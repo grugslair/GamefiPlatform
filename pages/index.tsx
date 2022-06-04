@@ -1,9 +1,58 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../store'
+import { walletStateAction } from '../store/wallet'
 import styles from '../styles/Home.module.css'
+import Web3Modal from 'web3modal'
+import { ethers } from 'ethers'
+
+const providerOptions = {
+}
+
+let web3Modal: any
+if (typeof window !== 'undefined') {
+  web3Modal = new Web3Modal({
+    network: 'mainnet', // optional
+    cacheProvider: true,
+    providerOptions, // required
+  })
+}
+
 
 const Home: NextPage = () => {
+  const wallet  = useSelector((state: RootState) => state.wallet.walletAddress)
+  const dispatch = useDispatch()
+
+  const connectWallet = useCallback(async function () {
+    // This is the initial `provider` that is returned when
+    // using web3Modal to connect. Can be MetaMask or WalletConnect.
+    const provider = await web3Modal.connect()
+
+    // We plug the initial `provider` into ethers.js and get back
+    // a Web3Provider. This will add on methods from ethers.js and
+    // event listeners such as `.on()` will be different.
+    const web3Provider = new ethers.providers.Web3Provider(provider)
+
+    const signer = web3Provider.getSigner()
+    const address = await signer.getAddress()
+
+    const network = await web3Provider.getNetwork()
+
+    console.log('this is signer', signer)
+    console.log('this is signer', address)
+    console.log('this is signer', network)
+    
+
+    dispatch(walletStateAction({
+      provider,
+      address,
+      network: network.chainId
+    }))
+  }, [])
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,6 +62,8 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <button onClick={connectWallet}>connect wallet</button>
+
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
