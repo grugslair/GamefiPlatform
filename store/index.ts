@@ -11,11 +11,11 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ['walletStateAction'],
+        ignoredActions: ['wallet/setState'],
         // Ignore these field paths in all actions
-        // ignoredActionPaths: ['wallet.provider', 'payload.timestamp'],
+        // ignoredActionPaths: ['wallet.provider'],
         // Ignore these paths in the state
-        // ignoredPaths: ['wallet.provider'],
+        ignoredPaths: ['wallet.provider'],
       },
     }),
 })

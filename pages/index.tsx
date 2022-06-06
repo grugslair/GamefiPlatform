@@ -4,54 +4,12 @@ import Image from 'next/image'
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../store'
-import { walletStateAction } from '../store/wallet'
+import { walletStateAction, ActionType } from '../store/wallet'
 import styles from '../styles/Home.module.css'
-import Web3Modal from 'web3modal'
-import { ethers } from 'ethers'
 
-const providerOptions = {
-}
-
-let web3Modal: any
-if (typeof window !== 'undefined') {
-  web3Modal = new Web3Modal({
-    network: 'mainnet', // optional
-    cacheProvider: true,
-    providerOptions, // required
-  })
-}
 
 
 const Home: NextPage = () => {
-  const wallet  = useSelector((state: RootState) => state.wallet.walletAddress)
-  const dispatch = useDispatch()
-
-  const connectWallet = useCallback(async function () {
-    // This is the initial `provider` that is returned when
-    // using web3Modal to connect. Can be MetaMask or WalletConnect.
-    const provider = await web3Modal.connect()
-
-    // We plug the initial `provider` into ethers.js and get back
-    // a Web3Provider. This will add on methods from ethers.js and
-    // event listeners such as `.on()` will be different.
-    const web3Provider = new ethers.providers.Web3Provider(provider)
-
-    const signer = web3Provider.getSigner()
-    const address = await signer.getAddress()
-
-    const network = await web3Provider.getNetwork()
-
-    console.log('this is signer', signer)
-    console.log('this is signer', address)
-    console.log('this is signer', network)
-    
-
-    dispatch(walletStateAction({
-      provider,
-      address,
-      network: network.chainId
-    }))
-  }, [])
 
   return (
     <div className={styles.container}>
@@ -62,46 +20,10 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <button onClick={connectWallet}>connect wallet</button>
 
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          GRUGs LAIR
         </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
       </main>
 
       <footer className={styles.footer}>

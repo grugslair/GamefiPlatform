@@ -1,11 +1,10 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-type ActionType =
+export type ActionType =
   {
       type: 'wallet/setState'
-      provider?: walletState['provider']
-      address?: walletState['walletAddress']
-      network?: walletState['chainId']
+      address: string
+      payload: setStatePayload
     }
   | {
       type: 'wallet/setAddress'
@@ -18,6 +17,12 @@ type ActionType =
   | {
       type: 'RESET_WEB3_PROVIDER'
     }
+
+interface setStatePayload {
+  provider?: walletState['provider']
+  address?: walletState['walletAddress']
+  network?: walletState['chainId']
+}
 
 interface walletState {
   walletAddress: string | null
@@ -38,7 +43,6 @@ const initialState = {
 const walletReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(walletStateAction, (state, action) => {
-      console.log(action)
       state.walletAddress = action.payload.address
       state.provider = action.payload.provider
       state.chainId = action.payload.network
