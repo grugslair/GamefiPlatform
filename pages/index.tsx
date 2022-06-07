@@ -1,10 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../store'
-import { walletStateAction, ActionType } from '../store/wallet'
 import styles from '../styles/Home.module.css'
 
 

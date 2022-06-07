@@ -1,40 +1,25 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-export type ActionType =
-  {
-      type: 'wallet/setState'
-      address: string
-      payload: setStatePayload
-    }
-  | {
-      type: 'wallet/setAddress'
-      address?: walletState['walletAddress']
-    }
-  | {
-      type: 'wallet/setChainId'
-      network?: walletState['chainId']
-    }
-  | {
-      type: 'RESET_WEB3_PROVIDER'
-    }
-
+interface setState {
+  payload: setStatePayload
+}
 interface setStatePayload {
   provider?: walletState['provider']
   address?: walletState['walletAddress']
-  network?: walletState['chainId']
+  chainId?: walletState['chainId']
 }
 
 interface walletState {
-  walletAddress: string | null
-  chainId: number | null
+  walletAddress: string | null | undefined
+  chainId: number | null | undefined
   provider: any
 }
 
-export const walletStateAction = createAction<ActionType>('wallet/setState')
+export const walletStateAction = createAction<any>('wallet/setState')
 export const walletAddressAction = createAction('wallet/setAddress')
-export const walletChainAction = createAction<number>('wallet/setChainId')
+export const walletChainAction = createAction('wallet/setChainId')
 
-const initialState = { 
+const initialState = {
   walletAddress: null,
   chainId: null,
   provider: null
@@ -42,10 +27,10 @@ const initialState = {
 
 const walletReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(walletStateAction, (state, action) => {
+    .addCase(walletStateAction, (state, action: setState) => {
       state.walletAddress = action.payload.address
       state.provider = action.payload.provider
-      state.chainId = action.payload.network
+      state.chainId = action.payload.chainId
     })
     .addCase(walletAddressAction, (state, action) => {
     })

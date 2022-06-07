@@ -42,7 +42,7 @@ const Header = () => {
     dispatch(walletStateAction({
       provider,
       address,
-      network: network.chainId
+      chainId: network.chainId
     }))
   }, [])
 
