@@ -6,10 +6,10 @@ const NotVerifiedGrug = () => {
         <div>
           Grug Image
         </div>
-        <h1 className="font-bold my-2">You're not a verified Grug</h1>
-        <p>You must own Grug's NFT to access this page.</p>
+        <h1 className="font-bold my-2">You&apos;re not a verified Grug</h1>
+        <p>You must own Grug&apos;s NFT to access this page.</p>
         <p>After getting one, try reconnect wallet/refresh this page</p>
-        <button className="mt-5 px-4 py-2 bg-[#6558F5] rounded-md font-bold text-white">Buy Grug's</button>
+        <button className="mt-5 px-4 py-2 bg-[#6558F5] rounded-md font-bold text-white">Buy Grug&apos;s</button>
       </div>
 
     </>
