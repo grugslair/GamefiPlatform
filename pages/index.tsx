@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import NotVerifiedGrug from '../components/NotVerifiedGrug'
 import styles from '../styles/Home.module.css'
 
 
@@ -16,10 +17,14 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-
-        <h1 className={styles.title}>
-          GRUGs LAIR
-        </h1>
+        { false ? (
+            <h1 className={styles.title}>
+              GRUGs LAIR
+            </h1>
+          ) : (
+            <NotVerifiedGrug />
+          )
+        }
       </main>
 
       <footer className={styles.footer}>
