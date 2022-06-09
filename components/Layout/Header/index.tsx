@@ -1,10 +1,10 @@
 import { ethers } from 'ethers'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import Web3Modal from 'web3modal'
 import { RootState } from '../../../store'
-import { walletStateAction } from '../../../store/wallet'
+import { resetWalletAction, walletStateAction } from '../../../store/wallet'
 import headerStyles from './Header.module.css'
 
 const providerOptions = {
@@ -21,7 +21,8 @@ if (typeof window !== 'undefined') {
 
 const Header = () => {
 
-  const wallet  = useSelector((state: RootState) => state.wallet.walletAddress)
+  const wallet  = useSelector((state: RootState) => state.wallet)
+  const {provider} = useSelector((state: RootState) => state.wallet)
   const dispatch = useDispatch()
 
   const connectWallet = useCallback(async function () {
@@ -46,6 +47,61 @@ const Header = () => {
     }))
   }, [])
 
+  const disconnect = useCallback(
+    async function () {
+      await web3Modal.clearCachedProvider()
+      if (wallet.provider?.disconnect && typeof wallet.provider.disconnect === 'function') {
+        const test = await wallet.provider.disconnect()
+      }
+      dispatch(resetWalletAction())
+    },
+    [wallet.provider]
+  )
+
+  useEffect(() => {
+    if (web3Modal.cachedProvider) {
+      connectWallet()
+    }
+  }, [connectWallet])
+
+  useEffect(() => {
+    if (provider?.on) {
+      const handleAccountsChanged = (accounts: string[]) => {
+        // eslint-disable-next-line no-console
+        console.log('accountsChanged', accounts)
+        dispatch({
+          type: 'SET_ADDRESS',
+          address: accounts[0],
+        })
+      }
+
+      // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
+      const handleChainChanged = (_hexChainId: string) => {
+        console.log(_hexChainId)
+        // window.location.reload()
+      }
+
+      const handleDisconnect = (error: { code: number; message: string }) => {
+        // eslint-disable-next-line no-console
+        console.log('disconnect', error)
+        disconnect()
+      }
+
+      provider.on('accountsChanged', handleAccountsChanged)
+      provider.on('chainChanged', handleChainChanged)
+      provider.on('disconnect', handleDisconnect)
+
+      // Subscription Cleanup
+      return () => {
+        if (provider.removeListener) {
+          provider.removeListener('accountsChanged', handleAccountsChanged)
+          provider.removeListener('chainChanged', handleChainChanged)
+          provider.removeListener('disconnect', handleDisconnect)
+        }
+      }
+    }
+  }, [provider, disconnect])
+
 
   return (
     <header className='px-9 py-6'>
@@ -60,7 +116,10 @@ const Header = () => {
         </div>
         <div className='flex justify-end gap-4'>
           <button className={headerStyles.buy_grug_button} onClick={connectWallet}>buy grug</button>
-          <button onClick={connectWallet}>connect wallet</button>
+          {wallet.walletAddress ?  
+            (<button className='w-32 overflow-hidden' onClick={disconnect}>{wallet.walletAddress}</button>)
+            : (<button className='w-32' onClick={connectWallet}>connect wallet</button>)
+          }
 
         </div>
 

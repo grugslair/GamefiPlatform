@@ -18,6 +18,7 @@ interface walletState {
 export const walletStateAction = createAction<any>('wallet/setState')
 export const walletAddressAction = createAction('wallet/setAddress')
 export const walletChainAction = createAction('wallet/setChainId')
+export const resetWalletAction = createAction('wallet/resetWallet')
 
 const initialState = {
   walletAddress: null,
@@ -35,6 +36,11 @@ const walletReducer = createReducer(initialState, (builder) => {
     .addCase(walletAddressAction, (state, action) => {
     })
     .addCase(walletChainAction, (state, action) => {
+    })
+    .addCase(resetWalletAction, (state, action) => {
+      state.walletAddress = null,
+      state.chainId = null,
+      state.provider = null
     })
 })
 
