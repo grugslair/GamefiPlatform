@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import Web3Modal from 'web3modal'
+import { contractABI, contractAddress } from '../../../helper/contract'
 import { RootState } from '../../../store'
 import { resetWalletAction, walletStateAction } from '../../../store/wallet'
 import headerStyles from './Header.module.css'
@@ -39,6 +40,8 @@ const Header = () => {
     const address = await signer.getAddress()
 
     const network = await web3Provider.getNetwork()
+
+    const contract = new ethers.Contract(contractAddress, contractABI, web3Provider)
 
     dispatch(walletStateAction({
       provider,
