@@ -1,12 +1,16 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import NotVerifiedGrug from '../components/NotVerifiedGrug'
+import { RootState } from '../store'
 import styles from '../styles/Home.module.css'
 
 
 
 const Home: NextPage = () => {
+  const wallet  = useSelector((state: RootState) => state.wallet)
 
   return (
     <div className={styles.container}>
@@ -17,7 +21,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        { false ? (
+        { wallet.balance && Number.parseInt(wallet.balance, 10) > 0 ? (
             <h1 className={styles.title}>
               GRUGs LAIR
             </h1>
@@ -25,6 +29,7 @@ const Home: NextPage = () => {
             <NotVerifiedGrug />
           )
         }
+
       </main>
     </div>
   )

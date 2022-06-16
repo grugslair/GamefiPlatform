@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import Link from 'next/link'
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
@@ -15,7 +16,6 @@ let web3Modal: any
 if (typeof window !== 'undefined') {
   web3Modal = new Web3Modal({
     network: 'mainnet', // optional
-    cacheProvider: true,
     providerOptions, // required
   })
 }
@@ -43,9 +43,14 @@ const Header = () => {
 
     const contract = new ethers.Contract(contractAddress, contractABI, web3Provider)
 
+    const balance = await contract.balanceOf(address)
+
     dispatch(walletStateAction({
+      walletAddress: address,
+      etherProvider: web3Provider,
+      balance: balance.toString(),
+      contract,
       provider,
-      address,
       chainId: network.chainId
     }))
   }, [])
@@ -111,8 +116,8 @@ const Header = () => {
       <div className='grid grid-cols-2'>
         <div>
           <div className='grid grid-cols-4 gap-4'>
-            <div>Grug lair</div>
-            <div>IGO</div>
+            <Link href="/">Grug lair</Link>
+            <Link href="/IGO">IGO</Link>
             <div>Stake ROCKS</div>
             <div>Community</div>
           </div>

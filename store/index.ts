@@ -15,7 +15,7 @@ const store = configureStore({
         // Ignore these field paths in all actions
         // ignoredActionPaths: ['wallet.provider'],
         // Ignore these paths in the state
-        ignoredPaths: ['wallet.provider'],
+        ignoredPaths: ['wallet.provider', 'wallet.etherProvider', 'wallet.contract'],
       },
     }),
 })

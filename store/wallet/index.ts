@@ -5,14 +5,20 @@ interface setState {
 }
 interface setStatePayload {
   provider?: walletState['provider']
-  address?: walletState['walletAddress']
+  walletAddress?: walletState['walletAddress']
   chainId?: walletState['chainId']
+  etherProvider?: walletState['etherProvider']
+  contract?: walletState['contract']
+  balance: walletState['balance']
 }
 
 interface walletState {
   walletAddress: string | null | undefined
   chainId: number | null | undefined
   provider: any
+  etherProvider: any
+  contract: any
+  balance: string | null | undefined
 }
 
 export const walletStateAction = createAction<any>('wallet/setState')
@@ -23,15 +29,22 @@ export const resetWalletAction = createAction('wallet/resetWallet')
 const initialState = {
   walletAddress: null,
   chainId: null,
-  provider: null
+  provider: null,
+  etherProvider: null,
+  contract: null,
+  balance: null
 } as walletState
 
 const walletReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(walletStateAction, (state, action: setState) => {
-      state.walletAddress = action.payload.address
+      state.walletAddress = action.payload.walletAddress
       state.provider = action.payload.provider
       state.chainId = action.payload.chainId
+      state.contract = action.payload.contract
+      state.etherProvider = action.payload.etherProvider
+      state.balance = action.payload.balance
+      
     })
     .addCase(walletAddressAction, (state, action) => {
     })
@@ -40,7 +53,10 @@ const walletReducer = createReducer(initialState, (builder) => {
     .addCase(resetWalletAction, (state, action) => {
       state.walletAddress = null,
       state.chainId = null,
-      state.provider = null
+      state.provider = null,
+      state.balance = null,
+      state.etherProvider = null,
+      state.contract = null
     })
 })
 
