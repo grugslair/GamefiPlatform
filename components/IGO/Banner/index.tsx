@@ -2,10 +2,10 @@ const Banner = () => {
   return (
     <div>
       <div>
-        Welcome to Grug's exclusive IGO lair
+        Welcome to Grug&apos;s exclusive IGO lair
       </div>
       <div>
-        Top tier quality IGO project, exclusively hand picked for Grug's NFT Owner
+        Top tier quality IGO project, exclusively hand picked for Grug&apos;s NFT Owner
       </div>
       <div>
         <button>Explore IGO</button>

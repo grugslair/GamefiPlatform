@@ -45,6 +45,8 @@ const Header = () => {
 
     const balance = await contract.balanceOf(address)
 
+    console.log(balance)
+
     dispatch(walletStateAction({
       walletAddress: address,
       etherProvider: web3Provider,
