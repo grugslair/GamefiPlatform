@@ -1,28 +1,8 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-
-interface setState {
-  payload: setStatePayload
-}
-interface setStatePayload {
-  provider?: walletState['provider']
-  walletAddress?: walletState['walletAddress']
-  chainId?: walletState['chainId']
-  etherProvider?: walletState['etherProvider']
-  contract?: walletState['contract']
-  balance: walletState['balance']
-}
-
-interface walletState {
-  walletAddress: string | null | undefined
-  chainId: number | null | undefined
-  provider: any
-  etherProvider: any
-  contract: any
-  balance: string | null | undefined
-}
+import { setState, setWalletAddress, walletState } from './walletType'
 
 export const walletStateAction = createAction<any>('wallet/setState')
-export const walletAddressAction = createAction('wallet/setAddress')
+export const walletAddressAction = createAction<setWalletAddress>('wallet/setAddress')
 export const walletChainAction = createAction('wallet/setChainId')
 export const resetWalletAction = createAction('wallet/resetWallet')
 
@@ -46,7 +26,7 @@ const walletReducer = createReducer(initialState, (builder) => {
       state.balance = action.payload.balance
       
     })
-    .addCase(walletAddressAction, (state, action: setState) => {
+    .addCase(walletAddressAction, (state, action) => {
       state.walletAddress = action.payload.walletAddress
     })
     .addCase(walletChainAction, (state, action) => {
