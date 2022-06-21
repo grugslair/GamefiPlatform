@@ -3,6 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import Banner from '../components/Home/Banner'
 import NotVerifiedGrug from '../components/NotVerifiedGrug'
 import { RootState } from '../store'
 import styles from '../styles/Home.module.css'
@@ -20,15 +21,17 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        { wallet.balance && Number.parseInt(wallet.balance, 10) > 0 ? (
+      <main>
+        <Banner />
+
+        {/* { wallet.balance && Number.parseInt(wallet.balance, 10) > 0 ? (
             <h1 className={styles.title}>
               GRUGs LAIR
             </h1>
           ) : (
             <NotVerifiedGrug />
           )
-        }
+        } */}
 
       </main>
     </div>

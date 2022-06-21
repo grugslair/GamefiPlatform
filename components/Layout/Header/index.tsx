@@ -119,7 +119,7 @@ const Header = () => {
         <div>
           <div className='grid grid-cols-4 gap-4'>
             <Link href="/">Grug lair</Link>
-            <Link href="/IGO">IGO</Link>
+            {/* <Link href="/IGO">IGO</Link> */}
             <div>Stake ROCKS</div>
             <div>Community</div>
           </div>
