@@ -114,7 +114,7 @@ const Header = () => {
 
 
   return (
-    <header className='px-9 py-6'>
+    <header className='px-16 py-6'>
       <div className='grid grid-cols-2'>
         <div>
           <div className='grid grid-cols-4 gap-4'>
