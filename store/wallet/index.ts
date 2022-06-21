@@ -46,7 +46,8 @@ const walletReducer = createReducer(initialState, (builder) => {
       state.balance = action.payload.balance
       
     })
-    .addCase(walletAddressAction, (state, action) => {
+    .addCase(walletAddressAction, (state, action: setState) => {
+      state.walletAddress = action.payload.walletAddress
     })
     .addCase(walletChainAction, (state, action) => {
     })

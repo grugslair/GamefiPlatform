@@ -13,7 +13,7 @@ const supportedChains: IChainData[] = [
     native_currency: {
       symbol: 'ETH',
       name: 'Ethereum',
-      decimals: '18',
+      decimals: 18,
       contractAddress: '',
       balance: '',
     },
@@ -29,11 +29,27 @@ const supportedChains: IChainData[] = [
     native_currency: {
       symbol: 'ETH',
       name: 'Ethereum',
-      decimals: '18',
+      decimals: 18,
       contractAddress: '',
       balance: '',
     },
-  }
+  },
+  {
+    name: 'Cronos Mainnet Beta',
+    short_name: 'cro',
+    chain: 'ETH',
+    network: 'cronos',
+    chain_id: 25,
+    network_id: 25,
+    rpc_url: 'https://evm-cronos.crypto.org',
+    native_currency: {
+      symbol: 'CRO',
+      name: 'Cronos',
+      decimals: 18,
+      contractAddress: '',
+      balance: '',
+    },
+  },
 ]
 
 export default supportedChains

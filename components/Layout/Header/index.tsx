@@ -1,18 +1,20 @@
 import { ethers } from 'ethers'
-import Link from 'next/link'
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import Web3Modal from 'web3modal'
-import { contractABI, contractAddress } from '../../../helper/contract'
+import { grugContractABI, grugContractAddress } from '../../../helper/contract'
+import { validNetworkId } from '../../../helper/environment'
 import { RootState } from '../../../store'
-import { resetWalletAction, walletStateAction } from '../../../store/wallet'
+import { resetWalletAction, walletStateAction, walletAddressAction } from '../../../store/wallet'
+import supportedChains from '../../../helper/chainList'
 import headerStyles from './Header.module.css'
+import Web3Modal from 'web3modal'
+import Link from 'next/link'
 
 const providerOptions = {
 }
 
-let web3Modal: any
+let web3Modal: Web3Modal
 if (typeof window !== 'undefined') {
   web3Modal = new Web3Modal({
     network: 'mainnet', // optional
@@ -23,13 +25,56 @@ if (typeof window !== 'undefined') {
 const Header = () => {
 
   const wallet  = useSelector((state: RootState) => state.wallet)
-  const {provider} = useSelector((state: RootState) => state.wallet)
   const dispatch = useDispatch()
+  let {provider} = useSelector((state: RootState) => state.wallet)
+
+  const swithcNetwork = async function(provider: any) {
+    if(typeof provider === 'undefined') return;
+    try{
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: ethers.utils.hexValue(validNetworkId) }],
+      });
+    } catch(switchError: any) {
+      if(switchError.code == 4902) {
+        await addNetwork();
+      }
+      console.log(switchError)
+    }
+  }
+
+  const addNetwork = async function() {
+    const requiredNetwork = supportedChains.find(e => e.chain_id === validNetworkId)
+    try {
+      if(!requiredNetwork) throw new Error("No required network found");
+      await provider.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: ethers.utils.hexValue(requiredNetwork.chain_id),
+          chainName: requiredNetwork.name,
+          rpcUrls: [requiredNetwork.rpc_url],
+          nativeCurrency: {
+            symbol: requiredNetwork.native_currency.symbol,
+            decimals: requiredNetwork.native_currency.decimals
+          }
+        }]
+      });
+    } catch (addError) {
+       console.log(addError);
+    }
+  }
+
+  const getGrugBalance = async function(web3Provider: ethers.providers.Web3Provider, walletAddress: string): Promise<number> {
+    const contract = new ethers.Contract(grugContractAddress, grugContractABI, web3Provider);
+    const balance: number = await contract.balanceOf(walletAddress);
+
+    return balance;
+  }
 
   const connectWallet = useCallback(async function () {
     // This is the initial `provider` that is returned when
     // using web3Modal to connect. Can be MetaMask or WalletConnect.
-    const provider = await web3Modal.connect()
+    provider = await web3Modal.connect()
 
     // We plug the initial `provider` into ethers.js and get back
     // a Web3Provider. This will add on methods from ethers.js and
@@ -40,18 +85,16 @@ const Header = () => {
     const address = await signer.getAddress()
 
     const network = await web3Provider.getNetwork()
+    if(network.chainId != validNetworkId) {
+      await swithcNetwork(provider)
+    }
 
-    const contract = new ethers.Contract(contractAddress, contractABI, web3Provider)
-
-    const balance = await contract.balanceOf(address)
-
-    console.log(balance)
+    const balance = await getGrugBalance(web3Provider, address)
 
     dispatch(walletStateAction({
       walletAddress: address,
       etherProvider: web3Provider,
       balance: balance.toString(),
-      contract,
       provider,
       chainId: network.chainId
     }))
@@ -79,16 +122,15 @@ const Header = () => {
       const handleAccountsChanged = (accounts: string[]) => {
         // eslint-disable-next-line no-console
         console.log('accountsChanged', accounts)
-        dispatch({
-          type: 'SET_ADDRESS',
-          address: accounts[0],
-        })
+        dispatch(walletAddressAction({
+          walletAddress: accounts[0],
+        }))
       }
 
       // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
-      const handleChainChanged = (_hexChainId: string) => {
+      const handleChainChanged = async (_hexChainId: string) => {
         console.log(_hexChainId)
-        // window.location.reload()
+        window.location.reload()
       }
 
       const handleDisconnect = (error: { code: number; message: string }) => {
