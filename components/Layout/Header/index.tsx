@@ -79,7 +79,7 @@ const Header = () => {
     // We plug the initial `provider` into ethers.js and get back
     // a Web3Provider. This will add on methods from ethers.js and
     // event listeners such as `.on()` will be different.
-    const web3Provider = new ethers.providers.Web3Provider(provider)
+    const web3Provider = new ethers.providers.Web3Provider(provider, "any")
 
     const signer = web3Provider.getSigner()
     const address = await signer.getAddress()
@@ -167,7 +167,12 @@ const Header = () => {
           </div>
         </div>
         <div className='flex justify-end gap-4'>
-          <button className={headerStyles.buy_grug_button} onClick={connectWallet}>buy grug</button>
+          <button 
+            className={headerStyles.buy_grug_button} 
+            onClick={() => window.location.href = 'https://opensea.io/collection/grugslair'}
+          >
+            buy grug
+          </button>
           {wallet.walletAddress ?  
             (<button className='w-32 overflow-hidden' onClick={disconnect}>{wallet.walletAddress}</button>)
             : (<button className='w-32' onClick={connectWallet}>connect wallet</button>)

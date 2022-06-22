@@ -1,5 +1,9 @@
+import { useSelector } from "react-redux"
+import { RootState } from "../../../store"
 
 const NotVerifiedGrug = () => {
+  const wallet  = useSelector((state: RootState) => state.wallet)
+
   return(
     <>
       <div className="NotVerifiedGrug p-36">
@@ -19,7 +23,12 @@ const NotVerifiedGrug = () => {
             <div className="ml-5">
               <h1>Own a Grug&apos;s NFT</h1>
               <p>You can get the NFT from Opensea</p>
-              <button className="mt-5 px-4 py-2 bg-[#6558F5] rounded-md font-bold text-white">Buy Grug&apos;s</button>
+              <button 
+                className="mt-5 px-4 py-2 bg-[#6558F5] rounded-md font-bold text-white" 
+                onClick={() => window.location.href = 'https://opensea.io/collection/grugslair'}
+              >
+                  Buy Grug&apos;s
+              </button>
             </div>
           </div>
 
@@ -29,10 +38,19 @@ const NotVerifiedGrug = () => {
                 2
               </div>
             </div>
-            
+
             <div className="ml-5">
-              <h1>Wallet Connected</h1>
-              <p>You successfully connect Metamask</p>
+              {wallet.walletAddress ? (
+                <>
+                  <h1>Wallet Connected</h1>
+                  <p>You successfully connect Metamask</p>
+                </>
+              ) : (
+                <>
+                  <h1>Connect Wallet</h1>
+                  <p>Connect your Metamask / TrustWallet</p>
+                </>
+              )}
             </div>
           </div>
         </div>
