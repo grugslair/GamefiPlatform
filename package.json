@@ -12,6 +12,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.2",
     "@types/react-redux": "^7.1.24",
+    "daisyui": "^2.17.0",
     "ethers": "^5.6.8",
     "next": "12.1.6",
     "react": "18.1.0",

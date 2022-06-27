@@ -6,6 +6,10 @@ export interface setWalletAddress {
   walletAddress: string
 }
 
+export interface setWalletBalance {
+  balance: number
+}
+
 export interface setStatePayload {
   provider?: walletState['provider']
   walletAddress?: walletState['walletAddress']
@@ -21,5 +25,5 @@ export interface walletState {
   provider: any
   etherProvider: any
   contract: any
-  balance: string | null | undefined
+  balance: number | null | undefined
 }

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { grugContractABI, grugContractAddress } from '../../../helper/contract'
 import { validNetworkId } from '../../../helper/environment'
 import { RootState } from '../../../store'
-import { resetWalletAction, walletStateAction, walletAddressAction } from '../../../store/wallet'
+import { resetWalletAction, walletStateAction, walletAddressAction, walletBalanceAction } from '../../../store/wallet'
 import supportedChains from '../../../helper/chainList'
 import headerStyles from './Header.module.css'
 import Web3Modal from 'web3modal'
@@ -18,6 +18,7 @@ let web3Modal: Web3Modal
 if (typeof window !== 'undefined') {
   web3Modal = new Web3Modal({
     network: 'mainnet', // optional
+    cacheProvider: true,
     providerOptions, // required
   })
 }
@@ -64,13 +65,6 @@ const Header = () => {
     }
   }
 
-  const getGrugBalance = async function(web3Provider: ethers.providers.Web3Provider, walletAddress: string): Promise<number> {
-    const contract = new ethers.Contract(grugContractAddress, grugContractABI, web3Provider);
-    const balance: number = await contract.balanceOf(walletAddress);
-
-    return balance;
-  }
-
   const connectWallet = useCallback(async function () {
     // This is the initial `provider` that is returned when
     // using web3Modal to connect. Can be MetaMask or WalletConnect.
@@ -79,7 +73,8 @@ const Header = () => {
     // We plug the initial `provider` into ethers.js and get back
     // a Web3Provider. This will add on methods from ethers.js and
     // event listeners such as `.on()` will be different.
-    const web3Provider = new ethers.providers.Web3Provider(provider, "any")
+    const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
+
 
     const signer = web3Provider.getSigner()
     const address = await signer.getAddress()
@@ -91,6 +86,8 @@ const Header = () => {
 
     const balance = await getGrugBalance(web3Provider, address)
 
+    // console.log(balance)
+
     dispatch(walletStateAction({
       walletAddress: address,
       etherProvider: web3Provider,
@@ -99,6 +96,12 @@ const Header = () => {
       chainId: network.chainId
     }))
   }, [])
+
+  const getGrugBalance = async function(web3Provider: ethers.providers.Web3Provider, walletAddress: string): Promise<number> {
+    const contract = new ethers.Contract(grugContractAddress, grugContractABI, web3Provider);
+    const balance: number = await contract.balanceOf(walletAddress);
+    return balance;
+  }
 
   const disconnect = useCallback(
     async function () {
@@ -119,9 +122,13 @@ const Header = () => {
 
   useEffect(() => {
     if (provider?.on) {
-      const handleAccountsChanged = (accounts: string[]) => {
+      const handleAccountsChanged = async (accounts: string[]) => {
         // eslint-disable-next-line no-console
+        const balance: number = await getGrugBalance(wallet.etherProvider, accounts[0])
         console.log('accountsChanged', accounts)
+        dispatch(walletBalanceAction({
+          balance
+        }))
         dispatch(walletAddressAction({
           walletAddress: accounts[0],
         }))
@@ -173,6 +180,7 @@ const Header = () => {
           >
             buy grug
           </button>
+
           {wallet.walletAddress ?  
             (<button className='w-32 overflow-hidden' onClick={disconnect}>{wallet.walletAddress}</button>)
             : (<button className='w-32' onClick={connectWallet}>connect wallet</button>)
