@@ -27,7 +27,7 @@ const Home: NextPage = () => {
         {/* <NotVerifiedGrug /> */}
         
 
-        { wallet.balance && Number.parseInt(wallet.balance, 10) > 0 ? (
+        { wallet.balance && wallet.balance > 0 ? (
             <>
               <div className="my-4 mx-16">
                 <ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
