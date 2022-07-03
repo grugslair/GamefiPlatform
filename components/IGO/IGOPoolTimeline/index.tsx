@@ -52,19 +52,19 @@ const IGOPoolTimeline = () => {
             <li className="step step-primary">
               <div>
                 <div className="text-left">Registration Phase</div>
-                <div>20 May'22 11:00 - 20 May'22 16:00</div>
+                <div>20 May&apos;22 11:00 - 20 May&apos;22 16:00</div>
               </div>
             </li>
             <li className="step step-primary">
               <div>
                 <div className="text-left">Buying Phase</div>
-                <div>21 May'22 11:00 - 25 May'22 16:00</div>
+                <div>21 May&apos;22 11:00 - 25 May&apos;22 16:00</div>
               </div>
             </li>
             <li className="step">
               <div>
                 <div className="text-left">Claim Start (10% TGE)</div>
-                <div className="text-left">25 June'22 11:00</div>
+                <div className="text-left">25 June&apos;22 11:00</div>
               </div>
             </li>
           </ul>
