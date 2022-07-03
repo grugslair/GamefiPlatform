@@ -6,7 +6,7 @@ const NotVerifiedGrug = () => {
 
   return(
     <>
-      <div className="NotVerifiedGrug p-36">
+      <div className="absolute NotVerifiedGrug p-36 top-0 bg-[url('/Bg.png')] w-full h-full">
         <div className="mb-5">
           <div className="text-xl font-bold mb-3">Reveal the projects</div>
           <p className="">Simply own a Grug&apos;s NFT then connect your <br/> wallet to reveal the project list</p>
@@ -14,8 +14,8 @@ const NotVerifiedGrug = () => {
 
         <div className="grid grid-cols-2">
           <div className="flex">
-            <div className="w-11 h-11 rounded-full border-[#C3CFD9] border relative">
-              <div className="absolute left-4 top-2">
+            <div className="w-10 h-10 rounded-full relative bg-[#FBE7D8]">
+              <div className="absolute left-[13px] top-1 text-[#B54639] text-xl font-bold">
                 1
               </div>
             </div>
@@ -24,7 +24,7 @@ const NotVerifiedGrug = () => {
               <h1>Own a Grug&apos;s NFT</h1>
               <p>You can get the NFT from Opensea</p>
               <button 
-                className="mt-5 px-4 py-2 bg-[#6558F5] rounded-md font-bold text-white" 
+                className="mt-5 px-[14px] py-2 bg-[#B54639] rounded-sm font-bold text-white" 
                 onClick={() => window.location.href = 'https://opensea.io/collection/grugslair'}
               >
                   Buy Grug&apos;s
@@ -33,8 +33,8 @@ const NotVerifiedGrug = () => {
           </div>
 
           <div className="flex">
-            <div className="w-11 h-11 rounded-full border-[#C3CFD9] border relative">
-              <div className="absolute left-4 top-2">
+            <div className="w-10 h-10 rounded-full relative bg-[#FBE7D8]">
+              <div className="absolute left-[14px] top-1 text-[#B54639] text-xl font-bold">
                 2
               </div>
             </div>

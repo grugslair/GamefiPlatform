@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import Link from 'next/link'
 import footerStyles from './Footer.module.css'
 
 const Footer = () => {
@@ -16,13 +18,45 @@ const Footer = () => {
     }
   ]
 
+  const sosMedList = [
+    {
+      img: '/twitter.png',
+      width: 20,
+      height: 15
+    },
+    {
+      img: '/brand.png',
+      width: 20,
+      height: 15
+    },
+    {
+      img: '/discord.png',
+      width: 20,
+      height: 15
+    },
+    {
+      img: '/telegram.png',
+      width: 20,
+      height: 15
+    },
+  ]
+
 
   return (
-    <footer>
-      <div className={`grid grid-cols-5 px-16 py-10`}>
+    <footer className='bg-black px-8 py-4 gap-2'>
+      <div className='grid grid-cols-5'>
         <div>
-          <div className={`${footerStyles.footer_subtitle} mb-2`}>Grug&apos;s Lair</div>
-          <div className='text-[#7E8D9A]'>Grug&apos;s is an exclusive place where blockchain enthusiast gather, share and support to top tier project</div>
+          <div className={`${footerStyles.footer_subtitle} mb-2`}>
+            <Image
+              src="/footergrug.png"
+              width={150}
+              height={40}
+              layout="fixed"
+            />
+          </div>
+          <div className='text-[#7E8D9A]'>
+            Grug&apos;s DAO will allow both P2E and crypto trading enthusiasts to take part in the activities that we will offer in the Discord group
+          </div>
         </div>
         {
           menus.map(menu => {
@@ -41,14 +75,27 @@ const Footer = () => {
           })
         }
         <div>
-          <button>
-            Buy Grug&apos;s
-          </button>
-          <ul>
-            <li>Medium</li>
-            <li>twitter</li>
-            <li>discord</li>
+          <ul className='flex'>
+            {
+              sosMedList.map((sosMed) => {
+                return (
+                  <li className='mr-[14px]' key={sosMed.img}>
+                    <Link href='/'>
+                      <Image
+                        src={sosMed.img}
+                        width={sosMed.width}
+                        height={sosMed.height}
+                        layout="fixed"
+                      />
+                    </Link>
+                  </li>
+                )
+              })
+            }
           </ul>
+          <div>
+            ©Grug&apos;s Lair 2022
+          </div>
         </div>
       </div>
     </footer>

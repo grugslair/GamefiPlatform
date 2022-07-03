@@ -1,4 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('http://fonts.cdnfonts.com/css/avara');
 
+body{
+  color: white;
+  background-color: black;
+}
+                

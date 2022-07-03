@@ -10,6 +10,8 @@ import supportedChains from '../../../helper/chainList'
 import headerStyles from './Header.module.css'
 import Web3Modal from 'web3modal'
 import Link from 'next/link'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 const providerOptions = {
 }
@@ -161,16 +163,28 @@ const Header = () => {
     }
   }, [provider, disconnect])
 
+  const router = useRouter()
+
 
   return (
-    <header className='px-16 py-6'>
+    <header className='fixed w-full px-8 py-8 text-white'>
       <div className='grid grid-cols-2'>
         <div>
-          <div className='grid grid-cols-4 gap-4'>
-            <Link href="/">Grug lair</Link>
-            <Link href="https://grugslair.xyz/">Project</Link>
-            <div>Stake ROCKS</div>
-            <div>Community</div>
+          <div className='flex items-center'>
+            <button className='mr-5' onClick={() => {router.push('/')}}>
+              <Image 
+                src="/headergrug.png"
+                width={61}
+                height={48}
+                layout="fixed"
+              />
+            </button>
+            <div className='mr-5'>
+              <Link href="/Landing" >Project</Link>
+            </div>
+            
+            <div className='mr-5'>Stake ROCKS</div>
+            <div className='mr-5'>Community</div>
           </div>
         </div>
         <div className='flex justify-end gap-4'>

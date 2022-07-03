@@ -1,7 +1,7 @@
 const Banner = () => {
   return (
-    <div className="text-center p-16 bg-[#F7F9FA]">
-      <div className="text-4xl mb-4">
+    <div className="flex flex-col justify-center text-center px-16 h-[708px] bg-[url('/grugbackground.png')]">
+      <div className="text-4xl mb-4 font-['Avara']">
         Multichain launchpad <br/>
         for every Grug&apos;s
       </div>
