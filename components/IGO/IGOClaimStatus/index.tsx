@@ -28,7 +28,7 @@ const IGOClaimStatus = () => {
             <div>
               <div className="grid grid-cols-3">
                 <div>
-                  <div>20 Jun'22 - 11:00</div>
+                  <div>20 Jun&apos;22 - 11:00</div>
                   <div>0 CHIBI</div>
                 </div>
                 <div>
