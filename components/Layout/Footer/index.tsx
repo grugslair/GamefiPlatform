@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { ISoscialMediaImage } from '../../../types/globalTypes'
 import footerStyles from './Footer.module.css'
 
 const Footer = () => {
@@ -18,23 +19,27 @@ const Footer = () => {
     }
   ]
 
-  const sosMedList = [
+  const sosMedList: ISoscialMediaImage[] = [
     {
+      url: '/Landing',
       img: '/twitter.png',
       width: 20,
       height: 15
     },
     {
+      url: '/Landing',
       img: '/brand.png',
       width: 20,
       height: 15
     },
     {
+      url: '/Landing',
       img: '/discord.png',
       width: 20,
       height: 15
     },
     {
+      url: '/Landing',
       img: '/telegram.png',
       width: 20,
       height: 15
@@ -80,7 +85,7 @@ const Footer = () => {
               sosMedList.map((sosMed) => {
                 return (
                   <li className='mr-[14px]' key={sosMed.img}>
-                    <Link href='/'>
+                    <Link href={sosMed.url}>
                       <Image
                         src={sosMed.img}
                         width={sosMed.width}

@@ -16,7 +16,7 @@ const Landing: NextPage = () => {
       <div>
         <Banner />
         <>
-          <div className="my-4 mx-16">
+          <div className="my-4 mx-[148px]">
             <ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
                 <li className="mr-2" role="presentation">
                     <button className="inline-block p-4 rounded-t-lg border-b-2" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
@@ -41,7 +41,9 @@ const Landing: NextPage = () => {
             </ul>
           </div>
           <div className="relative">
-            <div className='mx-16 grid gap-6 grid-cols-2 pb-5'>
+            <div className='mx-[148px] grid gap-4 grid-cols-2 pb-5'>
+              <Project></Project>
+              <Project></Project>
               <Project></Project>
               <Project></Project>
             </div>

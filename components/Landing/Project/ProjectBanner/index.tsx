@@ -1,13 +1,26 @@
-const ProjectBanner = () => {
+import Image from "next/image"
+
+interface IProjectBannerProp {
+  companyProfile: string
+  companyLogo: string
+}
+
+const ProjectBanner = (prop: IProjectBannerProp) => {
   return (
     <>
-      <div className="relative w-full h-36 bg-gray-400 border">
-        <img></img>
+      <div className="relative w-full h-64">
+        <Image
+          src={prop.companyProfile}
+          layout="fill"
+        />
 
-        <div className="absolute bottom-3 left-4">
-          <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">Default</span>
-          <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">Default</span>
-          <span className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">Default</span>
+        <div className="absolute bottom-0 left-10">
+          <Image
+            src={prop.companyLogo}
+            width={40}
+            height={40}
+            layout="fixed"
+          />
 
         </div>
       </div>

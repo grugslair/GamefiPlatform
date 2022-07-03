@@ -23,7 +23,7 @@ const ProjectTarget = () => {
           <div className="text-left font-bold text-gray-500">Min ROCKS</div>
           <div className="text-right font-bold text-gray-800">300 ROCKS</div>
         </div>
-        <div className="grid grid-cols-2 text-xs py-3">
+        <div className="grid grid-cols-2 text-xs pb-12 pt-3">
           <div className="text-left font-bold text-gray-500">Vesting</div>
           <div className="text-right font-bold text-gray-800">10% on TGE and after 10% monthly from the second month</div>
         </div>

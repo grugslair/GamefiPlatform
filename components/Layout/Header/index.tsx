@@ -7,7 +7,6 @@ import { validNetworkId } from '../../../helper/environment'
 import { RootState } from '../../../store'
 import { resetWalletAction, walletStateAction, walletAddressAction, walletBalanceAction } from '../../../store/wallet'
 import supportedChains from '../../../helper/chainList'
-import headerStyles from './Header.module.css'
 import Web3Modal from 'web3modal'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -167,7 +166,7 @@ const Header = () => {
 
 
   return (
-    <header className='fixed w-full px-8 py-8 text-white'>
+    <header className='fixed w-full px-8 py-8 text-white z-50'>
       <div className='grid grid-cols-2'>
         <div>
           <div className='flex items-center'>
@@ -187,18 +186,26 @@ const Header = () => {
             <div className='mr-5'>Community</div>
           </div>
         </div>
-        <div className='flex justify-end gap-4'>
-          <button 
-            className={headerStyles.buy_grug_button} 
-            onClick={() => window.location.href = 'https://opensea.io/collection/grugslair'}
-          >
-            buy grug
-          </button>
-
-          {wallet.walletAddress ?  
-            (<button className='w-32 overflow-hidden' onClick={disconnect}>{wallet.walletAddress}</button>)
-            : (<button className='w-32' onClick={connectWallet}>connect wallet</button>)
-          }
+        <div className='flex justify-end items-center gap-4'>
+          <div>
+            <button 
+              className="text-[#9B2C29] bg-white border border-[#FFF2E8] px-4 py-2 rounded-sm font-bold" 
+              onClick={() => window.location.href = 'https://opensea.io/collection/grugslair'}
+            >
+              buy grug
+            </button>
+          </div>
+          <div>
+            {wallet.walletAddress ? (
+              <button className='overflow-hidden bg-[#B54639] rounded-sm px-4 py-2' onClick={disconnect}>
+                {wallet.walletAddress}
+              </button>
+            ) : (
+              <button className='bg-[#B54639] px-4 py-2' onClick={connectWallet}>
+                connect wallet
+              </button>)
+            }
+          </div>
 
         </div>
 
