@@ -76,10 +76,10 @@ const IGOPoolTimeline = () => {
           </div>
           <div className="grid grid-cols-2">
             <div>
-              {data.map(item => <div>{item.text}</div>)}
+              {data.map(item => <div key={item.text}>{item.text}</div>)}
             </div>
             <div>
-              {data.map(item => <div>{item.value}</div>)}
+              {data.map(item => <div key={item.value}>{item.value}</div>)}
             </div>
           </div>
         </div>
