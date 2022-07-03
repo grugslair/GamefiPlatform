@@ -13,7 +13,7 @@ const IGO = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if(wallet.balance === '0') {
+    if(wallet.balance === 0) {
       router.push('/')
     }
   })
