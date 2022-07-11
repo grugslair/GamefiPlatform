@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { grugContractABI, grugContractAddress } from '../../../helper/contract'
 import { validNetworkId } from '../../../helper/environment'
 import { RootState } from '../../../store'
-import { resetWalletAction, walletStateAction, walletAddressAction, walletBalanceAction } from '../../../store/wallet'
+import { resetWalletAction, walletStateAction, walletAddressAction, walletBalanceAction, walletConnect } from '../../../store/wallet'
 import supportedChains from '../../../helper/chainList'
 import Web3Modal from 'web3modal'
 import Link from 'next/link'
@@ -89,13 +89,19 @@ const Header = () => {
 
     // console.log(balance)
 
-    dispatch(walletStateAction({
-      walletAddress: address,
-      etherProvider: web3Provider,
-      balance: balance.toString(),
-      provider,
-      chainId: network.chainId
-    }))
+    dispatch(walletConnect(web3Modal))
+    .unwrap()
+    .then((result) => {
+      console.log('this is the result',result)
+    })
+
+    // dispatch(walletStateAction({
+    //   walletAddress: address,
+    //   etherProvider: web3Provider,
+    //   balance: balance.toString(),
+    //   provider,
+    //   chainId: network.chainId
+    // }))
   }, [])
 
   const getGrugBalance = async function(web3Provider: ethers.providers.Web3Provider, walletAddress: string): Promise<number> {

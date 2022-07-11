@@ -6,7 +6,7 @@ const NotVerifiedGrug = () => {
 
   return(
     <>
-      <div className="flex justify-center absolute NotVerifiedGrug p-36 top-0 bg-[url('/Bg.png')] w-full h-full bg-cover">
+      <div className="NotVerifiedGrug p-36 top-0 bg-[url('/Bg.png')] w-full h-full bg-cover">
         <div>
           <div className="mb-5">
             <div className="text-xl font-bold mb-3">Reveal the projects</div>

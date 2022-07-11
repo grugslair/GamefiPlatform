@@ -86,12 +86,14 @@ const Footer = () => {
                 return (
                   <li className='mr-[14px]' key={sosMed.img}>
                     <Link href={sosMed.url}>
-                      <Image
-                        src={sosMed.img}
-                        width={sosMed.width}
-                        height={sosMed.height}
-                        layout="fixed"
-                      />
+                      <>
+                        <Image
+                          src={sosMed.img}
+                          width={sosMed.width}
+                          height={sosMed.height}
+                          layout="fixed"
+                        />
+                      </>
                     </Link>
                   </li>
                 )
