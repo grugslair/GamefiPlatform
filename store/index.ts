@@ -11,9 +11,9 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: {
         // Ignore these action types
-        ignoredActions: ['wallet/setState'],
+        ignoredActions: ['wallet/setWallet'],
         // Ignore these field paths in all actions
-        // ignoredActionPaths: ['wallet.provider'],
+        ignoredActionPaths: ['payload.etherProvider', 'payload.provider', 'meta.arg'],
         // Ignore these paths in the state
         ignoredPaths: ['wallet.provider', 'wallet.etherProvider', 'wallet.contract'],
       },
@@ -22,6 +22,7 @@ const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>
 
-export type  walletDispatch = typeof store.dispatch
+export type  AppDispatch = typeof store.dispatch
+
 
 export default store

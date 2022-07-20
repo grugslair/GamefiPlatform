@@ -4,13 +4,14 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { grugContractABI, grugContractAddress } from '../../../helper/contract'
 import { validNetworkId } from '../../../helper/environment'
-import { RootState } from '../../../store'
-import { resetWalletAction, walletStateAction, walletAddressAction, walletBalanceAction, walletConnect } from '../../../store/wallet'
+import { AppDispatch, RootState } from '../../../store'
+import { resetWalletAction, walletStateAction, walletAddressAction, walletBalanceAction } from '../../../store/wallet/actions'
 import supportedChains from '../../../helper/chainList'
 import Web3Modal from 'web3modal'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { getGrugBalance, switchNetwork, walletConnect } from '../../../store/wallet/thunk'
 
 const providerOptions = {
 }
@@ -27,88 +28,18 @@ if (typeof window !== 'undefined') {
 const Header = () => {
 
   const wallet  = useSelector((state: RootState) => state.wallet)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
   let {provider} = useSelector((state: RootState) => state.wallet)
 
-  const swithcNetwork = async function(provider: any) {
-    if(typeof provider === 'undefined') return;
-    try{
-      await provider.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: ethers.utils.hexValue(validNetworkId) }],
-      });
-    } catch(switchError: any) {
-      if(switchError.code == 4902) {
-        await addNetwork();
-      }
-      console.log(switchError)
-    }
-  }
-
-  const addNetwork = async function() {
-    const requiredNetwork = supportedChains.find(e => e.chain_id === validNetworkId)
-    try {
-      if(!requiredNetwork) throw new Error("No required network found");
-      await provider.request({
-        method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: ethers.utils.hexValue(requiredNetwork.chain_id),
-          chainName: requiredNetwork.name,
-          rpcUrls: [requiredNetwork.rpc_url],
-          nativeCurrency: {
-            symbol: requiredNetwork.native_currency.symbol,
-            decimals: requiredNetwork.native_currency.decimals
-          }
-        }]
-      });
-    } catch (addError) {
-       console.log(addError);
-    }
-  }
-
   const connectWallet = useCallback(async function () {
-    // This is the initial `provider` that is returned when
-    // using web3Modal to connect. Can be MetaMask or WalletConnect.
-    provider = await web3Modal.connect()
+    await dispatch(walletConnect(web3Modal))
 
-    // We plug the initial `provider` into ethers.js and get back
-    // a Web3Provider. This will add on methods from ethers.js and
-    // event listeners such as `.on()` will be different.
-    const web3Provider = new ethers.providers.Web3Provider(provider, 'any')
-
-
-    const signer = web3Provider.getSigner()
-    const address = await signer.getAddress()
-
-    const network = await web3Provider.getNetwork()
-    if(network.chainId != validNetworkId) {
-      await swithcNetwork(provider)
+    if(wallet.chainId != validNetworkId) {
+      await dispatch(switchNetwork())
     }
+    await dispatch(getGrugBalance())
 
-    const balance = await getGrugBalance(web3Provider, address)
-
-    // console.log(balance)
-
-    dispatch(walletConnect(web3Modal))
-    .unwrap()
-    .then((result) => {
-      console.log('this is the result',result)
-    })
-
-    // dispatch(walletStateAction({
-    //   walletAddress: address,
-    //   etherProvider: web3Provider,
-    //   balance: balance.toString(),
-    //   provider,
-    //   chainId: network.chainId
-    // }))
   }, [])
-
-  const getGrugBalance = async function(web3Provider: ethers.providers.Web3Provider, walletAddress: string): Promise<number> {
-    const contract = new ethers.Contract(grugContractAddress, grugContractABI, web3Provider);
-    const balance: number = await contract.balanceOf(walletAddress);
-    return balance;
-  }
 
   const disconnect = useCallback(
     async function () {
@@ -131,11 +62,8 @@ const Header = () => {
     if (provider?.on) {
       const handleAccountsChanged = async (accounts: string[]) => {
         // eslint-disable-next-line no-console
-        const balance: number = await getGrugBalance(wallet.etherProvider, accounts[0])
+        await dispatch(getGrugBalance())
         console.log('accountsChanged', accounts)
-        dispatch(walletBalanceAction({
-          balance
-        }))
         dispatch(walletAddressAction({
           walletAddress: accounts[0],
         }))

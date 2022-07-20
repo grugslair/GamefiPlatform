@@ -10,6 +10,13 @@ export interface setWalletBalance {
   balance: number
 }
 
+export interface IwalletConnect {
+  provider?: walletState['provider']
+  walletAddress?: walletState['walletAddress']
+  chainId?: walletState['chainId']
+  etherProvider?: walletState['etherProvider']
+}
+
 export interface setStatePayload {
   provider?: walletState['provider']
   walletAddress?: walletState['walletAddress']

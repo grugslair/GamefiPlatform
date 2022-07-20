@@ -61,9 +61,6 @@ const Landing: NextPage = () => {
               <Project></Project>
               <Project></Project>
             </div>
-            {wallet.walletAddress && (wallet.balance && wallet.balance > 0) ?
-              (<></>) : (<NotVerifiedGrug />)
-            }
           </div>
         </>
         
