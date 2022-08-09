@@ -1,9 +1,5 @@
 import Image from "next/image"
-
-interface IProjectBannerProp {
-  companyProfile: string
-  companyLogo: string
-}
+import { IProjectBannerProp } from "../type"
 
 const ProjectBanner = (prop: IProjectBannerProp) => {
   return (

@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ISoscialMediaImage } from '../../../types/globalTypes'
+import { ISocialMediaIcon } from '../../../types/globalTypes'
 import footerStyles from './Footer.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Footer = () => {
   const menus = [
@@ -19,30 +20,22 @@ const Footer = () => {
     }
   ]
 
-  const sosMedList: ISoscialMediaImage[] = [
+  const sosMedList: ISocialMediaIcon[] = [
     {
       url: '/Landing',
-      img: '/twitter.png',
-      width: 20,
-      height: 15
+      icon: {prefix: 'fab', iconName: 'twitter'},
     },
     {
       url: '/Landing',
-      img: '/brand.png',
-      width: 20,
-      height: 15
+      icon: {prefix: 'fab', iconName: '42-group'},
     },
     {
       url: '/Landing',
-      img: '/discord.png',
-      width: 20,
-      height: 15
+      icon: {prefix: 'fab', iconName: 'discord'},
     },
     {
       url: '/Landing',
-      img: '/telegram.png',
-      width: 20,
-      height: 15
+      icon: {prefix: 'fab', iconName: 'telegram'},
     },
   ]
 
@@ -82,17 +75,12 @@ const Footer = () => {
         <div>
           <ul className='flex'>
             {
-              sosMedList.map((sosMed) => {
+              sosMedList.map((sosMed, index) => {
                 return (
-                  <li className='mr-[14px]' key={sosMed.img}>
+                  <li className='mr-[14px]' key={index}>
                     <Link href={sosMed.url}>
                       <>
-                        <Image
-                          src={sosMed.img}
-                          width={sosMed.width}
-                          height={sosMed.height}
-                          layout="fixed"
-                        />
+                        <FontAwesomeIcon icon={sosMed.icon} />
                       </>
                     </Link>
                   </li>

@@ -1,42 +1,37 @@
+import { useRouter } from "next/router"
 import ProjectBanner from "./ProjectBanner"
 import ProjectDescription from "./ProjectDescription.tsx"
 import ProjectTarget from "./ProjectTarget"
-import ProjectStyle from './Project.module.css'
+import { IProjectBannerProp, IProjectDescriptionProp } from "./type"
 
 const Project = () => {
-  const projectBanner = {
+  const router = useRouter()
+
+  const projectBanner: IProjectBannerProp = {
     companyProfile: '/dota.png',
     companyLogo: '/Cryptos Logo.png'
   }
 
-  const projectDescription = {
+  const projectDescription: IProjectDescriptionProp = {
     companyName: 'Chibi Dinos',
     companyToken: '$CHIBI',
     companyDescription: 'Chibi Dinos is an ever expanding ecosystem <br/> spanning he Metaverse and Play to Earn Game',
     companySosMedList: [
       {
         url: '/Landing',
-        img: '/twitter.png',
-        width: 20,
-        height: 15
+        icon: {prefix: 'fab', iconName: 'twitter'}
       },
       {
         url: '/Landing',
-        img: '/brand.png',
-        width: 20,
-        height: 15
+        icon: {prefix: 'fab', iconName: 'twitter'}
       },
       {
         url: '/Landing',
-        img: '/discord.png',
-        width: 20,
-        height: 15
+        icon: {prefix: 'fab', iconName: 'discord'}
       },
       {
         url: '/Landing',
-        img: '/telegram.png',
-        width: 20,
-        height: 15
+        icon: {prefix: 'fab', iconName: 'telegram'}
       },
     ]
   }
@@ -54,7 +49,10 @@ const Project = () => {
               companySosMedList={projectDescription.companySosMedList}
             ></ProjectDescription>
             <ProjectTarget></ProjectTarget>
-            <button className="bg-[#B54639] text-white w-full rounded-md py-4 absolute bottom-[-65px]">
+            <button 
+              className="bg-[#B54639] text-white w-full rounded-md py-4 absolute bottom-[-65px]"
+              onClick={() => router.push('/IGO')}
+            >
               Participate <br />
               <span>Ends in 5d : 7h : 30m : 10s</span>
             </button>

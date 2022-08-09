@@ -1,13 +1,8 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import Image from "next/image"
 import Link from "next/link"
-import { ISoscialMediaImage } from "../../../../types/globalTypes"
-
-interface IProjectDescriptionProp { 
-  companyName: string,
-  companyToken: string,
-  companyDescription: string,
-  companySosMedList: ISoscialMediaImage[]
-}
+import { ISocialMediaIcon } from "../../../../types/globalTypes"
+import { IProjectDescriptionProp } from "../type"
 
 const ProjectDescription = (prop: IProjectDescriptionProp) => {
   return (
@@ -24,17 +19,12 @@ const ProjectDescription = (prop: IProjectDescriptionProp) => {
       <div className="mt-4 mb-4">
         <ul className="flex">
           {
-            prop.companySosMedList.map((sosMed: ISoscialMediaImage) => {
+            prop.companySosMedList.map((sosMed: ISocialMediaIcon, index) => {
               return (
-                <li className='mr-[14px]' key={sosMed.img}>
+                <li className='mr-[14px]' key={index}>
                   <Link href={sosMed.url}>
                     <>
-                      <Image
-                        src={sosMed.img}
-                        width={sosMed.width}
-                        height={sosMed.height}
-                        layout="fixed"
-                      />
+                      <FontAwesomeIcon icon={sosMed.icon}/>
                     </>
                   </Link>
                 </li>

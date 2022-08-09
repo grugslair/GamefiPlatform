@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import Banner from "../components/Landing/Banner"
+import Banner from "../components/Public/Banner"
 import NotVerifiedGrug from "../components/Verification/NotVerifiedGrug"
 import { RootState } from "../store"
 

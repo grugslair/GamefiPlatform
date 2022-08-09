@@ -1,3 +1,5 @@
+import { , IconProp } from "@fortawesome/fontawesome-svg-core"
+
 export interface IAssetData {
   symbol: string
   name: string
@@ -6,9 +8,13 @@ export interface IAssetData {
   balance?: string
 }
 
-export interface ISoscialMediaImage {
-  url: string
-  img: string,
-  width: number,
+export interface IStandardImage {
+  img: string
+  width: number
   height: number
+}
+
+export interface ISocialMediaIcon {
+  url: string
+  icon: IconProp
 }

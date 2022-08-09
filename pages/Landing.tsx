@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import { useSelector } from 'react-redux'
-import Banner from '../components/Landing/Banner'
-import NotVerifiedGrug from '../components/Verification/NotVerifiedGrug'
+import Banner from '../components/Public/Banner'
 import Project from '../components/Landing/Project'
 import { RootState } from '../store'
 import { useEffect } from 'react'
@@ -17,8 +16,7 @@ const Landing: NextPage = () => {
 
 
   useEffect(() => {
-    console.log(wallet.walletAddress)
-    if(!(wallet.walletAddress && (wallet.balance && wallet.balance > 0))) {
+    if(wallet.walletAddress && (wallet.balance && wallet.balance === 0)) {
       router.push('/Verification')
     }
 

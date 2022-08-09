@@ -1,11 +1,21 @@
-const IGOProfile = () => {
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { IIGOProfileProp } from "../type"
+
+const IGOProfile = (prop: IIGOProfileProp) => {
+  const router = useRouter()
+
   return (
     <>
-      <div className="border p-4">
+      <div className="border p-4 border-[#B546394D]">
         <div className="grid grid-cols-2 mb-4">
           <div className="text-left">
-            <button>
-              Back
+            <button onClick={() => router.push('/Landing')}>
+              <FontAwesomeIcon icon={faArrowLeft} />
+              <span className="ml-4">Back</span>
             </button>
           </div>
           <div className="text-right">
@@ -16,20 +26,28 @@ const IGOProfile = () => {
         </div>
         <div className="grid grid-cols-5 grid-flow-col">
           <div className="w-12 h-12 col-span-1">
-            image
+            <Image
+              src={prop.companyLogo.img}
+              layout="fixed"
+              width={prop.companyLogo.width}
+              height={prop.companyLogo.height}
+            />
           </div>
           <div className="col-span-4">
-            <div className="font-bold text-xl">Chibi Dino</div>
-            <div className="font-semibold text-gray-400 mb-5">$CHIBI - ETH</div>
+            <div className="font-bold text-xl font-['avara']">{prop.companyName}</div>
+            <div className="font-semibold text-gray-400 mb-5">{prop.companyToken}</div>
             <div className="truncate mb-5">
-              Chibi Dinos is an ever expanding ecosystem spanning the Metaverse and Play to Earn Game
+              {prop.companyDesc}
             </div>
             <div>
               <ul className="flex">
-                <li>sosmed</li>
-                <li>sosmed</li>
-                <li>sosmed</li>
-                <li>sosmed</li>
+                {prop.companySosMedia.map((sosMed, index) => 
+                  <li key={index}>
+                    <Link href={sosMed.url}>
+                      <FontAwesomeIcon icon={sosMed.icon} />
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>

@@ -3,8 +3,16 @@
 @tailwind utilities;
 @import url('http://fonts.cdnfonts.com/css/avara');
 
+@font-face {
+  font-family: 'avara';
+  src: url('../public/fonts/webfonts/Black/Avara-Black_web.ttf');
+  src: url('../public/fonts/webfonts/Black/Avara-Black_web.woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
 body{
   color: white;
   background-color: black;
 }
-                
+              

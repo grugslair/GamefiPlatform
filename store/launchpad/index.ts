@@ -1,18 +1,12 @@
 import { createAction, createAsyncThunk, createReducer, createSlice } from '@reduxjs/toolkit'
-import { IwalletConnect, setState, setWalletAddress, setWalletBalance, walletState } from './walletType'
-import { addNetwork, getGrugBalance, switchNetwork, walletConnect } from './thunk'
+import { ILaunchPadState } from './launchpad'
 
 const initialState = {
-  walletAddress: null,
-  chainId: null,
-  provider: null,
-  etherProvider: null,
-  contract: null,
-  balance: null
-} as walletState
+  projectList: []
+} as ILaunchPadState
 
-const wallet = createSlice({
-  name: 'wallet',
+const launchpad = createSlice({
+  name: 'launchpad',
   initialState,
   reducers: {
     setAddress(state, action) {
@@ -69,4 +63,4 @@ const wallet = createSlice({
   }
 })
 
-export default wallet.reducer
+export default launchpad.reducer
