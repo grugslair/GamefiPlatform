@@ -78,6 +78,7 @@ const Project = (props: IProps) => {
               rate={projectTarget.rate}
               endDate={projectTarget.endDate}
               minRocks={projectTarget.minRocks}
+              vesting={projectTarget.vesting}
             ></ProjectTarget>
             <button 
               className="bg-[#B54639] text-white w-full rounded-md py-4 absolute bottom-[-65px]"
