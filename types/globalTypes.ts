@@ -1,4 +1,4 @@
-import { , IconProp } from "@fortawesome/fontawesome-svg-core"
+import { IconLookup } from "@fortawesome/fontawesome-svg-core"
 
 export interface IAssetData {
   symbol: string
@@ -16,5 +16,5 @@ export interface IStandardImage {
 
 export interface ISocialMediaIcon {
   url: string
-  icon: IconProp
+  icon: IconLookup
 }

@@ -8,6 +8,14 @@ export interface IProjectDescriptionProp {
 }
 
 export interface IProjectBannerProp {
-  companyProfile: string
-  companyLogo: string
+  companyProfile: string | null
+  companyLogo: string | null
+}
+
+export interface IProjectTarget {
+  targetRaise: number,
+  rate: number,
+  endDate: string,
+  minRocks: number,
+  vesting: number
 }

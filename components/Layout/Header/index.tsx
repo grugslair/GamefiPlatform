@@ -1,17 +1,15 @@
-import { ethers } from 'ethers'
 import { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import { grugContractABI, grugContractAddress } from '../../../helper/contract'
 import { validNetworkId } from '../../../helper/environment'
 import { AppDispatch, RootState } from '../../../store'
-import { resetWalletAction, walletStateAction, walletAddressAction, walletBalanceAction } from '../../../store/wallet/actions'
-import supportedChains from '../../../helper/chainList'
+import { resetWalletAction, walletAddressAction } from '../../../store/wallet/actions'
 import Web3Modal from 'web3modal'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { getGrugBalance, switchNetwork, walletConnect } from '../../../store/wallet/thunk'
+import { useAppDispatch } from '../../../hooks/useStoreHooks'
 
 const providerOptions = {
 }
@@ -28,7 +26,7 @@ if (typeof window !== 'undefined') {
 const Header = () => {
 
   const wallet  = useSelector((state: RootState) => state.wallet)
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   let {provider} = useSelector((state: RootState) => state.wallet)
 
   const connectWallet = useCallback(async function () {

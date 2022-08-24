@@ -4,23 +4,31 @@ import Banner from '../components/Public/Banner'
 import Project from '../components/Landing/Project'
 import { RootState } from '../store'
 import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
+import { getProjectList } from '../store/launchpad/thunk'
+import { useAppDispatch } from '../hooks/useStoreHooks'
 
 
 
 const Landing: NextPage = () => {
   const wallet  = useSelector((state: RootState) => state.wallet)
-  const dispatch = useDispatch()
+  const launchpad = useSelector((state: RootState) => state.launchpad)
+  const dispatch = useAppDispatch()
   const router = useRouter()
 
 
   useEffect(() => {
-    if(wallet.walletAddress && (wallet.balance && wallet.balance === 0)) {
+    console.log(wallet.balance)
+    if(wallet.balance === 0 || wallet.balance === null) {
       router.push('/Verification')
     }
 
-  }, [dispatch])
+  }, [wallet])
+
+  useEffect(() => {
+
+    dispatch(getProjectList())
+  }, [])
 
   return (
     <div>
@@ -54,10 +62,9 @@ const Landing: NextPage = () => {
           </div>
           <div className="relative">
             <div className='mx-[148px] grid gap-4 grid-cols-2 pb-5'>
-              <Project></Project>
-              <Project></Project>
-              <Project></Project>
-              <Project></Project>
+              {launchpad.projectList.map(project => (
+                <Project dataproject={project}></Project>
+              ))}
             </div>
           </div>
         </>

@@ -14,8 +14,8 @@ const IGO = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if(wallet.balance === 0) {
-      router.push('/')
+    if(wallet.balance === 0 || wallet.balance === null) {
+      router.push('/Verification')
     }
   })
 
@@ -70,6 +70,20 @@ const IGO = () => {
           </div>
           <div>
             <IGOTargetRaise />
+            <div>
+              <div>
+                Invest
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>My USDT Balance:</div>
+                <div>200 USDT</div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>Max. Allocation:</div>
+                <div>100 USDT</div>
+              </div>
+              <div></div>
+            </div>
           </div>
         </div>
       </div>

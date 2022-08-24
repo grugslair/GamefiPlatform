@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ISocialMediaIcon } from "../../../../types/globalTypes"
 import { IProjectDescriptionProp } from "../type"
+import style from './style.module.css'
 
 const ProjectDescription = (prop: IProjectDescriptionProp) => {
   return (
@@ -22,7 +23,7 @@ const ProjectDescription = (prop: IProjectDescriptionProp) => {
             prop.companySosMedList.map((sosMed: ISocialMediaIcon, index) => {
               return (
                 <li className='mr-[14px]' key={index}>
-                  <Link href={sosMed.url}>
+                  <Link href={sosMed.url} className={style.test}>
                     <>
                       <FontAwesomeIcon icon={sosMed.icon}/>
                     </>

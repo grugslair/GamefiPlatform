@@ -1,27 +1,36 @@
-const ProjectTarget = () => {
+const ProjectTarget = (props) => {
   return (
     <div>
       <div className="font-bold text-xs text-gray-500">
         Target Raise
       </div>
       <div className="font-bold text-gray-700">
-        $190.000
+        {props.targetRaise}
       </div>
       <div className="mb-4">
-        Progress bar
+        <progress className="progress progress-success w-full" value="50" max="100"></progress>
+        <div className="relative h-5">
+          <div className="absolute left-0">
+            test
+          </div>
+          <div className="absolute right-0">
+            test
+          </div>
+
+        </div>
       </div>
       <div>
         <div className="grid grid-cols-2 text-xs py-3 border-b">
           <div className="text-left font-bold text-gray-500">Rate</div>
-          <div className="text-right font-bold text-gray-800">1 USDT = 1.000 CHIBI</div>
+          <div className="text-right font-bold text-gray-800">{props.rate}</div>
         </div>
         <div className="grid grid-cols-2 text-xs py-3 border-b">
           <div className="text-left font-bold text-gray-500">End Date (GMT+7)</div>
-          <div className="text-right font-bold text-gray-800">6 March&apos;22 - 07:00</div>
+          <div className="text-right font-bold text-gray-800">{props.endDate}</div>
         </div>
         <div className="grid grid-cols-2 text-xs py-3 border-b">
           <div className="text-left font-bold text-gray-500">Min ROCKS</div>
-          <div className="text-right font-bold text-gray-800">300 ROCKS</div>
+          <div className="text-right font-bold text-gray-800">{props.minRocks}</div>
         </div>
         <div className="grid grid-cols-2 text-xs pb-12 pt-3">
           <div className="text-left font-bold text-gray-500">Vesting</div>
