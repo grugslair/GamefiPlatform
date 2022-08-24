@@ -10,10 +10,8 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 library.add(fab)
 
 function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-  }, [])
 
-  return(
+  return (
     <Provider store={store}>
       <Layout>
         <Component {...pageProps} />

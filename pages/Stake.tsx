@@ -17,7 +17,7 @@ const Stake: NextPage = () => {
       router.push('/Verification')
     }
 
-  }, [router, wallet])
+  }, [wallet])
 
 
   return (

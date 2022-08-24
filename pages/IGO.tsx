@@ -17,7 +17,7 @@ const IGO = () => {
     if(wallet.balance === 0 || wallet.balance === null) {
       router.push('/Verification')
     }
-  })
+  }, [])
 
   const IgoProfile: IIGOProfileProp = {
     companyLogo: {

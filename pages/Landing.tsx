@@ -18,17 +18,14 @@ const Landing: NextPage = () => {
 
 
   useEffect(() => {
-    console.log(wallet.balance)
     if(wallet.balance === 0 || wallet.balance === null) {
       router.push('/Verification')
     }
-
-  }, [wallet, router])
+  }, [wallet])
 
   useEffect(() => {
-
     dispatch(getProjectList())
-  })
+  }, [])
 
   return (
     <div>
