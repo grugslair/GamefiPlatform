@@ -37,7 +37,7 @@ const Header = () => {
     }
     await dispatch(getGrugBalance())
 
-  }, [])
+  }, [dispatch, wallet])
 
   const disconnect = useCallback(
     async function () {
@@ -47,7 +47,7 @@ const Header = () => {
       }
       dispatch(resetWalletAction())
     },
-    [wallet.provider]
+    [wallet.provider, dispatch]
   )
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const Header = () => {
         }
       }
     }
-  }, [provider, disconnect])
+  }, [provider, disconnect, dispatch])
 
   const router = useRouter()
 

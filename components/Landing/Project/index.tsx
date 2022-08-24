@@ -54,13 +54,6 @@ const Project = (props: IProps) => {
     vesting: props.dataproject.vestingRuleId
   }
 
-  useEffect(() => {
-    
-    console.log(props)
-    
-  }, [])
-  
-
   return (
     <>
       <div className="border-[#B546394D] border mb-10">

@@ -23,12 +23,12 @@ const Landing: NextPage = () => {
       router.push('/Verification')
     }
 
-  }, [wallet])
+  }, [wallet, router])
 
   useEffect(() => {
 
     dispatch(getProjectList())
-  }, [])
+  })
 
   return (
     <div>
@@ -62,8 +62,8 @@ const Landing: NextPage = () => {
           </div>
           <div className="relative">
             <div className='mx-[148px] grid gap-4 grid-cols-2 pb-5'>
-              {launchpad.projectList.map(project => (
-                <Project dataproject={project}></Project>
+              {launchpad.projectList.map((project, index) => (
+                <Project key={index} dataproject={project}></Project>
               ))}
             </div>
           </div>

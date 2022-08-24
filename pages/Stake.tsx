@@ -1,18 +1,14 @@
 import type { NextPage } from 'next'
 import { useSelector } from 'react-redux'
-import Banner from '../components/Public/Banner'
-import Project from '../components/Landing/Project'
 import { RootState } from '../store'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
-import { getProjectList } from '../store/launchpad/thunk'
 
 
 
 const Stake: NextPage = () => {
   const wallet  = useSelector((state: RootState) => state.wallet)
-  const launchpad = useSelector((state: RootState) => state.launchpad)
   const dispatch = useDispatch()
   const router = useRouter()
 
@@ -21,7 +17,7 @@ const Stake: NextPage = () => {
       router.push('/Verification')
     }
 
-  }, [dispatch])
+  }, [router, wallet])
 
 
   return (

@@ -13,7 +13,7 @@ const Verification = () => {
     if(wallet.walletAddress !== null && wallet.balance && wallet.balance > 0) {
       router.push('/Landing')
     }
-  }, [wallet])
+  }, [wallet, router])
 
   return (
     <>
