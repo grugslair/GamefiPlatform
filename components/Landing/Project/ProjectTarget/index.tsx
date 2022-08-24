@@ -1,4 +1,6 @@
-const ProjectTarget = (props) => {
+import { IProjectTarget } from "../type"
+
+const ProjectTarget = (props: IProjectTarget) => {
   return (
     <div>
       <div className="font-bold text-xs text-gray-500">
