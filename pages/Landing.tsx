@@ -24,7 +24,7 @@ const Landing: NextPage = () => {
   }, [wallet])
 
   useEffect(() => {
-    dispatch(getProjectList())
+    // dispatch(getProjectList())
   }, [])
 
   return (

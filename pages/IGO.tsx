@@ -14,10 +14,10 @@ const IGO = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if(wallet.balance === 0 || wallet.balance === null) {
-      router.push('/Verification')
-    }
-  }, [])
+    // if(wallet.balance === 0 || wallet.balance === null) {
+    //   router.push('/Verification')
+    // }
+  }, [wallet])
 
   const IgoProfile: IIGOProfileProp = {
     companyLogo: {
