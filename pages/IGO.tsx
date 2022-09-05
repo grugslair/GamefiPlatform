@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 import IGOClaimStatus from "../components/IGO/IGOClaimStatus"
 import IGOPoolTimeline from "../components/IGO/IGOPoolTimeline"
 import IGOProfile from "../components/IGO/IGOProfile"
-import IgoStake from "../components/IGO/IGORegister/igoStake"
+import IgoStake from "../components/IGO/IGORegister/IgoStake"
 import IGOTargetRaise from "../components/IGO/IGOTargetRaise"
 import { IIGOProfileProp } from "../components/IGO/type"
 import { RootState } from "../store"
@@ -84,6 +84,7 @@ const IGO = () => {
                 <div className="text-[#D0D5DD]">Max. Allocation:</div>
                 <div className="text-right">100 USDT</div>
               </div>
+              
               <IgoStake />
             </div>
           </div>
