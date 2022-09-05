@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import url('http://fonts.cdnfonts.com/css/avara');
+@import 'antd/dist/antd.css';
 
 @font-face {
   font-family: 'avara';
@@ -14,5 +15,27 @@
 body{
   color: white;
   background-color: black;
+  height: unset;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 1;
+}
+.line-clamp-2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 2;
+}
+.line-clamp-3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 3;
+}
+.line-clamp-4 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 4;
 }
               

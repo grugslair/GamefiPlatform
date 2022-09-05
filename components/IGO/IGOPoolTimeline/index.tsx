@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
+import { Timeline } from 'antd'
 
 const IGOPoolTimeline = () => {
 
@@ -40,46 +41,36 @@ const IGOPoolTimeline = () => {
 
   return (
     <>
-      <div className="p-4 mt-4 border">
+      <div className="p-4 mt-4 border border-[#B546394D] divide-y divide-dashed divide-[#FCFCFD]">
         <div>
           <div className="grid grid-cols-2 my-3">
-            <div className="text-lg font-bold">Pool Timeline</div>
-            <div className="text-center">
-              <span className="bg-gray-600 text-white rounded-full px-4 py-1">GMT+7</span>
-            </div>
+            <div className="text-lg font-bold font-['avara'] text-[#CA5D50]">Pool Timeline</div>
           </div>
-          <ul className="steps steps-vertical">
-            <li className="step step-primary">
-              <div>
-                <div className="text-left">Registration Phase</div>
-                <div>20 May&apos;22 11:00 - 20 May&apos;22 16:00</div>
-              </div>
-            </li>
-            <li className="step step-primary">
-              <div>
-                <div className="text-left">Buying Phase</div>
-                <div>21 May&apos;22 11:00 - 25 May&apos;22 16:00</div>
-              </div>
-            </li>
-            <li className="step">
-              <div>
-                <div className="text-left">Claim Start (10% TGE)</div>
-                <div className="text-left">25 June&apos;22 11:00</div>
-              </div>
-            </li>
-          </ul>
+          <Timeline>
+            <Timeline.Item className="text-white" color="#B54639">
+              <div className="text-[#FCFCFD]">Registration Phase</div>
+              <div className="text-[#98A2B3]">20 May&apos;22 11:00 - 20 May&apos;22 16:00</div>
+            </Timeline.Item>
+            <Timeline.Item className="text-white" color="#98A2B3">
+              <div className="text-[#667085]">Buying Phase</div>
+              <div className="text-[#475467]">20 May&apos;22 11:00 - 20 May&apos;22 16:00</div>
+            </Timeline.Item>
+            <Timeline.Item className="text-white" color="#98A2B3">
+              <div className="text-[#667085]">Claim Start (10% TGE)</div>
+              <div className="text-[#475467]">20 May&apos;22 11:00 - 20 May&apos;22 16:00</div>
+            </Timeline.Item>
+          </Timeline>
         </div>
-        <hr className="my-6"/>
         <div>
-          <div className="font-bold text-xl mb-2">
+          <div className="font-bold text-xl my-6 text-[#CA5D50] font-['avara']">
             Token Info
           </div>
           <div className="grid grid-cols-2">
-            <div>
-              {data.map(item => <div key={item.text}>{item.text}</div>)}
+            <div className="text-[#D0D5DD]">
+              {data.map(item => <div className="mb-4" key={item.text}>{item.text}</div>)}
             </div>
             <div>
-              {data.map(item => <div key={item.value}>{item.value}</div>)}
+              {data.map(item => <div className="mb-4 font-['avara']" key={item.value}>{item.value}</div>)}
             </div>
           </div>
         </div>

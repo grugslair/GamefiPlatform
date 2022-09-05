@@ -19,9 +19,11 @@ const IGOProfile = (prop: IIGOProfileProp) => {
             </button>
           </div>
           <div className="text-right">
-            <button className="px-4 py-1 border">
-              Add to Metamask
-            </button>
+            <span 
+              className="text-[#EAAA08] text-sm rounded-full px-4 py-1 border border-[#EAAA08]"
+            >
+              Ends in 10d : 7h : 30m : 10s
+            </span>
           </div>
         </div>
         <div className="grid grid-cols-5 grid-flow-col">
@@ -36,7 +38,7 @@ const IGOProfile = (prop: IIGOProfileProp) => {
           <div className="col-span-4">
             <div className="font-bold text-xl font-['avara']">{prop.companyName}</div>
             <div className="font-semibold text-gray-400 mb-5">{prop.companyToken}</div>
-            <div className="truncate mb-5">
+            <div className="line-clamp-4 mb-5">
               {prop.companyDesc}
             </div>
             <div>
@@ -44,7 +46,7 @@ const IGOProfile = (prop: IIGOProfileProp) => {
                 {prop.companySosMedia.map((sosMed, index) => 
                   <li key={index}>
                     <Link href={sosMed.url}>
-                      <FontAwesomeIcon icon={sosMed.icon} />
+                      <FontAwesomeIcon icon={sosMed.icon} color="#CA5D50" className="fa-xl mr-6"/>
                     </Link>
                   </li>
                 )}

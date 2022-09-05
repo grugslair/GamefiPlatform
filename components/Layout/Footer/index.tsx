@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ISocialMediaIcon } from '../../../types/globalTypes'
 import footerStyles from './Footer.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTwitter, fa42Group, faDiscord, faTelegram} from '@fortawesome/free-brands-svg-icons'
 
 const Footer = () => {
   const menus = [
@@ -23,19 +24,19 @@ const Footer = () => {
   const sosMedList: ISocialMediaIcon[] = [
     {
       url: '/Landing',
-      icon: {prefix: 'fab', iconName: 'twitter'},
+      icon: faTwitter,
     },
     {
       url: '/Landing',
-      icon: {prefix: 'fab', iconName: '42-group'},
+      icon: fa42Group,
     },
     {
       url: '/Landing',
-      icon: {prefix: 'fab', iconName: 'discord'},
+      icon: faDiscord,
     },
     {
       url: '/Landing',
-      icon: {prefix: 'fab', iconName: 'telegram'},
+      icon: faTelegram,
     },
   ]
 

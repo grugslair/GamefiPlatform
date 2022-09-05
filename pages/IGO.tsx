@@ -1,9 +1,11 @@
+import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import IGOClaimStatus from "../components/IGO/IGOClaimStatus"
 import IGOPoolTimeline from "../components/IGO/IGOPoolTimeline"
 import IGOProfile from "../components/IGO/IGOProfile"
+import IgoStake from "../components/IGO/IGORegister/igoStake"
 import IGOTargetRaise from "../components/IGO/IGOTargetRaise"
 import { IIGOProfileProp } from "../components/IGO/type"
 import { RootState } from "../store"
@@ -31,19 +33,19 @@ const IGO = () => {
     companySosMedia: [
       {
         url: '/Landing',
-        icon: {prefix: 'fab', iconName: 'twitter'}
+        icon: faTwitter
       },
       {
         url: '/Landing',
-        icon: {prefix: 'fab', iconName: 'twitter'}
+        icon: faMedium
       },
       {
         url: '/Landing',
-        icon: {prefix: 'fab', iconName: 'discord'}
+        icon: faDiscord
       },
       {
         url: '/Landing',
-        icon: {prefix: 'fab', iconName: 'telegram'}
+        icon: faTelegram
       },
     ]
   }
@@ -70,19 +72,19 @@ const IGO = () => {
           </div>
           <div>
             <IGOTargetRaise />
-            <div>
-              <div>
+            <div className="relative p-6">
+              <div className="font-['avara'] text-[#CA5D50] mb-4">
                 Invest
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>My USDT Balance:</div>
-                <div>200 USDT</div>
+              <div className="grid grid-cols-2 gap-2 mb-2">
+                <div className="text-[#D0D5DD]">My USDT Balance:</div>
+                <div className="text-right">200 USDT</div>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <div>Max. Allocation:</div>
-                <div>100 USDT</div>
+              <div className="grid grid-cols-2 gap-2 mb-4">
+                <div className="text-[#D0D5DD]">Max. Allocation:</div>
+                <div className="text-right">100 USDT</div>
               </div>
-              <div></div>
+              <IgoStake />
             </div>
           </div>
         </div>
