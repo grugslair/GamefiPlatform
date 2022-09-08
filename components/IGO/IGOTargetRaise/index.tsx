@@ -6,7 +6,7 @@ import { Progress } from "antd"
 const IGOTargetRaise = () => {
   return (
     <>
-      <div className="border border-[#B546394D] p-6">
+      <div className="border border-[#B546394D] p-6 bg-[#151011]">
         <div>
           <div className="text-xs mb-1">
             Target Raise

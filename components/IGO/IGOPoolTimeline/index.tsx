@@ -41,7 +41,7 @@ const IGOPoolTimeline = () => {
 
   return (
     <>
-      <div className="p-4 mt-4 border border-[#B546394D] divide-y divide-dashed divide-[#FCFCFD]">
+      <div className="p-4 mt-4 border border-[#B546394D] divide-y divide-dashed divide-[#FCFCFD] bg-[#151011]">
         <div>
           <div className="grid grid-cols-2 my-3">
             <div className="text-lg font-bold font-['avara'] text-[#CA5D50]">Pool Timeline</div>

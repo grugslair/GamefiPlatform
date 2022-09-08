@@ -8,6 +8,7 @@ import IGOProfile from "../components/IGO/IGOProfile"
 import IgoStake from "../components/IGO/IGORegister/IgoStake"
 import IGOTargetRaise from "../components/IGO/IGOTargetRaise"
 import { IIGOProfileProp } from "../components/IGO/type"
+import ModalStakeAmount from "../components/Public/ModalStakeAmount"
 import { RootState } from "../store"
 
 const IGO = () => {
@@ -71,8 +72,8 @@ const IGO = () => {
             <IGOClaimStatus />
           </div>
           <div>
-            <IGOTargetRaise />
-            <div className="relative p-6">
+            <IGOTargetRaise/>
+            <div className="relative p-6 mt-4 bg-[#151011]">
               <div className="font-['avara'] text-[#CA5D50] mb-4">
                 Invest
               </div>
@@ -90,6 +91,7 @@ const IGO = () => {
           </div>
         </div>
       </div>
+      <ModalStakeAmount />
     </div>
   )
 }

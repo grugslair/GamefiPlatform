@@ -2,7 +2,7 @@ import { Timeline } from "antd"
 
 const IGOClaimStatus = () => {
   return (
-    <div className="p-4 border border-[#B546394D] mt-4">
+    <div className="p-4 border border-[#B546394D] mt-4 bg-[#151011]">
       <div>
         <div className="text-[#CA5D50] text-xl mb-6 font-['avara']">Vesting</div>
         

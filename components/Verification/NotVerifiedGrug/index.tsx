@@ -22,7 +22,7 @@ const NotVerifiedGrug = () => {
               </div>
 
               <div className="ml-5">
-                <h1 className="font-['avara']">Own a Grug&apos;s NFT</h1>
+                <h1 className="font-['avara'] text-white">Own a Grug&apos;s NFT</h1>
                 <p>You can get the NFT from Opensea</p>
                 <button 
                   className="mt-5 px-[14px] py-2 bg-[#B54639] rounded-sm font-bold text-white" 
@@ -43,12 +43,12 @@ const NotVerifiedGrug = () => {
               <div className="ml-5">
                 {wallet.walletAddress ? (
                   <>
-                    <h1 className="font-['avara']">Wallet Connected</h1>
+                    <h1 className="font-['avara'] text-white">Wallet Connected</h1>
                     <p>You successfully connect Metamask</p>
                   </>
                 ) : (
                   <>
-                    <h1 className="font-['avara']">Connect Wallet</h1>
+                    <h1 className="font-['avara'] text-white">Connect Wallet</h1>
                     <p>Connect your Metamask / TrustWallet</p>
                   </>
                 )}

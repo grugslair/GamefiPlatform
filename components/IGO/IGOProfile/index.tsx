@@ -10,7 +10,7 @@ const IGOProfile = (prop: IIGOProfileProp) => {
 
   return (
     <>
-      <div className="border p-4 border-[#B546394D]">
+      <div className="border p-4 border-[#B546394D] bg-[#151011]">
         <div className="grid grid-cols-2 mb-4">
           <div className="text-left">
             <button onClick={() => router.push('/Landing')}>
