@@ -13,13 +13,7 @@ export const walletConnect = createAsyncThunk<IwalletConnect, any>(
       const etherProvider = new ethers.providers.Web3Provider(provider, 'any')
       const signer = etherProvider.getSigner()
       const walletAddress = await signer.getAddress()
-
       const network = await etherProvider.getNetwork()
-      // if(network.chainId != validNetworkId) {
-      //   await swithcNetwork(provider)
-      // }
-
-      // const balance = await getGrugBalance(web3Provider, address)
 
       return {
         walletAddress,

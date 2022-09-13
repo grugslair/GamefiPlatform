@@ -10,6 +10,8 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { getGrugBalance, switchNetwork, walletConnect } from '../../../store/wallet/thunk'
 import { useAppDispatch } from '../../../hooks/useStoreHooks'
+import { contractGetBalance, initiateRocksContract } from '../../../store/contractRocks/thunk'
+import { initiateStakingContract } from '../../../store/contractStake/thunk'
 
 const providerOptions = {
 }
@@ -36,6 +38,11 @@ const Header = () => {
       await dispatch(switchNetwork())
     }
     await dispatch(getGrugBalance())
+
+    await dispatch(initiateStakingContract())
+    await dispatch(initiateRocksContract())
+
+    await dispatch(contractGetBalance());
 
   }, [wallet.walletAddress])
 

@@ -1,4 +1,5 @@
 import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -8,7 +9,6 @@ import IGOProfile from "../components/IGO/IGOProfile"
 import IgoStake from "../components/IGO/IGORegister/IgoStake"
 import IGOTargetRaise from "../components/IGO/IGOTargetRaise"
 import { IIGOProfileProp } from "../components/IGO/type"
-import ModalStakeAmount from "../components/Public/ModalStakeAmount"
 import { RootState } from "../store"
 
 const IGO = () => {
@@ -91,7 +91,6 @@ const IGO = () => {
           </div>
         </div>
       </div>
-      <ModalStakeAmount />
     </div>
   )
 }
