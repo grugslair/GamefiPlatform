@@ -1,3 +1,4 @@
+import { BigNumber, ethers } from "ethers"
 import { IChainData } from "../types/chainList"
 import supportedChains from "./chainList"
 
@@ -36,4 +37,12 @@ export function ellipseAddress(address = '', width = 10): string {
     return ''
   }
   return `${address.slice(0, width)}...${address.slice(-width)}`
+}
+
+export function ethToWei(eth: string) {
+  return ethers.utils.formatUnits(eth, 'wei')
+}
+
+export function weiToEth(wei: string) {
+  return ethers.utils.formatEther(wei)
 }

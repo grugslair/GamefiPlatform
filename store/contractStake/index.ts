@@ -3,7 +3,6 @@ import { IContractStake } from './contractStake'
 import { contractStaking, getAllowance, getGasPrice, initiateStakingContract } from './thunk'
 
 const initialState = {
-  balanceOfRocks: 0,
   stakeContract: null,
   allowance: null,
   gasPrice: null
@@ -51,9 +50,6 @@ const contractStake = createSlice({
       console.log('pending request launchpad')
     })
     builder.addCase(contractStaking.fulfilled, (state: IContractStake, action: any) => {
-      if(action.payload) {
-        state.balanceOfRocks = action.payload.balanceOfRocks
-      }
     })
     builder.addCase(contractStaking.rejected, (state, action) => {
       console.log('rejected async thunk', action)

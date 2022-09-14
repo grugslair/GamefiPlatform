@@ -45,7 +45,7 @@ export const getGasPrice = createAsyncThunk(
       const getGasPrice = await wallet.etherProvider.getGasPrice();
 
       return {
-        gasPrice: getGasPrice
+        gasPrice: getGasPrice._hex
       }
       
     }catch(error) {
@@ -64,11 +64,6 @@ export const contractStaking = createAsyncThunk(
     try {
 
       //threshold value lebih dari amount input set too threshold value otherwise set to amount value 
-      
-
-      const weiAmount = ethers.utils.formatUnits(BigNumber.from(amount).toString(), 'wei')
-
-      const estimatedGasApproval = await rocksContract.estimateGas.approve(stakeContractAddress, weiAmount)
 
       // const iRocks = new ethers.utils.Interface(rocksContractABI)
 
@@ -90,7 +85,7 @@ export const contractStaking = createAsyncThunk(
 
       console.log('contract abi stake', stakeContractABI)
 
-      const dataIStake = iStake.encodeFunctionData("lockToken", [weiAmount])
+      const dataIStake = iStake.encodeFunctionData("lockToken", [amount])
 
       const transactionParametersStake = {
         gasPrice: gasPrice._hex, // customizable by user during MetaMask confirmation.

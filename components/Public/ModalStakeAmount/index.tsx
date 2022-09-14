@@ -2,14 +2,18 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Checkbox, Input, Modal, Radio, RadioChangeEvent } from "antd"
 import type { CheckboxChangeEvent } from "antd/lib/checkbox";
+import { BigNumber, ethers } from "ethers";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useState } from "react"
 import { useSelector } from "react-redux";
+import { ethToWei, weiToEth } from "../../../helper/utilities";
 import { useAppDispatch } from "../../../hooks/useStoreHooks";
 import { RootState } from "../../../store";
 import { IContractRocks } from "../../../store/contractRocks/contractRocks";
+import { approveContractRocks } from "../../../store/contractRocks/thunk";
 import { IContractStake } from "../../../store/contractStake/contractStake";
 import { contractStaking, getAllowance, getGasPrice } from "../../../store/contractStake/thunk";
+import { IwalletConnect } from "../../../store/wallet/walletType";
 
 interface IModalStakeAmountProps {
   actionTitle: string
@@ -23,10 +27,15 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
   const [disclaimer, setDisclaimer] = useState(false)
   const contractRocks: IContractRocks = useSelector((state: RootState) => state.contractRocks)
   const contractStake: IContractStake = useSelector((state: RootState) => state.contractStake)
+  const wallet: IwalletConnect = useSelector((state: RootState) => state.wallet)
+
   const dispatch = useAppDispatch()
 
   function changeStakeAmount(event: ChangeEvent<HTMLInputElement>) {
     setStakeAmount(event.target.value)
+    if(parseInt(event.target.value, 10) > contractRocks.balanceOfRocks) {
+      setDisclaimer(false)
+    }
   }
 
   function handleCancel() {
@@ -38,20 +47,35 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
   }
   
   function checkDisclaimer(event: CheckboxChangeEvent) {
-    console.log(event.target.checked)
-    setDisclaimer(event.target.checked)
+    if(event.target.checked && parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
+      setDisclaimer(true)
+    } else {
+      setDisclaimer(false)
+    }
   }
 
   async function staking() {
-    await dispatch(getAllowance())
-    await dispatch(getGasPrice())
+    if(parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
+      await dispatch(getGasPrice())
 
-    if(contractStake.allowance && (parseInt(stakeAmount, 10) < contractStake.allowance)) {
+      const weiAmount = ethToWei(stakeAmount.toString())
 
-    } else {
-      await dispatch(contractStaking(stakeAmount))
+      const ethAmount = weiToEth(stakeAmount.toString())
+
+      console.log(contractStake.allowance)
+      console.log(weiAmount)
+      console.log(ethAmount)
+
+      if(contractStake.allowance) {
+        if(parseInt(weiAmount, 10) <= contractStake.allowance) {
+          await dispatch(contractStaking(weiAmount))
+        } else {
+          await dispatch(approveContractRocks(weiAmount))
+        }
+      }
     }
   }
+
 
   return (
     <div>
@@ -60,7 +84,7 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
       </Button>
       <Modal
         width={400}
-        destroyOnClose
+        destroyOnClose={true}
         open={isModalOpen} 
         onCancel={handleCancel}
         closeIcon={
@@ -108,7 +132,7 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
             </Input.Group>
           </div>
           <div className="mb-6">
-            <Checkbox className="text-[#98A2B3]" defaultChecked={disclaimer} onChange={checkDisclaimer}>
+            <Checkbox className="text-[#98A2B3]" checked={disclaimer} onChange={checkDisclaimer}>
               By checking this box, you’ll agree to lock the token until 7 days after IGO ended 
             </Checkbox>
           </div>
