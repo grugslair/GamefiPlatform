@@ -1,6 +1,6 @@
 import { Timeline } from "antd"
 
-const IGOClaimStatus = () => {
+const IGOClaimStatus = ({data}:any) => {
   return (
     <div className="p-4 border border-[#B546394D] mt-4 bg-[#151011]">
       <div>
@@ -8,7 +8,7 @@ const IGOClaimStatus = () => {
         
         <div className="grid grid-cols-2 my-2">
           <div>
-            <div className="font-semibold text-[#D0D5DD] text-sm mb-2">
+            <div className="font-semibold text-[#151c26] text-sm mb-2">
               Total Claimed
             </div>
             <div className="font-bold text-xl font-['avara']">0/0 CHIBI</div>

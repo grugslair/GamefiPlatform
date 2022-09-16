@@ -56,7 +56,8 @@ export interface IProject {
   tokenContractAddress: string // href logo token -> polygon/address/
   tokenSymbol: string //projectDecription -> company Token
   tokenDecimals: number 
-  tokenInitialSupply: number 
+  tokenInitialSupply: number
+  tokenTotalSupply: number 
   description: string //projectDescription -> companyDesc
   status: string
   banner: string | null //projectBanner -> companyProfile

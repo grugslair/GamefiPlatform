@@ -83,11 +83,16 @@ const ProjectDetail = () => {
                   companyToken={IgoProfile.companyToken}
                   companySosMedia={IgoProfile.companySosMedia}
                 />
-                <IGOPoolTimeline />
-                <IGOClaimStatus />
+                <IGOPoolTimeline
+                  data={dataIGO}
+                />
+                <IGOClaimStatus
+                />
               </div>
               <div>
-                <IGOTargetRaise/>
+                <IGOTargetRaise
+                  data={dataIGO}
+                />
                 <div className="relative p-6 mt-4 bg-[#151011]">
                   <div className="font-['avara'] text-[#CA5D50] mb-4">
                     Invest

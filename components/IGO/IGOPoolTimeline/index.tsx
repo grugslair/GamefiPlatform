@@ -2,16 +2,16 @@ import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Timeline } from 'antd'
 
-const IGOPoolTimeline = () => {
+const IGOPoolTimeline = ({data}: any) => {
 
-  const data = [
+  const dataTest = [
     {
       text: 'symbol',
-      value: '$CHIBI'
+      value: data.tokenSymbol
     },
     {
       text: 'Token Price',
-      value: '0.004 USDT'
+      value: data.publicSalePrice
     },
     {
       text: 'Token Network',
@@ -19,15 +19,15 @@ const IGOPoolTimeline = () => {
     },
     {
       text: 'Initial Supply',
-      value: '10.000.000 CHIBI'
+      value: `${data.tokenInitialSupply} ${data.tokenSymbol}`
     },
     {
       text: 'Total Supply',
-      value: '100.000.000 CHIBI'
+      value: `${data.tokenTotalSupply} ${data.tokenSymbol}`
     },
     {
       text: 'Initial Market Cap',
-      value: '$400.000'
+      value: `$${data.targetAmount}`
     },
     {
       text: 'Listing Date',
@@ -67,10 +67,10 @@ const IGOPoolTimeline = () => {
           </div>
           <div className="grid grid-cols-2">
             <div className="text-[#D0D5DD]">
-              {data.map(item => <div className="mb-4" key={item.text}>{item.text}</div>)}
+              {dataTest.map(item => <div className="mb-4" key={item.text}>{item.text}</div>)}
             </div>
             <div>
-              {data.map(item => <div className="mb-4 font-['avara']" key={item.value}>{item.value}</div>)}
+              {dataTest.map(item => <div className="mb-4 font-['avara']" key={item.value}>{item.value}</div>)}
             </div>
           </div>
         </div>

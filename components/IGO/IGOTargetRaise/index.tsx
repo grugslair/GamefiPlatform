@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { Progress } from "antd"
 
-const IGOTargetRaise = () => {
+const IGOTargetRaise = ({data}: any) => {
   return (
     <>
       <div className="border border-[#B546394D] p-6 bg-[#151011]">
@@ -12,17 +12,17 @@ const IGOTargetRaise = () => {
             Target Raise
           </div>
           <div className="text-2xl font-['avara']">
-            $190.000
+            {data.targetAmount}
           </div>
           <div>
             <Progress strokeColor="#1E9E3E" percent={50} showInfo={false} />
           </div>
           <div className="grid grid-cols-2 mb-5">
             <div className="text-[#98A2B3] text-xs">
-              Progress: 0%
+              Progress: {(data.publicSaleTokenSold / data.targetAmount) * 100} %
             </div>
             <div className="text-right text-[#98A2B3] text-xs">
-              0/150.000 CHIBI
+              {data.publicSaleTokenSold} / {data.targetAmount} {data.tokenSymbol}
             </div>
           </div>
           <button className="p-3 w-full border border-[#CA5D504D] bg-[#68121E1A]">
