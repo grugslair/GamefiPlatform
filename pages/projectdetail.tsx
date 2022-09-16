@@ -41,29 +41,25 @@ const ProjectDetail = () => {
 
   const IgoProfile: IIGOProfileProp = {
     companyLogo: {
-      img: '/Zenless_Zone_Zero_logo.png',
+      img: dataIGO?.logo || '',
       width: 80,
       height: 80
     },
-    companyName: 'Chibi Dino',
-    companyToken: '$CHIBI - ETH',
-    companyDesc: 'Chibi Dinos is an ever expanding ecosystem spanning the Metaverse and Play to Earn Game',
+    companyName: dataIGO?.name || '',
+    companyToken: dataIGO?.tokenSymbol || '',
+    companyDesc: dataIGO?.description || '',
     companySosMedia: [
       {
-        url: '/',
+        url: dataIGO?.twitterUrl || '',
         icon: faTwitter
       },
       {
-        url: '/',
+        url: dataIGO?.mediumUrl || '',
         icon: faMedium
       },
       {
-        url: '/',
+        url: dataIGO?.discordUrl || '',
         icon: faDiscord
-      },
-      {
-        url: '/',
-        icon: faTelegram
       },
     ]
   }
@@ -81,10 +77,10 @@ const ProjectDetail = () => {
             <div className="grid grid-cols-3 gap-3 px-9 pt-48">
               <div className="col-span-2">
                 <IGOProfile 
-                  companyLogo={dataIGO.logo}
-                  companyDesc={dataIGO.description}
-                  companyName={dataIGO.name}
-                  companyToken={dataIGO.tokenSymbol}
+                  companyLogo={IgoProfile.companyLogo}
+                  companyDesc={IgoProfile.companyDesc}
+                  companyName={IgoProfile.companyName}
+                  companyToken={IgoProfile.companyToken}
                   companySosMedia={IgoProfile.companySosMedia}
                 />
                 <IGOPoolTimeline />
