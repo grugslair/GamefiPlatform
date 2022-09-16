@@ -40,7 +40,9 @@ export function ellipseAddress(address = '', width = 10): string {
 }
 
 export function ethToWei(eth: string) {
-  return ethers.utils.formatUnits(eth, 'wei')
+  const weiAmount = ethers.utils.parseUnits(eth, 'ether')
+
+  return weiAmount.toString()
 }
 
 export function weiToEth(wei: string) {

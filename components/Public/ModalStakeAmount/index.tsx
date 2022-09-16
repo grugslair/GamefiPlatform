@@ -4,7 +4,7 @@ import { Button, Checkbox, Input, Modal, Radio, RadioChangeEvent } from "antd"
 import type { CheckboxChangeEvent } from "antd/lib/checkbox";
 import { BigNumber, ethers } from "ethers";
 import Link from "next/link";
-import React, { ChangeEvent, useEffect, useState } from "react"
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
 import { ethToWei, weiToEth } from "../../../helper/utilities";
 import { useAppDispatch } from "../../../hooks/useStoreHooks";
@@ -32,10 +32,14 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
   const dispatch = useAppDispatch()
 
   function changeStakeAmount(event: ChangeEvent<HTMLInputElement>) {
-    setStakeAmount(event.target.value)
-    if(parseInt(event.target.value, 10) > contractRocks.balanceOfRocks) {
-      setDisclaimer(false)
-    }
+    if(event.target.value === "" || parseInt(event.target.value, 10) < 0) {
+      setStakeAmount('0')      
+    } else {
+      setStakeAmount(event.target.value)
+      if(parseInt(event.target.value, 10) > contractRocks.balanceOfRocks) {
+        setDisclaimer(false)
+      }
+    }    
   }
 
   function handleCancel() {
@@ -54,27 +58,46 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
     }
   }
 
+  const isAllowed = useMemo(() => {
+    const weiAmount = ethToWei(stakeAmount.toString())
+    if(contractStake.allowance) {
+      return parseInt(weiAmount, 10) <= contractStake.allowance
+    }
+    return false
+    
+  }, [stakeAmount])
+
   async function staking() {
     if(parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
       await dispatch(getGasPrice())
 
       const weiAmount = ethToWei(stakeAmount.toString())
 
-      const ethAmount = weiToEth(stakeAmount.toString())
-
-      console.log(contractStake.allowance)
-      console.log(weiAmount)
-      console.log(ethAmount)
-
       if(contractStake.allowance) {
-        if(parseInt(weiAmount, 10) <= contractStake.allowance) {
           await dispatch(contractStaking(weiAmount))
-        } else {
-          await dispatch(approveContractRocks(weiAmount))
-        }
       }
     }
   }
+
+  async function approve() {
+    if(parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
+      await dispatch(getGasPrice())
+
+      const weiAmount = ethToWei(stakeAmount.toString())
+
+      if(contractStake.allowance) {
+        await dispatch(approveContractRocks(weiAmount))
+      }
+    }
+  }
+
+  async function callAllowance() {
+    await dispatch(getAllowance())
+  }
+
+  useEffect(() => {
+    callAllowance()
+  }, [isModalOpen])
 
 
   return (
@@ -114,6 +137,7 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
                 className="bg-[#68121E1A] text-white border border-[#CA5D504D]" 
                 value={stakeAmount} 
                 size="large"
+                defaultValue={0}
                 onChange={changeStakeAmount}
                 type="number"
               />
@@ -136,13 +160,25 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
               By checking this box, you’ll agree to lock the token until 7 days after IGO ended 
             </Checkbox>
           </div>
-          <Button 
-            className="w-full mb-6 py-2 bg-[#B54639] text-base font-['avara']"
-            disabled={!disclaimer}
-            onClick={staking}
-          >
-            Stake
-          </Button>
+
+          {isAllowed ? (
+            <Button 
+              className="w-full mb-6 py-2 bg-[#B54639] text-base font-['avara']"
+              disabled={!disclaimer}
+              onClick={staking}
+            >
+              Stake
+            </Button>
+          ) : (
+            <Button 
+              className="w-full mb-6 py-2 bg-[#B54639] text-base font-['avara']"
+              disabled={!disclaimer}
+              onClick={approve}
+            >
+              Approve
+            </Button>
+          )}
+
           <div>
             Dont have ROCKS? 
             <Link passHref href={'/Stake'}>

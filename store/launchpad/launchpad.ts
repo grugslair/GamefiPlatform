@@ -12,10 +12,46 @@ export interface IProjectBannerProp {
   companyLogo: string
 }
 
+export interface IProjectVestingRule {
+  id: number,
+  label: string,
+  tgePercentage: number,
+  type: string,
+  periodPercentage: number,
+  cliffPeriod: number,
+  createdAt: string,
+  updatedAt: string
+}
+
+export interface IPorjectCurrency {
+  id: number,
+  symbol: string,
+  contractAddress: string,
+  name: string,
+  decimals: number,
+  rate: number,
+  createdAt: string,
+  updatedAt: string
+}
+
+export interface IProjectChain {
+  id: number,
+  networkId: string,
+  rpcUrl: string,
+  name: string,
+  logo: string,
+  color: string,
+  createdAt: string,
+  updatedAt: string
+}
+
 export interface IProject {
   id: number
   chainId: number // ini di polygon
   vestingRuleId: number // ada tambahan object label
+  VestingRule: IProjectVestingRule
+  Currency: IPorjectCurrency
+  Chain: IProjectChain
   name: string //projectDescription -> comapnyName
   tokenContractAddress: string // href logo token -> polygon/address/
   tokenSymbol: string //projectDecription -> company Token
@@ -29,7 +65,7 @@ export interface IProject {
   publicSaleTokenAmount: number // -> 150rb -> berarti ini ambil dari contract
   publicSaleTokenSold: number // 2500 -> ambil dari contract
   publicSalePrice: number // rate -> 1usdt = 1000 dota
-  minInvestment: number //projectTarget -> minRocks
+  minStaking: number //projectTarget -> minRocks
   periodStart: string 
   periodEnd: string //projectTarget -> endDate
   discordUrl: string | null

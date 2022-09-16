@@ -23,10 +23,10 @@ const ProjectDescription = (prop: IProjectDescriptionProp) => {
             prop.companySosMedList.map((sosMed: ISocialMediaIcon, index) => {
               return (
                 <li className='mr-[14px]' key={index}>
-                  <Link href={sosMed.url} className={style.test}>
-                    <>
+                  <Link passHref href={sosMed.url} className={style.test}>
+                    <a>
                       <FontAwesomeIcon icon={sosMed.icon}/>
-                    </>
+                    </a>
                   </Link>
                 </li>
               )

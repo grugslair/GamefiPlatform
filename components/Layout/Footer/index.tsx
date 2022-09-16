@@ -23,19 +23,19 @@ const Footer = () => {
 
   const sosMedList: ISocialMediaIcon[] = [
     {
-      url: '/Landing',
+      url: '/',
       icon: faTwitter,
     },
     {
-      url: '/Landing',
+      url: '/',
       icon: fa42Group,
     },
     {
-      url: '/Landing',
+      url: '/',
       icon: faDiscord,
     },
     {
-      url: '/Landing',
+      url: '/',
       icon: faTelegram,
     },
   ]

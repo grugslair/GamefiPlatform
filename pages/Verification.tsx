@@ -11,7 +11,7 @@ const Verification = () => {
 
   useEffect(() => {
     if(wallet.walletAddress !== null && wallet.balance && wallet.balance > 0) {
-      router.push('/Landing')
+      router.push('/')
     }
   }, [wallet])
 

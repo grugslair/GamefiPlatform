@@ -12,7 +12,7 @@ const ProjectBanner = (prop: IProjectBannerProp) => {
           /> : <></>
         }
 
-        <div className="absolute bottom-0 left-10">
+        <div className="absolute bottom-0 left-10 w-10 h-10">
           {prop.companyLogo ? 
             <Image
               src={prop.companyLogo}

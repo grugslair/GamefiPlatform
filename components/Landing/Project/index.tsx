@@ -1,3 +1,4 @@
+import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -28,20 +29,16 @@ const Project = (props: IProps) => {
     companyToken: props.dataproject.tokenSymbol,
     companySosMedList: [
       {
-        url: '/Landing',
-        icon: {prefix: 'fab', iconName: 'twitter'}
+        url: props.dataproject.twitterUrl || '/',
+        icon: faTwitter
       },
       {
-        url: '/Landing',
-        icon: {prefix: 'fab', iconName: 'medium'}
+        url: props.dataproject.mediumUrl || '/',
+        icon: faMedium
       },
       {
-        url: '/Landing',
-        icon: {prefix: 'fab', iconName: 'discord'}
-      },
-      {
-        url: '/Landing',
-        icon: {prefix: 'fab', iconName: 'telegram'}
+        url: props.dataproject.discordUrl || '/',
+        icon: faDiscord
       },
     ]
   }
@@ -49,9 +46,12 @@ const Project = (props: IProps) => {
   const projectTarget: IProjectTarget = {
     targetRaise: props.dataproject.targetAmount,
     rate: props.dataproject.publicSalePrice,
-    endDate: props.dataproject.periodEnd,
-    minRocks: props.dataproject.minInvestment,
-    vesting: props.dataproject.vestingRuleId
+    startDate: props.dataproject.periodStart,
+    minRocks: props.dataproject.minStaking,
+    vesting: props.dataproject.VestingRule.label,
+    tokenSymbol: props.dataproject.tokenSymbol,
+    currency: props.dataproject.Currency,
+    publicSaleTokenSold: props.dataproject.publicSaleTokenSold
   }
 
   return (
@@ -67,17 +67,20 @@ const Project = (props: IProps) => {
               companySosMedList={projectDescription.companySosMedList}
             ></ProjectDescription>
             <ProjectTarget
-              targetRaise={projectTarget.targetRaise}
-              rate={projectTarget.rate}
-              endDate={projectTarget.endDate}
-              minRocks={projectTarget.minRocks}
-              vesting={projectTarget.vesting}
+              projectTarget={projectTarget}
             ></ProjectTarget>
             <button 
               className="bg-[#B54639] text-white w-full rounded-md py-4 absolute bottom-[-65px]"
-              onClick={() => router.push('/IGO')}
+              onClick={() => router.push({
+                pathname: '/projectdetail',
+                query: {
+                  id: props.dataproject.id
+                }
+              })}
             >
-              Participate <br />
+              <div className="font-['avara'] text-sm">
+                Participate
+              </div>
               <span>{props.dataproject.periodEnd}</span>
             </button>
           </div>

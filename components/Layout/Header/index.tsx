@@ -41,9 +41,6 @@ const Header = () => {
 
     await dispatch(initiateStakingContract())
     await dispatch(initiateRocksContract())
-
-    await dispatch(getAllowance())
-
     await dispatch(contractGetBalance());
 
   }, [wallet.walletAddress])
@@ -120,7 +117,7 @@ const Header = () => {
               />
             </button>
             <div className='mr-5'>
-              <Link href="/Landing" >Project</Link>
+              <Link href="/" >Project</Link>
             </div>
             
             <div className='mr-5'>Stake ROCKS</div>

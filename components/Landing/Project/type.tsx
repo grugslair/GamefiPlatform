@@ -1,3 +1,4 @@
+import { IPorjectCurrency } from "store/launchpad/launchpad";
 import { ISocialMediaIcon } from "../../../types/globalTypes";
 
 export interface IProjectDescriptionProp { 
@@ -15,7 +16,10 @@ export interface IProjectBannerProp {
 export interface IProjectTarget {
   targetRaise: number,
   rate: number,
-  endDate: string,
+  startDate: string,
   minRocks: number,
-  vesting: number
+  vesting: string,
+  tokenSymbol: string,
+  currency: IPorjectCurrency,
+  publicSaleTokenSold: number
 }

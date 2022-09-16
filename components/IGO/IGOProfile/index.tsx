@@ -13,7 +13,7 @@ const IGOProfile = (prop: IIGOProfileProp) => {
       <div className="border p-4 border-[#B546394D] bg-[#151011]">
         <div className="grid grid-cols-2 mb-4">
           <div className="text-left">
-            <button onClick={() => router.push('/Landing')}>
+            <button onClick={() => router.push('/')}>
               <FontAwesomeIcon icon={faArrowLeft} />
               <span className="ml-4">Back</span>
             </button>
