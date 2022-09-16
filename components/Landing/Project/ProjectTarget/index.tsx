@@ -33,7 +33,7 @@ const ProjectTarget = ({projectTarget}: any) => {
         </div>
         <div className="grid grid-cols-2 text-xs py-3 border-b">
           <div className="text-left font-bold text-gray-500">Min. Staked ROCKS</div>
-          <div className="text-right font-bold font-['avara']">{projectTarget.minRocks} {projectTarget.tokenSymbol}</div>
+          <div className="text-right font-bold font-['avara']">{projectTarget.minRocks} ROCKS</div>
         </div>
         <div className="grid grid-cols-2 text-xs py-3 border-b">
           <div className="text-left font-bold text-gray-500">Start Date (GMT+7)</div>
