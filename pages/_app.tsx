@@ -5,8 +5,13 @@ import { Provider } from 'react-redux'
 import Layout from '../components/Layout'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import { notification } from 'antd'
 
 config.autoAddCss = false
+
+notification.config({
+  maxCount: 5
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
 

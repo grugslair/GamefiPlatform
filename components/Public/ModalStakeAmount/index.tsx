@@ -68,7 +68,7 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
   }, [stakeAmount])
 
   async function staking() {
-    if(parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
+    if(parseInt(stakeAmount, 10) > contractRocks.balanceOfRocks) {
       await dispatch(getGasPrice())
 
       const weiAmount = ethToWei(stakeAmount.toString())

@@ -2,13 +2,15 @@ import { configureStore } from '@reduxjs/toolkit'
 import contractRocks from './contractRocks'
 import contractStake from './contractStake'
 import launchpad from './launchpad'
+import message from './message'
 import walletReducer from './wallet/index'
 
 const reducer = {
   wallet: walletReducer,
   launchpad: launchpad,
   contractRocks: contractRocks,
-  contractStake: contractStake
+  contractStake: contractStake,
+  message: message
 }
 
 const store = configureStore({

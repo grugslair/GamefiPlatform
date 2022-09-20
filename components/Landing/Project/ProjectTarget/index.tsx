@@ -1,7 +1,10 @@
+import { Progress } from "antd"
 import { useEffect } from "react"
 import { IProjectTarget } from "../type"
 
 const ProjectTarget = ({projectTarget}: any) => {
+
+
   useEffect(() => {
     console.log(projectTarget)
   }, [])
@@ -15,7 +18,7 @@ const ProjectTarget = ({projectTarget}: any) => {
         {projectTarget.targetRaise}
       </div>
       <div className="mb-4">
-        <progress className="progress progress-success w-full" value={projectTarget.publicSaleTokenSold} max={projectTarget.targetRaise}></progress>
+        <Progress strokeColor="#1E9E3E" percent={(projectTarget.publicSaleTokenSold / projectTarget.targetRaise) * 100} showInfo={false} />
         <div className="relative h-5">
           <div className="absolute left-0 text-[#98A2B3] text-xs">
            Progress: {(projectTarget.publicSaleTokenSold / projectTarget.targetRaise) * 100} %

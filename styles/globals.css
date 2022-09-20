@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('http://fonts.cdnfonts.com/css/avara');
 @import 'antd/dist/antd.css';
 
 @font-face {
@@ -12,10 +11,16 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'work sans';
+  src: url('../public/fonts/static/WorkSans-Regular.ttf');
+}
+
 body{
   color: white;
   background-color: black;
   height: unset;
+  font-family: 'work sans';
 }
 
 .line-clamp-1 {

@@ -15,7 +15,7 @@ const IGOTargetRaise = ({data}: any) => {
             {data.targetAmount}
           </div>
           <div>
-            <Progress strokeColor="#1E9E3E" percent={50} showInfo={false} />
+            <Progress strokeColor="#1E9E3E" percent={(data.publicSaleTokenSold / data.targetAmount) * 100} showInfo={false} />
           </div>
           <div className="grid grid-cols-2 mb-5">
             <div className="text-[#98A2B3] text-xs">
