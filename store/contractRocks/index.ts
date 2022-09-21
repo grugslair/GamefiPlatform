@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { IContractRocks } from './contractRocks'
-import { contractGetBalance, initiateRocksContract } from './thunk'
+import { approveContractRocks, contractGetBalance, initiateRocksContract } from './thunk'
 
 const initialState = {
   balanceOfRocks: 0,

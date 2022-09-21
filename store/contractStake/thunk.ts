@@ -56,7 +56,7 @@ export const getGasPrice = createAsyncThunk(
 
 export const contractStaking = createAsyncThunk(
   'contract/staking',
-  async (amount:string, { getState }): Promise<any> => {
+  async (amount:string, { getState, rejectWithValue }): Promise<any> => {
     const { wallet, contractStake, contractRocks }:any = getState();
     const { rocksContract } = contractRocks as IContractRocks
     const { gasPrice } = contractStake as IContractStake
@@ -64,22 +64,6 @@ export const contractStaking = createAsyncThunk(
     try {
 
       //threshold value lebih dari amount input set too threshold value otherwise set to amount value 
-
-      // const iRocks = new ethers.utils.Interface(rocksContractABI)
-
-      // const dataIrocks = iRocks.encodeFunctionData("approve", [stakeContractAddress, weiAmount])
-    
-      // const transactionParameters = {
-      //   gasPrice: getGasPrice._hex, // customizable by user during MetaMask confirmation.
-      //   to: rocksContractAddress, // Required except during contract publications.
-      //   from: wallet.walletAddress, // must match user's active address.
-      //   value: '0x00', // Only required to send ether to the recipient from the initiating external account.
-      //   data: dataIrocks, // Optional, but used for defining smart contract creation and interaction.
-      //   chainId: '0x4', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-      // };
-
-      // const tx = await wallet.etherProvider.getSigner().sendTransaction(transactionParameters)
-      // console.log(tx)
 
       const iStake = new ethers.utils.Interface(stakeContractABI)
 
@@ -105,19 +89,11 @@ export const contractStaking = createAsyncThunk(
         console.log('call function approval')
       }
 
-      
-
-      //stake
-
-      // const data = ethers.utils.formatEther(balanceOfRocks.toString()).toString()
-
-      // return {
-      //   balanceOfRocks: data
-      // }
-      
-    } catch (error) {
-      return error
+      return ts
+    } catch(err) {
+      return rejectWithValue(err)
     }
+
 
   }
 )

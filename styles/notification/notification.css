@@ -1,0 +1,18 @@
+.message-notification {
+  border-radius: 8px;
+  padding: 18px 21px;
+}
+.message-notification .ant-notification-notice-message {
+  color: white;
+}
+.message-notification .ant-notification-notice-description {
+  color: white;
+  font-weight: 300;
+}
+.message-notification .anticon.ant-notification-notice-icon-info {
+  color: white;
+  font-size: 20px;
+}
+.message-notification .ant-notification-notice-close {
+  color: white;
+}

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Checkbox, Input, Modal, Radio, RadioChangeEvent } from "antd"
 import type { CheckboxChangeEvent } from "antd/lib/checkbox";
 import { BigNumber, ethers } from "ethers";
+import useMessage from "hooks/useMessageHooks";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
@@ -28,6 +29,8 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
   const contractRocks: IContractRocks = useSelector((state: RootState) => state.contractRocks)
   const contractStake: IContractStake = useSelector((state: RootState) => state.contractStake)
   const wallet: IwalletConnect = useSelector((state: RootState) => state.wallet)
+
+  const { pushMessage } = useMessage()
 
   const dispatch = useAppDispatch()
 
@@ -68,13 +71,24 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
   }, [stakeAmount])
 
   async function staking() {
-    if(parseInt(stakeAmount, 10) > contractRocks.balanceOfRocks) {
+    if(parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
       await dispatch(getGasPrice())
 
       const weiAmount = ethToWei(stakeAmount.toString())
 
+      console.log(contractStake.allowance)
+
       if(contractStake.allowance) {
-          await dispatch(contractStaking(weiAmount))
+          const result = await dispatch(contractStaking(weiAmount))
+          console.log({result})
+
+          if(result?.payload?.hash) {
+            await pushMessage('success', result.payload.hash)
+          }
+
+          if(result?.error?.message === 'Rejected') {
+            await pushMessage('failed', result.payload.reason)
+          }
       }
     }
   }
@@ -84,9 +98,16 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
       await dispatch(getGasPrice())
 
       const weiAmount = ethToWei(stakeAmount.toString())
-
       if(contractStake.allowance) {
-        await dispatch(approveContractRocks(weiAmount))
+        const approveResult = await dispatch(approveContractRocks(weiAmount))
+
+        if(approveResult?.payload?.hash) {
+          await pushMessage('success', approveResult.payload.hash)
+        }
+
+        if(approveResult?.error?.message === 'Rejected') {
+          await pushMessage('failed', approveResult.payload.reason)
+        }
       }
     }
   }

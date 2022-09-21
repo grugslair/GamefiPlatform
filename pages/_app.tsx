@@ -10,7 +10,8 @@ import { notification } from 'antd'
 config.autoAddCss = false
 
 notification.config({
-  maxCount: 5
+  maxCount: 5,
+  duration: 1000000,
 })
 
 function MyApp({ Component, pageProps }: AppProps) {

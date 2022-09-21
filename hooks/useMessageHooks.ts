@@ -1,4 +1,5 @@
 import { notification } from "antd";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { pushMessageAction, resetMessageAction } from "store/message/actions";
@@ -9,27 +10,53 @@ const useMessage = () => {
   const message = useSelector((state: RootState) => state.message)
   const dispatch = useAppDispatch();
 
+  const handleMessage = async (result) => {
+    if(result?.payload?.hash) {
+      await pushMessage('success', result.payload.hash)
+    }
 
-  const pushMessage = (status:string) => {
-    if(status === 'success') {
-      const data = {
-        title: 'Successfully unstake token',
-        description: 'You’ve unstake 2000 ROCKS',
-        style: {
-          backgroundColor: 'green'
-        }
-      }
-      dispatch(pushMessageAction(data))
+    if(result?.error?.message === 'Rejected') {
+      await pushMessage('failed', result.payload.reason)
     }
   }
 
-  const openMessage = () => {
-    notification.open({
-      message: message.title,
-      description: message.description,
-      style: message.style,
-    });
+
+  const pushMessage = (status:string, payload) => {
+    console.log(payload)
+    const data: IMessageState = {
+      title: '',
+      description: '',
+      style: {}
+    }
+    if(status === 'success') {
+      data.title = 'Successfully unstake token',
+      data.description = `You’ve unstake ${payload} ROCKS`,
+      data.style = {
+        backgroundColor: '#15873D',
+      }
+    }
+    if(status === 'failed') {
+      data.title = '',
+      data.description = payload,
+      data.style = {
+        backgroundColor: '#890D30'
+      }
+    }
+    dispatch(pushMessageAction(data))
   }
+
+  useEffect(() => {
+    if(message.description !== '') {
+      notification.info({
+        message: message.title,
+        description: message.description,
+        style: message.style,
+        className: 'message-notification',
+      });
+
+      clearMessage()
+    }
+  }, [message.description])
 
   const clearMessage = () => {
     dispatch(resetMessageAction())
@@ -37,9 +64,9 @@ const useMessage = () => {
 
 
   return {
-    openMessage,
     clearMessage,
-    pushMessage
+    pushMessage,
+    handleMessage
   }
 }
 

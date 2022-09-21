@@ -3,20 +3,10 @@
 @tailwind utilities;
 @import 'antd/dist/antd.css';
 
-@font-face {
-  font-family: 'avara';
-  src: url('../public/fonts/webfonts/Black/Avara-Black_web.ttf');
-  src: url('../public/fonts/webfonts/Black/Avara-Black_web.woff');
-  font-weight: 400;
-  font-style: normal;
-}
+@import './font/font.css';
+@import './notification/notification.css';
 
-@font-face {
-  font-family: 'work sans';
-  src: url('../public/fonts/static/WorkSans-Regular.ttf');
-}
-
-body{
+body {
   color: white;
   background-color: black;
   height: unset;

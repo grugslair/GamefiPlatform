@@ -46,14 +46,6 @@ const contractStake = createSlice({
       console.log('rejected async thunk', action)
     })
 
-    builder.addCase(contractStaking.pending, (state, action: any) => {
-      console.log('pending request launchpad')
-    })
-    builder.addCase(contractStaking.fulfilled, (state: IContractStake, action: any) => {
-    })
-    builder.addCase(contractStaking.rejected, (state, action) => {
-      console.log('rejected async thunk', action)
-    })
   }
 })
 

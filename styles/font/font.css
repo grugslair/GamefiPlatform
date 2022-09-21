@@ -1,0 +1,40 @@
+@font-face {
+  font-family: 'avara';
+  src: url('../../public/fonts/webfonts/Black/Avara-Black_web.ttf');
+  src: url('../../public/fonts/webfonts/Black/Avara-Black_web.woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'avara';
+  src: url('../../public/fonts/webfonts/Bold/Avara-Bold_web.ttf');
+  src: url('../../public/fonts/webfonts/Bold/Avara-Bold_web.woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'work sans';
+  src: url('../../public/fonts/static/WorkSans-Light.ttf');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'work sans';
+  src: url('../../public/fonts/static/WorkSans-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'work sans';
+  src: url('../../public/fonts/static/WorkSans-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'work sans';
+  src: url('../../public/fonts/static/WorkSans-SemiBold.ttf');
+  font-weight: 600;
+  font-style: normal;
+}
