@@ -85,7 +85,8 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
           if(result?.payload?.hash) {
             await pushMessage('success', result.payload.hash)
           }
-
+          
+          //@ts-ignore
           if(result?.error?.message === 'Rejected') {
             await pushMessage('failed', result.payload.reason)
           }
@@ -104,7 +105,8 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
         if(approveResult?.payload?.hash) {
           await pushMessage('success', approveResult.payload.hash)
         }
-
+        
+        //@ts-ignore
         if(approveResult?.error?.message === 'Rejected') {
           await pushMessage('failed', approveResult.payload.reason)
         }

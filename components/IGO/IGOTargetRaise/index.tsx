@@ -12,7 +12,7 @@ const IGOTargetRaise = ({data}: any) => {
             Target Raise
           </div>
           <div className="text-2xl font-['avara']">
-            {data.targetAmount}
+            ${data.targetAmount}
           </div>
           <div>
             <Progress strokeColor="#1E9E3E" percent={(data.publicSaleTokenSold / data.targetAmount) * 100} showInfo={false} />
@@ -22,7 +22,7 @@ const IGOTargetRaise = ({data}: any) => {
               Progress: {(data.publicSaleTokenSold / data.targetAmount) * 100} %
             </div>
             <div className="text-right text-[#98A2B3] text-xs">
-              {data.publicSaleTokenSold} / {data.targetAmount} {data.tokenSymbol}
+              {data.publicSaleTokenSold} / {data.targetAmount} ${data.tokenSymbol}
             </div>
           </div>
           <button className="p-3 w-full border border-[#CA5D504D] bg-[#68121E1A]">

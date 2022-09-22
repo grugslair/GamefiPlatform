@@ -12,9 +12,9 @@ const ProjectDescription = (prop: IProjectDescriptionProp) => {
         {prop.companyName}
       </div>
       <div className="font-[300] text-xl mb-4 font-['avara']">
-        {prop.companyToken}
+        ${prop.companyToken}
       </div>
-      <div className="text-[#D0D5DD] text-base mb-7">
+      <div className="text-[#D0D5DD] text-base mb-7 line-clamp-2">
         {prop.companyDescription}
       </div>
       <div className="mt-4 mb-4">

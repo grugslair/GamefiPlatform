@@ -7,7 +7,7 @@ const IGOPoolTimeline = ({data}: any) => {
   const dataTest = [
     {
       text: 'symbol',
-      value: data.tokenSymbol
+      value: `$${data.tokenSymbol}`
     },
     {
       text: 'Token Price',
@@ -19,11 +19,11 @@ const IGOPoolTimeline = ({data}: any) => {
     },
     {
       text: 'Initial Supply',
-      value: `${data.tokenInitialSupply} ${data.tokenSymbol}`
+      value: `${data.tokenInitialSupply} $${data.tokenSymbol}`
     },
     {
       text: 'Total Supply',
-      value: `${data.tokenTotalSupply} ${data.tokenSymbol}`
+      value: `${data.tokenTotalSupply} $${data.tokenSymbol}`
     },
     {
       text: 'Initial Market Cap',
@@ -70,7 +70,11 @@ const IGOPoolTimeline = ({data}: any) => {
               {dataTest.map(item => <div className="mb-4" key={item.text}>{item.text}</div>)}
             </div>
             <div>
-              {dataTest.map(item => <div className="mb-4 font-['avara']" key={item.value}>{item.value}</div>)}
+              {dataTest.map(item => {
+                return (
+                  <div className="mb-4 font-['avara']" key={item.value}>{item.value}</div>
+                )
+              })}
             </div>
           </div>
         </div>

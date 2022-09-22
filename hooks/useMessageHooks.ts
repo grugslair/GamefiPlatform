@@ -10,7 +10,7 @@ const useMessage = () => {
   const message = useSelector((state: RootState) => state.message)
   const dispatch = useAppDispatch();
 
-  const handleMessage = async (result) => {
+  const handleMessage = async (result:any) => {
     if(result?.payload?.hash) {
       await pushMessage('success', result.payload.hash)
     }
@@ -21,7 +21,7 @@ const useMessage = () => {
   }
 
 
-  const pushMessage = (status:string, payload) => {
+  const pushMessage = (status:string, payload: any) => {
     console.log(payload)
     const data: IMessageState = {
       title: '',
