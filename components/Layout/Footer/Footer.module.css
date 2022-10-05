@@ -1,6 +1,10 @@
-.footer_subtitle {
-  font-weight: bold;
-}
-.footer-menu {
-  margin: 30px;
+.footerGrugs {
+  background-image: linear-gradient(
+      to right,
+      #0b0b0b 2%,
+      transparent,
+      #0b0b0b 98%
+    ),
+    url("/footer-grugs.png");
+  background-size: contain;
 }

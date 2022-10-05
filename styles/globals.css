@@ -1,23 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import 'antd/dist/antd.css';
+@import "antd/dist/antd.css";
 
-@import './font/font.css';
-@import './notification/notification.css';
+@import "./font/font.css";
+@import "./notification/notification.css";
 
 body {
   color: white;
   background-color: black;
   height: unset;
-  font-family: 'work sans';
+  font-family: "work sans";
 }
 
-.line-clamp-2 {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
+a:hover {
+  color: inherit;
+  text-decoration: none;
 }
-              
+
+.reports-search > input {
+  margin-left: 8px;
+  font-size: inherit;
+  background-color: transparent;
+  color: white;
+}
