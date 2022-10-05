@@ -1,5 +1,8 @@
 export interface IContractStake {
   stakeContract: any,
   allowance: number | null,
-  gasPrice: any
+  gasPrice: any,
+  balances: number,
+  unlockRocks: number,
+  lockRocks: number
 }

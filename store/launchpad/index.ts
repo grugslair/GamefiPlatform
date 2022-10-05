@@ -12,15 +12,8 @@ const launchpad = createSlice({
   reducers: {
   },
   extraReducers: (builder) => {
-    builder.addCase(getProjectList.pending, (state, action: any) => {
-      console.log('pending request launchpad')
-    })
     builder.addCase(getProjectList.fulfilled, (state, action: any) => {
       state.projectList = action.payload
-
-    })
-    builder.addCase(getProjectList.rejected, (state, action) => {
-      console.log('rejected async thunk', action)
     })
   }
 })

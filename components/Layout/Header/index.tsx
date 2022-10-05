@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import { getGrugBalance, switchNetwork, walletConnect } from '../../../store/wallet/thunk'
 import { useAppDispatch } from '../../../hooks/useStoreHooks'
 import { contractGetBalance, initiateRocksContract } from '../../../store/contractRocks/thunk'
-import { getAllowance, initiateStakingContract } from '../../../store/contractStake/thunk'
+import { getAllowance, getAvailableWithdrawAmount, getStakeBalance, initiateStakingContract } from '../../../store/contractStake/thunk'
 
 const providerOptions = {
 }
@@ -41,7 +41,10 @@ const Header = () => {
 
     await dispatch(initiateStakingContract())
     await dispatch(initiateRocksContract())
-    await dispatch(contractGetBalance());
+    await dispatch(contractGetBalance())
+
+    await dispatch(getStakeBalance())
+    await dispatch(getAvailableWithdrawAmount())
 
   }, [wallet.walletAddress])
 
@@ -102,7 +105,6 @@ const Header = () => {
 
   const router = useRouter()
 
-
   return (
     <header className='fixed w-full px-8 py-8 text-white z-50'>
       <div className='grid grid-cols-2'>
@@ -135,14 +137,14 @@ const Header = () => {
           </div>
           <div>
             {wallet.walletAddress ? (
-              <button className='overflow-hidden bg-[#B54639] rounded-sm px-4 py-2' onClick={disconnect}>
+              <button className='overflow-hidden bg-[#B54639] rounded-sm px-4 py-2 text-clip' onClick={disconnect}>
                 {wallet.walletAddress}
               </button>
             ) : (
               <button className='bg-[#B54639] px-4 py-2' onClick={connectWallet}>
                 connect wallet
               </button>)
-            }
+            }  
           </div>
 
         </div>

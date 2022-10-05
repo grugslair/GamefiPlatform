@@ -17,10 +17,11 @@ import { contractStaking, getAllowance, getGasPrice } from "../../../store/contr
 import { IwalletConnect } from "../../../store/wallet/walletType";
 
 interface IModalStakeAmountProps {
-  actionTitle: string
+  actionTitle: string,
+  paddingButton: string,
 }
 
-const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
+const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) => {
 
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
   const [method, setMethod] = useState(1);
@@ -125,9 +126,11 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
 
   return (
     <div>
-      <Button onClick={() => setModalOpen(true)}>
+      <button
+        className={`${paddingButton} bg-[#B54639] font-['avara']`}
+        onClick={() => setModalOpen(true)}>
         { actionTitle }
-      </Button>
+      </button>
       <Modal
         width={400}
         destroyOnClose={true}
@@ -203,7 +206,7 @@ const ModalStakeAmount = ({actionTitle}: IModalStakeAmountProps) => {
           )}
 
           <div>
-            Dont have ROCKS? 
+            Dont have ROCKS? &nbsp;
             <Link passHref href={'/Stake'}>
               <a className="font-['avara'] text-[#CA5D50]">
                 Claim
