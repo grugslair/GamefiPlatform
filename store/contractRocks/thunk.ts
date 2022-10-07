@@ -59,7 +59,8 @@ export const approveContractRocks = createAsyncThunk(
       };
 
       const tx = await wallet.etherProvider.getSigner().sendTransaction(transactionParameters)
-      console.log(tx)
+
+      return tx
 
     } catch(err) {
       return rejectWithValue(err)

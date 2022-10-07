@@ -20,7 +20,13 @@ import {
   contractGetBalance,
   initiateRocksContract,
 } from "../../../store/contractRocks/thunk";
-import { initiateStakingContract } from "../../../store/contractStake/thunk";
+// import { initiateStakingContract } from "../../../store/contractStake/thunk";
+import {
+  getAllowance,
+  getAvailableWithdrawAmount,
+  getStakeBalance,
+  initiateStakingContract,
+} from "../../../store/contractStake/thunk";
 
 import useMediaQuery from "hooks/useMediaQuery";
 
@@ -222,6 +228,9 @@ const Header = () => {
       await dispatch(initiateStakingContract());
       await dispatch(initiateRocksContract());
       await dispatch(contractGetBalance());
+
+      await dispatch(getStakeBalance());
+      await dispatch(getAvailableWithdrawAmount());
     },
     [wallet.walletAddress]
   );
@@ -286,7 +295,8 @@ const Header = () => {
     }
   }, [provider, disconnect]);
 
-  useEffect(() => { // Fix hydration issue
+  useEffect(() => {
+    // Fix hydration issue
     setIsMobile(mobile);
   }, [mobile]);
 
@@ -355,7 +365,7 @@ const Header = () => {
           <div>
             {wallet.walletAddress ? (
               <button
-                className="overflow-hidden bg-[#B54639] rounded-sm px-4 py-2"
+                className="overflow-hidden bg-[#B54639] rounded-sm px-4 py-2 text-clip"
                 onClick={disconnect}
               >
                 {wallet.walletAddress}

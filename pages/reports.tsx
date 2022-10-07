@@ -137,7 +137,18 @@ const Reports = () => {
                     </p>
                     <Button
                       className={join("mt-4", "tablet:mt-8")}
-                      onClick={() => window.open(url, "_blank")}
+                      onClick={() => {
+                        const win = window.open(url, "_blank");
+                        setTimeout(
+                          () =>
+                            // postMessage to reports.grugslair.xyz to enable viwing pdf
+                            win?.postMessage(
+                              `isFromGrugsLair-t-${new Date().toDateString()}`,
+                              "https://reports.grugslair.xyz"
+                            ),
+                          1000
+                        );
+                      }}
                     >
                       Read
                     </Button>

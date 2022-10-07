@@ -52,3 +52,22 @@ export function weiToEth(wei: string) {
 export function numberWithCommas(x: any) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
+
+export function changeToOneDecimal (x: any) {
+  return Math.round(x * 10) / 10
+}
+
+export function grugDateFormat(unFomatDate:string) {
+  const date = new Date(unFomatDate)
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  const formatTime = (time: number) => {
+    if (time < 10) {
+      return "0" + time
+    }
+    return time
+  }
+
+  const formatedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} - ${formatTime(date.getHours())} : ${formatTime(date.getMinutes())}`
+  return formatedDate
+}

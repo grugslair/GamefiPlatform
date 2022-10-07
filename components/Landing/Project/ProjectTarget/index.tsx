@@ -1,13 +1,21 @@
 import { Progress } from "antd"
-import { numberWithCommas } from "helper/utilities"
-import { useEffect } from "react"
+import { grugDateFormat, numberWithCommas } from "helper/utilities"
+import { useEffect, useMemo } from "react"
 import { IProjectTarget } from "../type"
+import * as moment from 'moment'
 
 const ProjectTarget = ({projectTarget}: any) => {
 
+  const startDate = useMemo(() => {
+    
+    return grugDateFormat(projectTarget.startDate)
+  }, [projectTarget.startDate])
 
   useEffect(() => {
     console.log(projectTarget)
+    const date = new Date(projectTarget.startDate)
+
+    console.log(date.toUTCString())
   }, [])
 
   return (
@@ -41,7 +49,7 @@ const ProjectTarget = ({projectTarget}: any) => {
         </div>
         <div className="grid grid-cols-2 text-xs py-3 border-b">
           <div className="text-left text-[#D0D5DD]">Start Date (GMT+7)</div>
-          <div className="text-right font-[300] font-['avara']">{projectTarget.startDate}</div>
+          <div className="text-right font-[300] font-['avara']">{startDate}</div>
         </div>
         <div className="grid grid-cols-2 text-xs pb-12 pt-3">
           <div className="text-left text-[#D0D5DD]">Vesting</div>

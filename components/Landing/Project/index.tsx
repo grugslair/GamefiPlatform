@@ -1,5 +1,6 @@
 import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { faGlobe } from "@fortawesome/free-solid-svg-icons"
+import { useCountdown } from "hooks/useCountDown"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -86,7 +87,11 @@ const Project = (props: IProps) => {
               <div className="font-['avara'] text-sm">
                 Participate
               </div>
-              <span>{props.dataproject.periodEnd}</span>
+              <div className="show-counter">
+                <div>
+
+                </div>
+              </div>
             </button>
           </div>
         </div>
