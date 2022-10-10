@@ -22,36 +22,34 @@ const FOOTER_MENUS: ({
     list: [
       {
         label: "About",
-        url: "https://grugslair.xyz?jump=about",
+        url: "https://home.grugslair.xyz?jump=about",
       },
       {
         label: "Rockmap",
-        url: "https://grugslair.xyz?jump=rockmap",
+        url: "https://home.grugslair.xyz?jump=rockmap",
       },
       {
         label: "The Tribe",
-        url: "https://grugslair.xyz?jump=tribe",
+        url: "https://home.grugslair.xyz?jump=tribe",
       },
     ],
   },
-  {
-    title: "Launchpad",
-    list: [
-      {
-        label: "Projects",
-        url: "https://launchpad.grugslair.xyz",
-        target: "_blank",
-      },
-      {
-        label: "Stake ROCKS",
-        url: "https://launchpad.grugslair.xyz/staking",
-        target: "_blank",
-      },
-    ],
-  },
+  // {
+  //   title: "Launchpad",
+  //   list: [
+  //     {
+  //       label: "Projects",
+  //       url: "/",
+  //     },
+  //     {
+  //       label: "Stake ROCKS",
+  //       url: "/staking",
+  //     },
+  //   ],
+  // },
   {
     title: "Help",
-    list: [{ label: "Terms & Condition", url: "https://grugslair.xyz/tnc" }],
+    list: [{ label: "Terms & Condition", url: "https://home.grugslair.xyz/tnc" }],
   },
 ];
 
@@ -144,7 +142,7 @@ const Footer = () => {
                       target={target}
                       className="flex h-6 w-6 items-center justify-center text-white"
                     >
-                      <FontAwesomeIcon icon={icon} className="w-5" />
+                      <FontAwesomeIcon icon={icon} className="w-5 text-2xl" />
                     </a>
                   </Link>
                 );

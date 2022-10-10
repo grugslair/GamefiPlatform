@@ -143,7 +143,7 @@ const Reports = () => {
                           () =>
                             // postMessage to reports.grugslair.xyz to enable viwing pdf
                             win?.postMessage(
-                              `isFromGrugsLair-t-${new Date().toDateString()}`,
+                              `15Fr0m6ru95L41r-t-${new Date().toDateString()}`,
                               "https://reports.grugslair.xyz"
                             ),
                           1000

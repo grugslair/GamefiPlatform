@@ -8,6 +8,7 @@ export interface INavLink {
   target?: string;
   hideInMobile?: boolean;
   key?: any;
+  onClick?: any;
 }
 export interface IDropdownLink {
   label: string;

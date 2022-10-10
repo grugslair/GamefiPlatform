@@ -49,6 +49,8 @@ const tailwind = resolveConfig(tailwindConfig);
 
 import { IDropdownLink, INavLink } from "./type";
 
+import Button from "@/components/Button";
+
 const providerOptions = {};
 
 let web3Modal: Web3Modal;
@@ -82,14 +84,14 @@ const SOCIAL_MEDIAS = [
 ];
 
 const LINKS = [
-  {
-    label: "Launchpad",
-    url: "/",
-  },
-  {
-    label: "Stake ROCKS",
-    url: "/Stake",
-  },
+  // {
+  //   label: "Launchpad",
+  //   url: "/",
+  // },
+  // {
+  //   label: "Stake ROCKS",
+  //   url: "/Stake",
+  // },
   {
     label: "Reports",
     url: "/reports",
@@ -101,7 +103,7 @@ const LINKS = [
   },
 ];
 
-const MobileMenu = () => {
+const MobileMenu = ({ renderWalletButtons }: any) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -145,7 +147,10 @@ const MobileMenu = () => {
       >
         <div className="flex flex-col gap-6">
           {LINKS.map(
-            (data, i) => !data.hideInMobile && <NavLink key={i} {...data} />
+            (data, i) =>
+              !data.hideInMobile && (
+                <NavLink key={i} {...data} onClick={() => setIsOpen(false)} />
+              )
           )}
         </div>
         <div className="mt-8 flex gap-3">
@@ -155,19 +160,21 @@ const MobileMenu = () => {
                 <a
                   target={target}
                   className="flex h-6 w-6 items-center justify-center text-white"
+                  onClick={() => setIsOpen(false)}
                 >
-                  <FontAwesomeIcon icon={icon} className="w-5" />
+                  <FontAwesomeIcon icon={icon} className="w-5 text-2xl" />
                 </a>
               </Link>
             );
           })}
         </div>
+        {renderWalletButtons()}
       </div>
     </>
   );
 };
 
-const NavLink = ({ label, url, child, target }: INavLink) => {
+const NavLink = ({ label, url, child, target, onClick }: INavLink) => {
   return child?.length ? (
     <DropdownLink label={label} child={child} />
   ) : (
@@ -178,6 +185,7 @@ const NavLink = ({ label, url, child, target }: INavLink) => {
           "font-avara text-xl font-black text-white",
           "tablet:text-base tablet:font-bold tablet:text-shadow-grugSm"
         )}
+        onClick={onClick}
       >
         {label}
       </a>
@@ -211,7 +219,8 @@ const DropdownLink = ({ label, child }: IDropdownLink) => {
 
 const Header = () => {
   const mobile = useMediaQuery("(max-width: 833px)");
-  const [isMobile, setIsMobile] = useState();
+  const [isMobile, setIsMobile] = useState(-1);
+  const [scrolled, setScrolled] = useState(false);
   const wallet = useSelector((state: RootState) => state.wallet);
   const dispatch = useAppDispatch();
   let { provider } = useSelector((state: RootState) => state.wallet);
@@ -300,88 +309,131 @@ const Header = () => {
     setIsMobile(mobile);
   }, [mobile]);
 
-  const router = useRouter();
+  useEffect(() => {
+    const scrollHandler: EventListener = (event: Event) => {
+      const target = event.target as HTMLDocument;
+      setScrolled((target?.scrollingElement?.scrollTop || 0) > 100);
+    };
+    setScrolled(window.scrollY > 100);
+    window.addEventListener("scroll", scrollHandler);
+    return () => window.removeEventListener("scroll", scrollHandler);
+  }, []);
 
-  return (
+  const router = useRouter();
+  console.log(scrolled);
+
+  const renderWalletButtons = () => (
     <div
-      id="NavBar"
-      className={join(
-        "fixed top-0 z-10 w-full pt-4",
-        isMobile ? "pl-4 pr-5" : "tablet:px-8"
+      className={twMerge(
+        "flex justify-end items-center gap-4",
+        isMobile && "justify-start mt-8"
       )}
-      style={{
-        background:
-          "linear-gradient(180deg, rgba(0, 0, 0, 0.59) 0%, rgba(182, 199, 243, 0) 100%)",
-      }}
     >
-      <div
-        className={join(
-          "mx-auto flex max-w-screen-largeDesktop items-center gap-12",
-          isMobile && "justify-between"
-        )}
-      >
-        <div
-          className="z-[1] cursor-pointer"
-          style={{
-            filter: `drop-shadow(${tailwind!.theme!.textShadow.grugSm})`,
-          }}
-          onClick={() => {
-            router.push("/");
-          }}
-        >
-          <Image
-            src={"/grugsLair.png"}
-            alt="grugs-lair"
-            width={61}
-            height={48}
-          />
-        </div>
-        {isMobile ? (
-          <MobileMenu />
-        ) : (
-          <div className="flex flex-1 gap-12">
-            {LINKS.map((data, i) => (
-              <NavLink key={i} {...data} />
-            ))}
-          </div>
-        )}
-        <div
+      <div>
+        <Button
           className={join(
-            "flex justify-end items-center gap-4",
-            isMobile && "absolute right-20"
+            "h-10 text-sm bg-white text-primary700 font-black",
+            "tablet:h-10 tablet:text-sm",
+            isMobile && "shadow-lg"
           )}
+          onClick={() =>
+            window.open("https://opensea.io/collection/grugslair", "_blank")
+          }
         >
-          <div>
-            <button
-              className="text-[#9B2C29] bg-white border border-[#FFF2E8] px-4 py-2 rounded-sm font-bold"
-              onClick={() =>
-                (window.location.href =
-                  "https://opensea.io/collection/grugslair")
-              }
-            >
-              buy grug
-            </button>
+          <div className="relative w-5 h-5 mr-2 -mt-1">
+            <Image
+              src="/openseas.svg"
+              alt="openseas"
+              objectFit="contain"
+              layout="fill"
+            />
           </div>
-          <div>
-            {wallet.walletAddress ? (
-              <button
-                className="overflow-hidden bg-[#B54639] rounded-sm px-4 py-2 text-clip"
-                onClick={disconnect}
-              >
-                {wallet.walletAddress}
-              </button>
-            ) : (
-              <button
-                className="bg-[#B54639] px-4 py-2"
-                onClick={connectWallet}
-              >
-                connect wallet
-              </button>
+          Buy Grug&apos;s
+        </Button>
+      </div>
+      <div>
+        {
+          <Button
+            className={join(
+              "h-10 text-sm font-black",
+              "tablet:h-10 tablet:text-sm",
+              isMobile && "shadow-lg"
             )}
-          </div>
-        </div>
+            onClick={wallet.walletAddress ? disconnect : connectWallet}
+          >
+            {wallet.walletAddress ? (
+              <>
+                {wallet.walletAddress.slice(0, 5)}
+                ...
+                {wallet.walletAddress.slice(-4)}
+                {/* <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className="ml-2 -mt-1 w-[16px] text-white"
+                    /> */}
+              </>
+            ) : (
+              <>
+                Connect Wallet
+                {/* <FontAwesomeIcon
+                      icon={faChevronDown}
+                      className="ml-2 -mt-1 w-[16px] text-white"
+                    /> */}
+              </>
+            )}
+          </Button>
+        }
       </div>
     </div>
+  );
+
+  return (
+    isMobile !== -1 && (
+      <div
+        id="NavBar"
+        className={join(
+          "fixed top-0 z-10 w-full pt-4",
+          isMobile ? "pl-4 pr-5" : "tablet:px-8"
+        )}
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0, 0, 0, 0.59) 0%, rgba(182, 199, 243, 0) 100%)",
+        }}
+      >
+        <div
+          className={join(
+            "mx-auto flex max-w-screen-largeDesktop items-center gap-12",
+            isMobile && "justify-between"
+          )}
+        >
+          <div
+            className="z-[1] cursor-pointer"
+            style={{
+              filter: `drop-shadow(${tailwind!.theme!.textShadow.grugSm})`,
+            }}
+            onClick={() => {
+              router.push("https://home.grugslair.xyz");
+            }}
+          >
+            <Image
+              src={"/grugsLair.png"}
+              alt="grugs-lair"
+              width={61}
+              height={48}
+            />
+          </div>
+          {isMobile ? (
+            <MobileMenu renderWalletButtons={renderWalletButtons} />
+          ) : (
+            <div className="flex flex-1 gap-12">
+              {LINKS.map((data, i) => (
+                <NavLink key={i} {...data} />
+              ))}
+            </div>
+          )}
+          {!isMobile && renderWalletButtons()}
+        </div>
+      </div>
+    )
   );
 };
 
