@@ -386,55 +386,53 @@ const Header = () => {
     </div>
   );
 
-  return (
-    isMobile !== -1 && (
+  return isMobile !== -1 ? (
+    <div
+      id="NavBar"
+      className={join(
+        "fixed top-0 z-10 w-full pt-4",
+        isMobile ? "pl-4 pr-5" : "tablet:px-8"
+      )}
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(0, 0, 0, 0.59) 0%, rgba(182, 199, 243, 0) 100%)",
+      }}
+    >
       <div
-        id="NavBar"
         className={join(
-          "fixed top-0 z-10 w-full pt-4",
-          isMobile ? "pl-4 pr-5" : "tablet:px-8"
+          "mx-auto flex max-w-screen-largeDesktop items-center gap-12",
+          isMobile && "justify-between"
         )}
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(0, 0, 0, 0.59) 0%, rgba(182, 199, 243, 0) 100%)",
-        }}
       >
         <div
-          className={join(
-            "mx-auto flex max-w-screen-largeDesktop items-center gap-12",
-            isMobile && "justify-between"
-          )}
+          className="z-[1] cursor-pointer"
+          style={{
+            filter: `drop-shadow(${tailwind!.theme!.textShadow.grugSm})`,
+          }}
+          onClick={() => {
+            router.push("https://home.grugslair.xyz");
+          }}
         >
-          <div
-            className="z-[1] cursor-pointer"
-            style={{
-              filter: `drop-shadow(${tailwind!.theme!.textShadow.grugSm})`,
-            }}
-            onClick={() => {
-              router.push("https://home.grugslair.xyz");
-            }}
-          >
-            <Image
-              src={"/grugsLair.png"}
-              alt="grugs-lair"
-              width={61}
-              height={48}
-            />
-          </div>
-          {isMobile ? (
-            <MobileMenu renderWalletButtons={renderWalletButtons} />
-          ) : (
-            <div className="flex flex-1 gap-12">
-              {LINKS.map((data, i) => (
-                <NavLink key={i} {...data} />
-              ))}
-            </div>
-          )}
-          {!isMobile && renderWalletButtons()}
+          <Image
+            src={"/grugsLair.png"}
+            alt="grugs-lair"
+            width={61}
+            height={48}
+          />
         </div>
+        {isMobile ? (
+          <MobileMenu renderWalletButtons={renderWalletButtons} />
+        ) : (
+          <div className="flex flex-1 gap-12">
+            {LINKS.map((data, i) => (
+              <NavLink key={i} {...data} />
+            ))}
+          </div>
+        )}
+        {!isMobile && renderWalletButtons()}
       </div>
-    )
-  );
+    </div>
+  ) : null;
 };
 
 export default Header;
