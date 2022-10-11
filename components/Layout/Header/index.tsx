@@ -348,7 +348,7 @@ const Header = () => {
               layout="fill"
             />
           </div>
-          Buy Grug&apos;s
+          OpenSea
         </Button>
       </div>
       <div>
