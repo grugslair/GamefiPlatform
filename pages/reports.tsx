@@ -1,54 +1,40 @@
-import Button from "@/components/Button";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Input } from "antd";
+import { Loading3QuartersOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { join } from "tailwind-merge";
 
-const Reports = () => {
-  const [search, setSearch] = useState("");
+// Redux
+import { useSelector } from "react-redux";
+import { RootState } from "store";
+import { getReportList } from "store/launchpad/thunk";
+import { useAppDispatch } from "hooks/useStoreHooks";
 
-  const list = [
-    {
-      title: "Champion Ascension",
-      subtitle:
-        " growing and transformative web3 universe that redefines entertainment, games, storytelling, and real world experiences through Jam ...",
-      url: "https://reports.grugslair.xyz/public/Illuvium_in-deep_analysis",
-    },
-    {
-      title: "Illuvium Ascension",
-      subtitle: "Champions Ascension is a growing and",
-      url: "https://reports.grugslair.xyz/public/Illuvium_in-deep_analysis",
-    },
-    {
-      title: "Potato Ascension",
-      subtitle: "Abura soba",
-      url: "https://reports.grugslair.xyz/public/Illuvium_in-deep_analysis",
-    },
-    {
-      title: "Banana Ascension",
-      subtitle: "aehalwknkl wnlkdand lkawnbl",
-      url: "https://reports.grugslair.xyz/public/Illuvium_in-deep_analysis",
-    },
-    {
-      title: "Super Ascension",
-      subtitle: "Lorem ipsum",
-      url: "https://reports.grugslair.xyz/public/Illuvium_in-deep_analysis",
-    },
-    {
-      title: "Treasure Ascension",
-      subtitle: "Dolor sit amet",
-      url: "https://reports.grugslair.xyz/public/Illuvium_in-deep_analysis",
-    },
-  ];
+// Fontawesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+
+// Components
+import Button from "@/components/Button";
+
+const Reports = () => {
+  const dispatch = useAppDispatch();
+  const { loading, list } = useSelector(
+    (state: RootState) =>
+      state.launchpad?.reports || { loading: false, list: [] }
+  );
+  const [search, setSearch] = useState("");
 
   const searchResult = list.filter(
     (e) =>
       e.title.toLowerCase().includes(search.toLowerCase()) ||
       e.subtitle.toLowerCase().includes(search.toLowerCase())
   );
+
+  useEffect(() => {
+    dispatch(getReportList());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -88,75 +74,77 @@ const Reports = () => {
             prefix={<FontAwesomeIcon icon={faSearch} />}
           />
 
-          <div
-            className={join(
-              "grid grid-cols-1 gap-2 mt-4",
-              "tablet:grid-cols-2 tablet:gap-4 tablet:mt-6",
-              "desktop:grid-cols-3"
-            )}
-          >
-            {searchResult.map(({ title, subtitle, url }, i) => (
-              <div
-                key={i}
-                className="p-6 overflow-hidden border border-solid border-[#b546394d] bg-[#151011e6]"
-              >
+          {loading ? (
+            <div className="mt-8 w-full h-64 flex items-center justify-center">
+              <Loading3QuartersOutlined spin style={{ fontSize: 64 }} />
+            </div>
+          ) : (
+            <div
+              className={join(
+                "grid grid-cols-1 gap-2 mt-4",
+                "tablet:grid-cols-2 tablet:gap-4 tablet:mt-6",
+                "desktop:grid-cols-3"
+              )}
+            >
+              {searchResult.map(({ title, subtitle, imageUrl, pdfUrl }, i) => (
                 <div
-                  className={join(
-                    "flex gap-4 h-full",
-                    "tablet:flex-col tablet: gap-6"
-                  )}
+                  key={i}
+                  className="p-6 overflow-hidden border border-solid border-[#b546394d] bg-[#151011e6]"
                 >
                   <div
                     className={join(
-                      "relative w-12 h-12 rounded-full overflow-hidden",
-                      "tablet:w-[72px] tablet:h-[72px]"
+                      "flex gap-4 h-full",
+                      "tablet:flex-col tablet: gap-6"
                     )}
                   >
-                    <Image
-                      src={"/grugbackground.png"}
-                      alt="logo"
-                      layout="fill"
-                    />
-                  </div>
-                  <div className="flex-1 flex flex-col items-start">
-                    <h3
+                    <div
                       className={join(
-                        "font-avara font-black text-base text-white",
-                        "tablet:text-xl"
+                        "relative w-12 h-12 rounded-full overflow-hidden",
+                        "tablet:w-[72px] tablet:h-[72px]"
                       )}
                     >
-                      {title}
-                    </h3>
-                    <p
-                      className={join(
-                        "mt-2 flex-1 font-sora text-xs leading-[18px] text-gray300 line-clamp-3",
-                        "tablet:text-sm"
-                      )}
-                    >
-                      {subtitle}
-                    </p>
-                    <Button
-                      className={join("mt-4", "tablet:mt-8")}
-                      onClick={() => {
-                        const win = window.open(url, "_blank");
-                        setTimeout(
-                          () =>
-                            // postMessage to reports.grugslair.xyz to enable viwing pdf
-                            win?.postMessage(
-                              `15Fr0m6ru95L41r-t-${new Date().toDateString()}`,
-                              "https://reports.grugslair.xyz"
-                            ),
-                          1000
-                        );
-                      }}
-                    >
-                      Read
-                    </Button>
+                      <Image src={imageUrl} alt="logo" layout="fill" />
+                    </div>
+                    <div className="flex-1 flex flex-col items-start">
+                      <h3
+                        className={join(
+                          "font-avara font-black text-base text-white",
+                          "tablet:text-xl"
+                        )}
+                      >
+                        {title}
+                      </h3>
+                      <p
+                        className={join(
+                          "mt-2 flex-1 font-sora text-xs leading-[18px] text-gray300 line-clamp-3",
+                          "tablet:text-sm"
+                        )}
+                      >
+                        {subtitle}
+                      </p>
+                      <Button
+                        className={join("mt-4", "tablet:mt-8")}
+                        onClick={() => {
+                          const win = window.open(pdfUrl, "_blank");
+                          setTimeout(
+                            () =>
+                              // postMessage to reports.grugslair.xyz to enable viwing pdf
+                              win?.postMessage(
+                                `15Fr0m6ru95L41r-t-${new Date().toDateString()}`,
+                                "https://reports.grugslair.xyz"
+                              ),
+                            1000
+                          );
+                        }}
+                      >
+                        Read
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </>

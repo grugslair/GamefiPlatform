@@ -9,16 +9,16 @@ import {
   faMedium,
 } from "@fortawesome/free-brands-svg-icons";
 
-const FOOTER_MENUS: ({
+const FOOTER_MENUS: {
   title: string;
   list: {
     label: string;
     url: string;
     target?: string;
   }[];
-})[] = [
+}[] = [
   {
-    title: "Grug's",
+    title: "The Lair",
     list: [
       {
         label: "About",
@@ -49,7 +49,9 @@ const FOOTER_MENUS: ({
   // },
   {
     title: "Help",
-    list: [{ label: "Terms & Condition", url: "https://home.grugslair.xyz/tnc" }],
+    list: [
+      { label: "Terms & Condition", url: "https://home.grugslair.xyz/tnc" },
+    ],
   },
 ];
 
@@ -100,9 +102,9 @@ const Footer = () => {
               height={40}
             />
             <div className="mt-6 max-w-[212px] font-sora text-xs font-light leading-[18px] text-gray400">
-              Grug&apos;s DAO will allow both P2E and crypto trading enthusiasts
-              to take part in the activities that we will offer in the Discord
-              group
+              Grug&apos;s DAO will allow both GameFi and crypto trading
+              enthusiasts to take part in the activities that we will offer in
+              our Discord server
             </div>
           </div>
           <div className={join("flex flex-wrap gap-8", "tablet:gap-10")}>
