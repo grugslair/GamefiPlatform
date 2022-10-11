@@ -6,4 +6,5 @@ import { createAction } from "@reduxjs/toolkit"
 // export const walletBalanceAction = createAction<setWalletBalance>('wallet/setBalance')
 // export const walletChainAction = createAction('wallet/setChainId')
 export const getLaunchPadProjectListAction = createAction('launchpad/projectList')
+export const getLaunchPadReportListAction = createAction('launchpad/reportList')
 

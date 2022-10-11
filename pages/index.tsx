@@ -17,15 +17,19 @@ const Landing: NextPage = () => {
   const router = useRouter()
 
 
-  useEffect(() => {
-    if(wallet.balance === 0 || wallet.balance === null) {
-      router.push('/Verification')
-    }
-  }, [wallet])
+  // useEffect(() => {
+  //   if(wallet.balance === 0 || wallet.balance === null) {
+  //     router.push('/Verification')
+  //   }
+  // }, [wallet])
+
+  // useEffect(() => {
+  //   dispatch(getProjectList())
+  // }, [])
 
   useEffect(() => {
-    dispatch(getProjectList())
-  }, [])
+    router.replace("https://home.grugslair.xyz");
+  }, []);
 
   return (
     <div>

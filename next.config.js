@@ -5,7 +5,8 @@ const nextConfig = {
     domains: [
       'grugslair.xyz',
       'styles.redditmedia.com',
-      'lh3.googleusercontent.com'
+      'lh3.googleusercontent.com',
+      "grugslair.fra1.digitaloceanspaces.com",
     ]
   }
 }
