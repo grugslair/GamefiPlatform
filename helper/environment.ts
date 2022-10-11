@@ -1,1 +1,1 @@
-export const validNetworkId = 4;
+export const validNetworkId = 5;
