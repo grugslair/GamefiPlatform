@@ -18,3 +18,9 @@ export interface ISocialMediaIcon {
   url: string
   icon: IconLookup
 }
+
+declare global {
+  interface Window {
+    closeMobileMenu: any; // 👈️ turn off type checking
+  }
+}

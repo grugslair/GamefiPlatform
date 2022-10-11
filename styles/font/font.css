@@ -2,7 +2,7 @@
   font-family: 'avara';
   src: url('../../public/fonts/webfonts/Black/Avara-Black_web.ttf');
   src: url('../../public/fonts/webfonts/Black/Avara-Black_web.woff');
-  font-weight: 400;
+  font-weight: 800;
   font-style: normal;
 }
 
@@ -10,7 +10,7 @@
   font-family: 'avara';
   src: url('../../public/fonts/webfonts/Bold/Avara-Bold_web.ttf');
   src: url('../../public/fonts/webfonts/Bold/Avara-Bold_web.woff');
-  font-weight: 300;
+  font-weight: 700;
   font-style: normal;
 }
 

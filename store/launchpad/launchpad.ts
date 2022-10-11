@@ -78,6 +78,23 @@ export interface IProject {
   Chain: IProjectChain
 }
 
+export interface IReportList {
+  createdAt: string
+  deletedAt: string
+  updatedAt: string 
+  id: number
+  imageUrl: string
+  pdfUrl: string
+  subtitle: string
+  title: string
+}
+
+export interface IReport {
+  loading: boolean
+  list: IReportList[]
+}
+
 export interface ILaunchPadState {
   projectList: IProject[]
+  reports: IReport
 }
