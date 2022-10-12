@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { validNetworkId } from "../../../helper/environment";
 import { RootState } from "../../../store";
@@ -34,6 +34,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBars,
   faChevronDown,
+  faChevronRight,
   faClose,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -67,18 +68,21 @@ const SOCIAL_MEDIAS = [
     label: "Twitter",
     url: "https://twitter.com/GrugsLair",
     icon: faTwitter,
+    logo: "/twitter.svg",
     target: "_blank",
   },
   {
     label: "Medium",
     url: "https://medium.com/@grugslair",
     icon: faMedium,
+    logo: "/medium.svg",
     target: "_blank",
   },
   {
     label: "Discord",
     url: "https://discord.gg/NPsHvxvg",
     icon: faDiscord,
+    logo: "/discord.svg",
     target: "_blank",
   },
 ];
@@ -95,11 +99,6 @@ const LINKS = [
   {
     label: "Reports",
     url: "/reports",
-  },
-  {
-    label: "Communities",
-    hideInMobile: true,
-    child: SOCIAL_MEDIAS,
   },
 ];
 
@@ -146,12 +145,9 @@ const MobileMenu = ({ renderWalletButtons }: any) => {
         )}
       >
         <div className="flex flex-col gap-6">
-          {LINKS.map(
-            (data, i) =>
-              !data.hideInMobile && (
-                <NavLink key={i} {...data} onClick={() => setIsOpen(false)} />
-              )
-          )}
+          {LINKS.map((data, i) => (
+            <NavLink key={i} {...data} onClick={() => setIsOpen(false)} />
+          ))}
         </div>
         <div className="mt-8 flex gap-3">
           {SOCIAL_MEDIAS.map(({ url, icon, target }, i) => {
@@ -174,10 +170,8 @@ const MobileMenu = ({ renderWalletButtons }: any) => {
   );
 };
 
-const NavLink = ({ label, url, child, target, onClick }: INavLink) => {
-  return child?.length ? (
-    <DropdownLink label={label} child={child} />
-  ) : (
+const NavLink = ({ label, url, target, onClick }: INavLink) => {
+  return (
     <Link href={url || ""}>
       <a
         target={target}
@@ -193,24 +187,78 @@ const NavLink = ({ label, url, child, target, onClick }: INavLink) => {
   );
 };
 
-const DropdownLink = ({ label, child }: IDropdownLink) => {
+const DesktopSocialMedias = () => {
+  const [open, setOpen] = useState(false);
+  const closeTimeout = useRef<NodeJS.Timeout>();
+  const onEnter = () => {
+    clearTimeout(closeTimeout.current);
+    setOpen(true);
+  };
+  const onLeave = () => {
+    clearTimeout(closeTimeout.current);
+    closeTimeout.current = setTimeout(() => {
+      setOpen(false);
+    }, 500);
+  };
   return (
-    <div className="group relative inline-block">
-      <div className="flex cursor-context-menu items-center justify-center gap-[6px]">
+    <div className="relative inline-block">
+      <div
+        className="flex cursor-context-menu items-center justify-center gap-[6px]"
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+        onTouchStart={onEnter}
+        onTouchEnd={onLeave}
+      >
         <p className="font-avara text-base text-white text-shadow-grugSm">
-          {label}
+          Communities
         </p>
         <FontAwesomeIcon
           icon={faChevronDown}
-          className="-mt-1 w-[16px] text-white"
+          className={join(
+            "-mt-1 w-[16px] text-white transition-transform",
+            open && "rotate-180"
+          )}
           style={{
             filter: `drop-shadow(${tailwind!.theme!.textShadow.grugSm})`,
           }}
         />
       </div>
-      <div className="absolute right-0 z-[1] flex flex-col gap-2 pt-3 text-right opacity-0 transition-opacity group-hover:opacity-100">
-        {child!.map((data, i) => (
-          <NavLink key={i} {...data} />
+      <div
+        className={join(
+          "absolute right-0 top-10 z-[1] w-64 flex-col rounded-sm border border-solid border-grugBorder bg-grugCardBackground p-4",
+          "origin-top-right transition-all group-hover:opacity-100",
+          open ? "scale-100 opacity-100" : "scale-0 opacity-0"
+        )}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+      >
+        {SOCIAL_MEDIAS.map((data, i) => (
+          <NavLink
+            key={i}
+            {...data}
+            label={
+              <div
+                className={join(
+                  "flex items-center",
+                  i !== 0 && "mt-4 border-t border-solid border-grugBorder pt-4"
+                )}
+              >
+                <Image
+                  src={data.logo}
+                  alt={data.label}
+                  width={32}
+                  height={32}
+                />
+                <p className="ml-3 flex flex-1 items-center font-avara text-base font-black text-white">
+                  {data.label}
+                </p>
+                <FontAwesomeIcon
+                  icon={faChevronRight}
+                  className="-mt-1 w-[9px] text-white"
+                />
+              </div>
+            }
+          />
         ))}
       </div>
     </div>
@@ -224,6 +272,9 @@ const Header = () => {
   const wallet = useSelector((state: RootState) => state.wallet);
   const dispatch = useAppDispatch();
   let { provider } = useSelector((state: RootState) => state.wallet);
+
+  let lastKnownScrollPosition = useRef(0);
+  let ticking = useRef(false);
 
   const connectWallet = useCallback(
     async function () {
@@ -311,8 +362,16 @@ const Header = () => {
 
   useEffect(() => {
     const scrollHandler: EventListener = (event: Event) => {
-      const target = event.target as HTMLDocument;
-      setScrolled((target?.scrollingElement?.scrollTop || 0) > 100);
+      lastKnownScrollPosition.current = window.scrollY;
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          // simple throttle
+          const target = event.target as HTMLDocument;
+          setScrolled((target?.scrollingElement?.scrollTop || 0) > 100);
+          ticking.current = false;
+        });
+        ticking.current = true;
+      }
     };
     setScrolled(window.scrollY > 100);
     window.addEventListener("scroll", scrollHandler);
@@ -320,7 +379,6 @@ const Header = () => {
   }, []);
 
   const router = useRouter();
-  console.log(scrolled);
 
   const renderWalletButtons = () => (
     <div
@@ -390,12 +448,14 @@ const Header = () => {
     <div
       id="NavBar"
       className={join(
-        "fixed top-0 z-10 w-full pt-4",
-        isMobile ? "pl-4 pr-5" : "tablet:px-8"
+        "fixed top-0 z-10 w-full py-4 transition duration-500",
+        isMobile ? "pl-4 pr-5 py-4" : "px-8 py-[30px]"
       )}
       style={{
-        background:
-          "linear-gradient(180deg, rgba(0, 0, 0, 0.59) 0%, rgba(182, 199, 243, 0) 100%)",
+        background: scrolled
+          ? "rgba(11, 11, 11, 0.9)"
+          : "linear-gradient(180deg, rgba(0, 0, 0, 0.59) 0%, rgba(182, 199, 243, 0) 100%)",
+        ...(scrolled && { backdropFilter: "blur(40px)" }),
       }}
     >
       <div
@@ -427,6 +487,7 @@ const Header = () => {
             {LINKS.map((data, i) => (
               <NavLink key={i} {...data} />
             ))}
+            <DesktopSocialMedias />
           </div>
         )}
         {!isMobile && renderWalletButtons()}
