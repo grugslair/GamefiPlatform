@@ -17,7 +17,7 @@ import useMessage from 'hooks/useMessageHooks'
 
 
 
-const Stake: NextPage = () => {
+const Staking: NextPage = () => {
   const wallet: walletState  = useSelector((state: RootState) => state.wallet)
   const contractRocks: IContractRocks  = useSelector((state: RootState) => state.contractRocks)
   const contractStake: IContractStake  = useSelector((state: RootState) => state.contractStake)
@@ -41,7 +41,7 @@ const Stake: NextPage = () => {
     
     console.log(wallet)
     // if(wallet.balance === 0 || wallet.balance === null) {
-    //   router.push('/Verification')
+    //   router.push('/verify')
     // }
   }, [wallet])
 
@@ -162,4 +162,4 @@ const Stake: NextPage = () => {
   )
 }
 
-export default Stake
+export default Staking

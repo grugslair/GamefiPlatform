@@ -71,3 +71,16 @@ export function grugDateFormat(unFomatDate:string) {
   const formatedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} - ${formatTime(date.getHours())} : ${formatTime(date.getMinutes())}`
   return formatedDate
 }
+
+export const getReturnValues = (countDown:number) => {
+  // calculate time left
+  console.log(countDown)
+  const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
+  const hours = Math.floor(
+    (countDown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
+  const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
+
+  return [days, hours, minutes, seconds];
+};

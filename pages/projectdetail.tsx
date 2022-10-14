@@ -43,7 +43,7 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     // if(wallet.balance === 0 || wallet.balance === null) {
-    //   router.push('/Verification')
+    //   router.push('/verify')
     // }
   }, [wallet])
 

@@ -1,5 +1,5 @@
 import { Progress } from "antd"
-import { grugDateFormat, numberWithCommas } from "helper/utilities"
+import { getReturnValues, grugDateFormat, numberWithCommas } from "helper/utilities"
 import { useEffect, useMemo } from "react"
 import { IProjectTarget } from "../type"
 import * as moment from 'moment'
@@ -12,10 +12,14 @@ const ProjectTarget = ({projectTarget}: any) => {
   }, [projectTarget.startDate])
 
   useEffect(() => {
-    console.log(projectTarget)
     const date = new Date(projectTarget.startDate)
+    console.log(date)
+    console.log(new Date())
+    console.log(date.getTime())
+    const countDown = new Date().getTime() - date.getTime()
 
-    console.log(date.toUTCString())
+    console.log(getReturnValues(countDown))
+
   }, [])
 
   return (

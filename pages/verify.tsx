@@ -5,7 +5,7 @@ import Banner from "../components/Public/Banner"
 import NotVerifiedGrug from "../components/Verification/NotVerifiedGrug"
 import { RootState } from "../store"
 
-const Verification = () => {
+const Verify = () => {
   const wallet  = useSelector((state: RootState) => state.wallet)
   const router = useRouter()
 
@@ -34,4 +34,4 @@ const Verification = () => {
   )
 }
 
-export default Verification
+export default Verify
