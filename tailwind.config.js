@@ -17,6 +17,9 @@ module.exports = {
         grayCool25: "#FCFCFD",
         grayCool300: "#B9C0D4",
         grugBlack: "#0B0B0B",
+        grugCardBackground: "#151011",
+        grugCardBackground20: "#151011e6",
+        grugBorder: "#b546394d",
       },
       fontFamily: {
         avara: ["Avara", "sans-serif"],
