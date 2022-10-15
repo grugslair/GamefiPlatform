@@ -138,15 +138,6 @@ const Reports = () => {
                         className={join("mt-4", "tablet:mt-8")}
                         onClick={() => {
                           openedRef.current = window.open(pdfUrl, "_blank");
-                          // setTimeout(
-                          //   () =>
-                          //     // postMessage to reports.grugslair.xyz to enable viwing pdf
-                          //     win?.postMessage(
-                          //       `15Fr0m6ru95L41r-t-${new Date().toDateString()}`,
-                          //       "https://reports.grugslair.xyz"
-                          //     ),
-                          //   1000
-                          // );
                         }}
                       >
                         Read
