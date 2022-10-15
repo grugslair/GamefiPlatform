@@ -1,7 +1,7 @@
 import { Input } from "antd";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { join } from "tailwind-merge";
 
 // Redux
@@ -18,6 +18,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/Button";
 
 const Reports = () => {
+  const openedRef = useRef<any>();
   const dispatch = useAppDispatch();
   const { loading, list } = useSelector(
     (state: RootState) =>
@@ -33,6 +34,17 @@ const Reports = () => {
 
   useEffect(() => {
     dispatch(getReportList());
+    window.addEventListener("message", e => {
+      if (e.data === '15Fr0m6ru95L41r-loaded' &&
+      [
+        "https://reports.grugslair.xyz",
+      ].includes(e.origin)) {
+        openedRef.current?.postMessage?.(
+          `15Fr0m6ru95L41r-t-${new Date().toDateString()}`,
+          "https://reports.grugslair.xyz"
+        );
+      }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -125,16 +137,16 @@ const Reports = () => {
                       <Button
                         className={join("mt-4", "tablet:mt-8")}
                         onClick={() => {
-                          const win = window.open(pdfUrl, "_blank");
-                          setTimeout(
-                            () =>
-                              // postMessage to reports.grugslair.xyz to enable viwing pdf
-                              win?.postMessage(
-                                `15Fr0m6ru95L41r-t-${new Date().toDateString()}`,
-                                "https://reports.grugslair.xyz"
-                              ),
-                            1000
-                          );
+                          openedRef.current = window.open(pdfUrl, "_blank");
+                          // setTimeout(
+                          //   () =>
+                          //     // postMessage to reports.grugslair.xyz to enable viwing pdf
+                          //     win?.postMessage(
+                          //       `15Fr0m6ru95L41r-t-${new Date().toDateString()}`,
+                          //       "https://reports.grugslair.xyz"
+                          //     ),
+                          //   1000
+                          // );
                         }}
                       >
                         Read

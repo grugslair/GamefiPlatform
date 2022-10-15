@@ -10,7 +10,7 @@ const useCountDown = () => {
 
   }, [countDown])
 
-  function initialEndDate(date) {
+  function initialEndDate(date: any) {
     
 
   }
