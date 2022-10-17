@@ -33,11 +33,9 @@ const Reports = () => {
   );
 
   const openPdf = async (pdfUrl: string) => {
+    const win = window.open();
     const url = await getSignedPDFUrl(pdfUrl);
-    window.open(
-      `https://reports.grugslair.xyz?url=${encodeURIComponent(url || "")}`,
-      '_blank'
-    );
+    win!.location = `https://reports.grugslair.xyz?url=${encodeURIComponent(url || "")}`;
   };
 
   useEffect(() => {
