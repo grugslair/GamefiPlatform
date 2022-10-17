@@ -35,7 +35,8 @@ const Reports = () => {
   const openPdf = async (pdfUrl: string) => {
     const url = await getSignedPDFUrl(pdfUrl);
     window.open(
-      `https://reports.grugslair.xyz?url=${encodeURIComponent(url || "")}`
+      `https://reports.grugslair.xyz?url=${encodeURIComponent(url || "")}`,
+      '_blank'
     );
   };
 
