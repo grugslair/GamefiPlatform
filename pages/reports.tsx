@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { getReportList } from "store/launchpad/thunk";
 import { useAppDispatch } from "hooks/useStoreHooks";
+import { getSignedPDFUrl } from "helper/s3Client";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +19,6 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/Button";
 
 const Reports = () => {
-  const openedRef = useRef<any>();
   const dispatch = useAppDispatch();
   const { loading, list } = useSelector(
     (state: RootState) =>
@@ -32,19 +32,15 @@ const Reports = () => {
       e.subtitle.toLowerCase().includes(search.toLowerCase())
   );
 
+  const openPdf = async (pdfUrl: string) => {
+    const url = await getSignedPDFUrl(pdfUrl);
+    window.open(
+      `https://reports.grugslair.xyz?url=${encodeURIComponent(url || "")}`
+    );
+  };
+
   useEffect(() => {
     dispatch(getReportList());
-    window.addEventListener("message", e => {
-      if (e.data === '15Fr0m6ru95L41r-loaded' &&
-      [
-        "https://reports.grugslair.xyz",
-      ].includes(e.origin)) {
-        openedRef.current?.postMessage?.(
-          `15Fr0m6ru95L41r-t-${new Date().toDateString()}`,
-          "https://reports.grugslair.xyz"
-        );
-      }
-    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -136,9 +132,7 @@ const Reports = () => {
                       </p>
                       <Button
                         className={join("mt-4", "tablet:mt-8")}
-                        onClick={() => {
-                          openedRef.current = window.open(pdfUrl, "_blank");
-                        }}
+                        onClick={() => openPdf(pdfUrl)}
                       >
                         Read
                       </Button>
