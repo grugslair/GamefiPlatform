@@ -13,12 +13,11 @@ const ProjectTarget = ({projectTarget}: any) => {
 
   useEffect(() => {
     const date = new Date(projectTarget.startDate)
+    const countDown = new Date().getTime() - date.getTime()
+    console.log(getReturnValues(countDown))
     console.log(date)
     console.log(new Date())
-    console.log(date.getTime())
-    const countDown = new Date().getTime() - date.getTime()
-
-    console.log(getReturnValues(countDown))
+    console.log(new Date(countDown))
 
   }, [])
 

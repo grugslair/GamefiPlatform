@@ -1,34 +1,24 @@
 import React, { useEffect, useState } from 'react'
 
 const useCountDown = () => {
-  const [countDown, setCountDown] = useState()
+  const [countDown, setCountDown] = useState(0)
 
-  const [endDate, setEndDate] = useState()
+  const [endDate, setEndDate] = useState(0)
 
   useEffect(() => {
+    setTimeout(() => {
+      if(countDown < endDate) {
+        setCountDown(countDown - new Date().getTime())
+      }
+    }, 1000)
     
 
   }, [countDown])
 
-  function initialEndDate(date: any) {
-    
-
+  return {
+    countDown
   }
 
-  const calculateTheTime = (countDown:number) => {
-    // calculate time left
-    console.log(countDown)
-    const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (countDown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
-  
-    return [days, hours, minutes, seconds];
-  };
-
-  return
 }
 
 export default useCountDown
