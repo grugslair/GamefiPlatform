@@ -1,5 +1,7 @@
 import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { faGlobe } from "@fortawesome/free-solid-svg-icons"
+import { Button } from "antd"
+import useCountDown from "hooks/useCountDown"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
@@ -18,6 +20,14 @@ interface IProps {
 
 const Project = (props: IProps) => {
   const router = useRouter()
+
+  const {handleSetEndDate, countDown} = useCountDown()
+
+  useEffect(() => {
+    const date = new Date(props.dataproject.periodEnd)
+    handleSetEndDate(date.getTime())
+
+  }, [])
 
   const projectBanner: IProjectBannerProp = {
     companyLogo: props.dataproject.logo,
@@ -61,7 +71,7 @@ const Project = (props: IProps) => {
 
   return (
     <>
-      <div className="border-[#B546394D] border mb-10">
+      <div className="border-[#B546394D] border mb-10 text-white bg-[#151011]">
         <ProjectBanner companyProfile={projectBanner.companyProfile} companyLogo={projectBanner.companyLogo}></ProjectBanner>
         <div className="px-10 py-6">
           <div className="relative">
@@ -74,24 +84,28 @@ const Project = (props: IProps) => {
             <ProjectTarget
               projectTarget={projectTarget}
             ></ProjectTarget>
-            <button 
-              className="bg-[#B54639] text-white w-full rounded-md py-4 absolute bottom-[-65px]"
+            <Button 
+              className="bg-[#B54639] text-white w-full rounded-md absolute bottom-[-64px] h-16"
               onClick={() => router.push({
                 pathname: '/projectdetail',
                 query: {
                   id: props.dataproject.id
                 }
               })}
+              size="large"
+              disabled={!countDown}
             >
-              <div className="font-['avara'] text-sm">
-                Participate
-              </div>
-              <div className="show-counter">
-                <div>
-
-                </div>
-              </div>
-            </button>
+              {countDown ?
+                <> 
+                  <div className="font-['avara'] text-sm">
+                    Participate
+                  </div>
+                  <div className="show-counter">
+                    Ends in {countDown[0]}d : {countDown[1]}h : {countDown[2]}m : {countDown[3]}s
+                  </div>
+                </> : <div>Expired</div>
+              }
+            </Button>
           </div>
         </div>
       </div>

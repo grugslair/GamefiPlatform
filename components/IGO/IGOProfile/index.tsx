@@ -1,29 +1,40 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import useCountDown from "hooks/useCountDown"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
 import { IIGOProfileProp } from "../type"
 
 const IGOProfile = (prop: IIGOProfileProp) => {
   const router = useRouter()
+
+  const {countDown, handleSetEndDate} = useCountDown()
+
+  useEffect(() => {
+    const endDate = new Date(prop.companyEndDate)
+    handleSetEndDate(endDate.getTime())
+  }, [])
 
   return (
     <>
       <div className="border p-4 border-[#B546394D] bg-[#151011]">
         <div className="grid grid-cols-2 mb-4">
           <div className="text-left">
-            <button onClick={() => router.push('/')}>
+            <button onClick={() => router.push('/projects')}>
               <FontAwesomeIcon icon={faArrowLeft} />
               <span className="ml-4">Back</span>
             </button>
           </div>
           <div className="text-right">
-            <span 
-              className="text-[#EAAA08] text-sm rounded-full px-4 py-1 border border-[#EAAA08]"
-            >
-              Ends in 10d : 7h : 30m : 10s
-            </span>
+            {countDown ?
+              <p 
+                className="text-[#EAAA08] text-sm rounded-full px-4 py-1 border border-[#EAAA08]"
+              >
+                Ends in {countDown[0]}d : {countDown[1]}h : {countDown[2]}m : {countDown[3]}s
+              </p> : <p>Expired</p>
+            }
           </div>
         </div>
         <div className="grid grid-cols-5 grid-flow-col gap-6">

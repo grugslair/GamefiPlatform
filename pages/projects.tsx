@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { getProjectList } from '../store/launchpad/thunk'
 import { useAppDispatch } from '../hooks/useStoreHooks'
+import { Tabs } from 'antd'
 
 
 
@@ -34,36 +35,62 @@ const Landing: NextPage = () => {
         <Banner />
         <>
           <div className="my-4 mx-[148px]">
-            <ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-                <li className="mr-2" role="presentation">
-                    <button className="inline-block p-4 rounded-t-lg border-b-2 font-['avara']" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                      Ongoing
-                    </button>
-                </li>
-                <li className="mr-2" role="presentation">
-                    <button className="font-['avara'] inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
-                      Upcoming
-                    </button>
-                </li>
-                <li className="mr-2" role="presentation">
-                    <button className="font-['avara'] inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="settings-tab" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">
-                      Ended
-                    </button>
-                </li>
-                <li role="presentation">
-                    <button className="font-['avara'] inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="contacts-tab" data-tabs-target="#contacts" type="button" role="tab" aria-controls="contacts" aria-selected="false">
-                      Participate
-                    </button>
-                </li>
-            </ul>
+            <Tabs defaultActiveKey="1" tabBarStyle={{color: 'white'}}>
+              <Tabs.TabPane tab="Ongoing" key="1">
+                <div className="relative">
+                  <div className='grid gap-4 grid-cols-2 pb-5'>
+                    {launchpad.projectList.map((project, index) => {
+                      if(project.status === 'on_going') {
+                        return(
+                          <Project key={index} dataproject={project} />
+                        )
+                      }
+                    })}
+                  </div>
+                </div>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Upcoming" key="2">
+                <div className="relative">
+                  <div className='grid gap-4 grid-cols-2 pb-5'>
+                    {launchpad.projectList.map((project, index) => {
+                      if(project.status === 'up_coming') {
+                        return(
+                          <Project key={index} dataproject={project} />
+                        )
+                      }
+                    })}
+                  </div>
+                </div>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Ended" key="3">
+                <div className="relative">
+                  <div className='grid gap-4 grid-cols-2 pb-5'>
+                    {launchpad.projectList.map((project, index) => {
+                      if(project.status === 'ended') {
+                        return(
+                          <Project key={index} dataproject={project} />
+                        )
+                      }
+                    })}
+                  </div>
+                </div>
+              </Tabs.TabPane>
+              <Tabs.TabPane tab="Participate" key="4">
+                <div className="relative">
+                  <div className='grid gap-4 grid-cols-2 pb-5'>
+                    {launchpad.projectList.map((project, index) => {
+                      if(project.status === 'participate') {
+                        return(
+                          <Project key={index} dataproject={project} />
+                        )
+                      }
+                    })}
+                  </div>
+                </div>
+              </Tabs.TabPane>
+            </Tabs>
           </div>
-          <div className="relative">
-            <div className='mx-[148px] grid gap-4 grid-cols-2 pb-5'>
-              {launchpad.projectList.map((project, index) => (
-                <Project key={index} dataproject={project} />
-              ))}
-            </div>
-          </div>
+          
         </>
         
       </div>

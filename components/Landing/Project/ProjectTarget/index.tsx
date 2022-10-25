@@ -1,25 +1,15 @@
 import { Progress } from "antd"
 import { getReturnValues, grugDateFormat, numberWithCommas } from "helper/utilities"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { IProjectTarget } from "../type"
 import * as moment from 'moment'
+import useCountDown from "hooks/useCountDown"
 
 const ProjectTarget = ({projectTarget}: any) => {
-
   const startDate = useMemo(() => {
     
     return grugDateFormat(projectTarget.startDate)
   }, [projectTarget.startDate])
-
-  useEffect(() => {
-    const date = new Date(projectTarget.startDate)
-    const countDown = new Date().getTime() - date.getTime()
-    console.log(getReturnValues(countDown))
-    console.log(date)
-    console.log(new Date())
-    console.log(new Date(countDown))
-
-  }, [])
 
   return (
     <div>

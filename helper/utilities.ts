@@ -50,7 +50,7 @@ export function weiToEth(wei: string) {
 }
 
 export function numberWithCommas(x: any) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export function changeToOneDecimal (x: any) {
@@ -74,7 +74,6 @@ export function grugDateFormat(unFomatDate:string) {
 
 export const getReturnValues = (countDown:number) => {
   // calculate time left
-  console.log(countDown)
   const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
   const hours = Math.floor(
     (countDown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)

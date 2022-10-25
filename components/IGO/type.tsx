@@ -6,4 +6,5 @@ export interface IIGOProfileProp {
   companyToken: string
   companyDesc: string
   companySosMedia: ISocialMediaIcon[]
+  companyEndDate: string
 }
