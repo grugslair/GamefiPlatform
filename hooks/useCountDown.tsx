@@ -19,7 +19,6 @@ const useCountDown = () => {
     } else {
       setCountDown(undefined)
     }
-    
 
   }, [countDown])
 
