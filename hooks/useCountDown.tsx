@@ -1,22 +1,31 @@
+import { getReturnValues } from 'helper/utilities'
 import React, { useEffect, useState } from 'react'
 
 const useCountDown = () => {
-  const [countDown, setCountDown] = useState(0)
+  const [countDown, setCountDown] = useState<number[]>()
 
   const [endDate, setEndDate] = useState(0)
 
+  function handleSetEndDate(endDate: number) {
+    console.log(endDate)
+    setEndDate(endDate)
+  }
+
   useEffect(() => {
-    setTimeout(() => {
-      if(countDown < endDate) {
-        setCountDown(countDown - new Date().getTime())
-      }
-    }, 1000)
+    if(new Date().getTime() < endDate) {
+      setTimeout(() => {
+          setCountDown(getReturnValues(endDate - new Date().getTime()))
+      }, 1000)
+    } else {
+      setCountDown(undefined)
+    }
     
 
   }, [countDown])
 
   return {
-    countDown
+    countDown,
+    handleSetEndDate
   }
 
 }

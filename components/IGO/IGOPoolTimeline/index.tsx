@@ -1,12 +1,13 @@
 import { useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Timeline } from 'antd'
+import { numberWithCommas } from "helper/utilities"
 
 const IGOPoolTimeline = ({data}: any) => {
 
   const dataTest = [
     {
-      text: 'symbol',
+      text: 'Symbol',
       value: `$${data.tokenSymbol}`
     },
     {
@@ -19,15 +20,15 @@ const IGOPoolTimeline = ({data}: any) => {
     },
     {
       text: 'Initial Supply',
-      value: `${data.tokenInitialSupply} $${data.tokenSymbol}`
+      value: `${numberWithCommas(data.tokenInitialSupply)} $${data.tokenSymbol}`
     },
     {
       text: 'Total Supply',
-      value: `${data.tokenTotalSupply} $${data.tokenSymbol}`
+      value: `${numberWithCommas(data.tokenTotalSupply)} $${data.tokenSymbol}`
     },
     {
       text: 'Initial Market Cap',
-      value: `$${data.targetAmount}`
+      value: `$${numberWithCommas(data.targetAmount)}`
     },
     {
       text: 'Listing Date',

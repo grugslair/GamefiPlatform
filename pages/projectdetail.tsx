@@ -69,7 +69,8 @@ const ProjectDetail = () => {
         url: dataIGO?.discordUrl || '',
         icon: faDiscord
       },
-    ]
+    ],
+    companyEndDate: dataIGO?.periodEnd || ''
   }
 
   function changeAmount(event: ChangeEvent<HTMLInputElement>) {
@@ -91,7 +92,8 @@ const ProjectDetail = () => {
           <div className="relative mx-16">
             <div className="grid grid-cols-3 gap-3 px-9 pt-48">
               <div className="col-span-2">
-                <IGOProfile 
+                <IGOProfile
+                  companyEndDate={IgoProfile.companyEndDate}
                   companyLogo={IgoProfile.companyLogo}
                   companyDesc={IgoProfile.companyDesc}
                   companyName={IgoProfile.companyName}
