@@ -1,7 +1,7 @@
 import { Input } from "antd";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { join } from "tailwind-merge";
 
 // Redux
@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { getReportList } from "store/launchpad/thunk";
 import { useAppDispatch } from "hooks/useStoreHooks";
-import { getSignedPDFUrl } from "helper/s3Client";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +16,9 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 // Components
 import Button from "@/components/Button";
+
+// Utils
+import { encodeUrl } from "helper/utilities";
 
 const Reports = () => {
   const dispatch = useAppDispatch();
@@ -32,10 +34,18 @@ const Reports = () => {
       e.subtitle.toLowerCase().includes(search.toLowerCase())
   );
 
+
   const openPdf = async (pdfUrl: string) => {
     const win = window.open("about:blank", "_blank");
-    const url = await getSignedPDFUrl(pdfUrl);
-    win!.location = `https://reports.grugslair.xyz?url=${encodeURIComponent(url || "")}`;
+    const { result } = await fetch("/api/signurl", {
+      method: "POST",
+      body: JSON.stringify({
+        data: encodeUrl(pdfUrl),
+      }),
+    }).then((res) => res.json());
+    win!.location = `https://reports.grugslair.xyz?url=${encodeURIComponent(
+      result || ""
+    )}`;
   };
 
   useEffect(() => {

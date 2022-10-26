@@ -83,3 +83,12 @@ export const getReturnValues = (countDown:number) => {
 
   return [days, hours, minutes, seconds];
 };
+
+export const encodeUrl = (pdfUrl: string) => {
+  const encode = (data: string) => {
+    return Buffer.from(data).toString("base64");
+  };
+  return encode(
+    "141r6ru6" + encode("541ty6ru6" + pdfUrl + "541ty141r") + "6ru6541ty"
+  )
+}
