@@ -4,6 +4,7 @@ import { getProjectList, getReportList } from './thunk'
 
 const initialState = {
   projectList: [],
+  requirementsMeet: 0,
   reports: {
     loading: false,
     list: [],
@@ -14,8 +15,7 @@ const initialState = {
 const launchpad = createSlice({
   name: 'launchpad',
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getProjectList.fulfilled, (state, action: any) => {
       state.projectList = action.payload

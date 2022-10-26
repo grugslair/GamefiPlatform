@@ -16,6 +16,7 @@ import { Button, Divider, Input } from "antd"
 import { IContractRocks } from "store/contractRocks/contractRocks"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
+import Requirement from "@/components/Public/Requirement"
 
 const ProjectDetail = () => {
   const wallet = useSelector((state: RootState) => state.wallet)
@@ -27,6 +28,8 @@ const ProjectDetail = () => {
   const [dataIGO, setDataIGO] = useState<IProject | null>(null)
 
   const [amount, setAmount] = useState('0')
+
+  const [openRequirement, setOpenRequirement] = useState<boolean>(false)
 
   const dispatch = useAppDispatch()
 
@@ -77,6 +80,14 @@ const ProjectDetail = () => {
     setAmount(event.target.value)
   }
 
+  function handleOpenRequirement() {
+    setOpenRequirement(true)
+  }
+
+  function handleCloseRequirement() {
+    setOpenRequirement(false)
+  }
+
   return(
     <>
       {dataIGO &&
@@ -108,6 +119,7 @@ const ProjectDetail = () => {
               </div>
               <div>
                 <IGOTargetRaise
+                  handleOpenRequirement={handleOpenRequirement}
                   data={dataIGO}
                 />
                 <div className="relative p-6 mt-4 bg-[#151011]">
@@ -178,6 +190,10 @@ const ProjectDetail = () => {
               </div>
             </div>
           </div>
+          <Requirement 
+            openRequirement={openRequirement}
+            handleClose={handleCloseRequirement}
+          />
         </div>
       }
     </>

@@ -207,7 +207,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
 
           <div>
             Dont have ROCKS? &nbsp;
-            <Link passHref href={'/Stake'}>
+            <Link passHref href={'/staking'}>
               <a className="font-['avara'] text-[#CA5D50]">
                 Claim
               </a>
