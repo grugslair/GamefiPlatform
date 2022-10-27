@@ -1,7 +1,5 @@
-import { useEffect } from "react"
-import { useSelector } from "react-redux"
 import { Timeline } from 'antd'
-import { numberWithCommas } from "helper/utilities"
+import { grugDateFormat, numberWithCommas } from "helper/utilities"
 
 const IGOPoolTimeline = ({data}: any) => {
 
@@ -12,7 +10,7 @@ const IGOPoolTimeline = ({data}: any) => {
     },
     {
       text: 'Token Price',
-      value: data.publicSalePrice
+      value: `${data.publicSalePrice} $${data.Currency.symbol}`
     },
     {
       text: 'Token Network',
@@ -32,11 +30,11 @@ const IGOPoolTimeline = ({data}: any) => {
     },
     {
       text: 'Listing Date',
-      value: "20 Jun'22"
+      value: `${grugDateFormat(data.periodStart)}`
     },
     {
       text: 'Contract Address',
-      value: 'x0812885002010'
+      value: `${data.tokenContractAddress.slice(0,15)}`
     }
   ]
 

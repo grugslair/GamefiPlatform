@@ -26,8 +26,7 @@ const Project = (props: IProps) => {
   useEffect(() => {
     const date = new Date(props.dataproject.periodEnd)
     handleSetEndDate(date.getTime())
-
-  }, [])
+  }, [props])
 
   const projectBanner: IProjectBannerProp = {
     companyLogo: props.dataproject.logo,

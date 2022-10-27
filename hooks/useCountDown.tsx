@@ -7,20 +7,19 @@ const useCountDown = () => {
   const [endDate, setEndDate] = useState(0)
 
   function handleSetEndDate(endDate: number) {
-    console.log(endDate)
     setEndDate(endDate)
   }
 
   useEffect(() => {
     if(new Date().getTime() < endDate) {
       setTimeout(() => {
-          setCountDown(getReturnValues(endDate - new Date().getTime()))
+        setCountDown(getReturnValues(endDate - new Date().getTime()))
       }, 1000)
     } else {
       setCountDown(undefined)
     }
 
-  }, [countDown])
+  }, [countDown, endDate])
 
   return {
     countDown,

@@ -59,7 +59,7 @@ export function changeToOneDecimal (x: any) {
 
 export function grugDateFormat(unFomatDate:string) {
   const date = new Date(unFomatDate)
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   const formatTime = (time: number) => {
     if (time < 10) {
@@ -68,7 +68,7 @@ export function grugDateFormat(unFomatDate:string) {
     return time
   }
 
-  const formatedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} - ${formatTime(date.getHours())} : ${formatTime(date.getMinutes())}`
+  const formatedDate = `${date.getDate()} ${months[date.getMonth()]}'${date.getFullYear()} - ${formatTime(date.getHours())} : ${formatTime(date.getMinutes())}`
   return formatedDate
 }
 

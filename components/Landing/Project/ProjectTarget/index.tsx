@@ -34,7 +34,7 @@ const ProjectTarget = ({projectTarget}: any) => {
       <div>
         <div className="grid grid-cols-2 text-xs py-3 border-b">
           <div className="text-left text-[#D0D5DD]">Rate</div>
-          <div className="text-right font-[300] font-['avara']">1 {projectTarget.currency.symbol} = {1 / projectTarget.rate} ${projectTarget.tokenSymbol}</div>
+          <div className="text-right font-[300] font-['avara']">1 ${projectTarget.currency.symbol} = {1 / projectTarget.rate} ${projectTarget.tokenSymbol}</div>
         </div>
         <div className="grid grid-cols-2 text-xs py-3 border-b">
           <div className="text-left text-[#D0D5DD]">Min. Staked ROCKS</div>
