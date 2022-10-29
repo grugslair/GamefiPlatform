@@ -1,8 +1,13 @@
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import useWallet from "hooks/useWallet"
 import { useSelector } from "react-redux"
 import { RootState } from "../../../store"
 
 const NotVerifiedGrug = () => {
   const wallet  = useSelector((state: RootState) => state.wallet)
+
+  const {connectWallet} = useWallet()
 
   return(
     <>
@@ -35,9 +40,12 @@ const NotVerifiedGrug = () => {
 
             <div className="flex">
               <div className="w-10 h-10 rounded-full relative bg-[#FBE7D8]">
-                <div className="absolute left-[14px] top-1 text-[#B54639] text-xl font-bold">
-                  2
-                </div>
+                2
+                {/* <div className="absolute left-[14px] top-1 text-[#B54639] text-xl font-bold">
+                  {
+                    wallet.walletAddress ? <FontAwesomeIcon icon={faCheckCircle} color="#1E9E3E" size="1x"/> : 2
+                  }
+                </div> */}
               </div>
 
               <div className="ml-5">
@@ -50,6 +58,12 @@ const NotVerifiedGrug = () => {
                   <>
                     <h1 className="font-['avara'] text-white">Connect Wallet</h1>
                     <p>Connect your Metamask / TrustWallet</p>
+                    <button 
+                      onClick={connectWallet}
+                      className="mt-5 px-[14px] py-2 bg-[#B54639] rounded-sm font-bold text-white"
+                    >
+                      Connect Wallet
+                    </button>
                   </>
                 )}
               </div>

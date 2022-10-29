@@ -127,16 +127,16 @@ const ProjectDetail = () => {
                     Invest
                   </div>
                   <div className="grid grid-cols-2 gap-2 mb-2">
-                    <div className="text-[#D0D5DD]">My USDT Balance:</div>
-                    <div className="text-right">200 USDT</div>
+                    <div className="text-[#D0D5DD]">My ${dataIGO.Currency.symbol} Balance:</div>
+                    <div className="text-right">200 ${dataIGO.Currency.symbol}</div>
                   </div>
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     <div className="text-[#D0D5DD]">Max. Allocation:</div>
-                    <div className="text-right">100 USDT</div>
+                    <div className="text-right">100 ${dataIGO.Currency.symbol}</div>
                   </div>
                   <div className="p-4 border border-[#CA5D504D]">
                     <div className="mb-1 text-[#D0D5DD] text-xs">
-                      Invest (USDT)
+                      Invest (${dataIGO.Currency.symbol})
                     </div>
                     <div>
                       <Input.Group compact>
@@ -171,7 +171,7 @@ const ProjectDetail = () => {
                     </div>
                     <div>
                       <div className="mb-1 text-[#D0D5DD] text-xs">
-                        To get (ZZZ)
+                        To get (${dataIGO.tokenSymbol})
                       </div>
                       <div className="mb-4 text-2xl font-['avara']">
                         0
@@ -180,7 +180,7 @@ const ProjectDetail = () => {
 
                     <div>
                       <Button className="w-full h-full text-center py-3 bg-[#B54639] font-['avara']" disabled>
-                        Invest USDT
+                        Invest ${dataIGO.Currency.symbol}
                       </Button>
                     </div>
                   </div>
