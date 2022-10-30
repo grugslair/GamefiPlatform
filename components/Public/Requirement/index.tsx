@@ -1,41 +1,66 @@
-import { CloseOutlined } from "@ant-design/icons"
-import { faSquare } from "@fortawesome/free-regular-svg-icons"
-import { faSquareCheck } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Modal } from "antd"
-import { useMemo } from "react"
-import { useSelector } from "react-redux"
-import { RootState } from "store"
+import { useMemo } from "react";
+import { join } from "tailwind-merge";
+import { Modal } from "antd";
+
+// Fontawesome
+import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// Redux
+import { RootState } from "store";
+import { useSelector } from "react-redux";
 
 export interface IRequirement {
-  openRequirement: boolean,
-  handleClose: () => void
+  openRequirement: boolean;
+  handleClose: () => void;
+  showRocks?: boolean;
+}
+export interface ICheckbox {
+  checked: boolean;
 }
 
-const Requirement = ({openRequirement, handleClose}:IRequirement) => {
+const Checkbox = ({ checked }: ICheckbox) => {
+  return (
+    <div
+      className={join(
+        "mr-2 w-4 h-4 text-xs rounded-[4px] flex items-center justify-center",
+        checked
+          ? "bg-success600"
+          : "border border-solid border-gray-300 bg-gray100"
+      )}
+    >
+      {checked && <FontAwesomeIcon icon={faCheck} color="white" />}
+    </div>
+  );
+};
+
+const Requirement = ({
+  openRequirement,
+  handleClose,
+  showRocks = true,
+}: IRequirement) => {
   const wallet = useSelector((state: RootState) => state.wallet);
   const contractRocks = useSelector((state: RootState) => state.contractRocks);
 
-
   const haveWallet = useMemo(() => {
-    return !!wallet.walletAddress
-  }, [wallet.walletAddress])
+    return !!wallet.walletAddress;
+  }, [wallet.walletAddress]);
 
   const haveNft = useMemo(() => {
-    if(wallet.balance) {
-      return wallet.balance > 0
+    if (wallet.balance) {
+      return wallet.balance > 0;
     } else {
-      return false
+      return false;
     }
-  }, [wallet.balance])
+  }, [wallet.balance]);
 
   const haveRocks = useMemo(() => {
-    if(contractRocks.balanceOfRocks) {
-      return contractRocks.balanceOfRocks >= 3000
+    if (contractRocks.balanceOfRocks) {
+      return contractRocks.balanceOfRocks >= 3000;
     } else {
-      return false
+      return false;
     }
-  }, [contractRocks.balanceOfRocks])
+  }, [contractRocks.balanceOfRocks]);
 
   return (
     <div>
@@ -45,30 +70,43 @@ const Requirement = ({openRequirement, handleClose}:IRequirement) => {
         footer={null}
         centered
         width={400}
-        closeIcon={<CloseOutlined style={{color: 'white'}}/>}
+        closable={false}
+        closeIcon={null}
         bodyStyle={{
-          backgroundColor: '#151011',
-          border: '1px solid #B546394D',
-          color: 'white'
+          backgroundColor: "#151011",
+          border: "1px solid #B546394D",
+          color: "white",
         }}
         onCancel={handleClose}
       >
-        <h3 className="text-white text-lg font-['avara'] font-extrabold mb-4">Requirement to unlock</h3>
-        <div className="mb-2 text-sm font-['sora']">
-          {haveWallet ? <FontAwesomeIcon icon={faSquareCheck} size="lg" color="#1E9E3E"/> : <FontAwesomeIcon icon={faSquare} size="lg"/>}
-          &nbsp;Connect Wallet
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-white text-lg font-['avara'] font-extrabold">
+            Requirement to unlock
+          </h3>
+          <FontAwesomeIcon
+            icon={faTimes}
+            color="white"
+            className="text-xl w-6 h-6 cursor-pointer"
+            onClick={handleClose}
+          />
         </div>
-        <div className="mb-2 text-sm font-['sora']">
-          {haveNft ? <FontAwesomeIcon icon={faSquareCheck} size="lg" color="#1E9E3E"/> : <FontAwesomeIcon icon={faSquare} size="lg"/>}
-          &nbsp;Own Grug&apos;s NFT
+        <div className="mb-3 text-sm font-['sora'] flex items-center">
+          <Checkbox checked={haveWallet} />
+          Connect Wallet
         </div>
-        <div className="text-sm font-['sora']">
-          {haveRocks ? <FontAwesomeIcon icon={faSquareCheck} size="lg" color="#1E9E3E"/> : <FontAwesomeIcon icon={faSquare} size="lg"/>}
-          &nbsp;Stake {contractRocks.balanceOfRocks}/3000 $ROCKS
+        <div className="mb-3 text-sm font-['sora'] flex items-center">
+          <Checkbox checked={haveNft} />
+          Own Grug&apos;s NFT
         </div>
+        {showRocks && (
+          <div className="text-sm font-['sora'] flex items-center">
+            <Checkbox checked={haveRocks} />
+            Stake {contractRocks.balanceOfRocks}/3000 $ROCKS
+          </div>
+        )}
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default Requirement
+export default Requirement;

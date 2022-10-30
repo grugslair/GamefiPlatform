@@ -84,9 +84,10 @@ export interface IReportList {
   updatedAt: string 
   id: number
   imageUrl: string
-  pdfUrl: string
+  pdfUrl?: string
   subtitle: string
   title: string
+  type: string
 }
 
 export interface IReport {
