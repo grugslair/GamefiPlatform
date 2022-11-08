@@ -32,11 +32,12 @@ export function getChainData(chainId?: number): IChainData | null {
   return chainData
 }
 
-export function ellipseAddress(address = '', width = 10): string {
+export function ellipseAddress(address = '', width = 5): string {
+  const normalizedWidth = width >= 2 ? width : 2;
   if (!address) {
     return ''
   }
-  return `${address.slice(0, width)}...${address.slice(-width)}`
+  return `${address.slice(0, normalizedWidth)}...${address.slice(-(normalizedWidth - 1))}`
 }
 
 export function ethToWei(eth: string) {

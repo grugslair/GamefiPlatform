@@ -30,6 +30,7 @@ import { INavLink } from "./type";
 
 import Button from "@/components/Button";
 import useWallet from "hooks/useWallet";
+import { ellipseAddress } from "helper/utilities";
 
 const providerOptions = {};
 
@@ -250,7 +251,7 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const wallet = useSelector((state: RootState) => state.wallet);
 
-  const {connectWallet, disconnect} = useWallet()
+  const { connectWallet, disconnect } = useWallet();
 
   let lastKnownScrollPosition = useRef(0);
   let ticking = useRef(false);
@@ -320,15 +321,7 @@ const Header = () => {
             onClick={wallet.walletAddress ? disconnect : connectWallet}
           >
             {wallet.walletAddress ? (
-              <>
-                {wallet.walletAddress.slice(0, 5)}
-                ...
-                {wallet.walletAddress.slice(-4)}
-                {/* <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className="ml-2 -mt-1 w-[16px] text-white"
-                    /> */}
-              </>
+              ellipseAddress(wallet.walletAddress, 5)
             ) : (
               <>
                 Connect Wallet

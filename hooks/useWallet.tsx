@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { getGrugBalance, switchNetwork, walletConnect } from "store/wallet/thunk";
 import { useAppDispatch } from "./useStoreHooks";
 import Web3Modal from "web3modal";
@@ -22,7 +22,28 @@ if (typeof window !== "undefined") {
 
 const useWallet = () => {
   const dispatch = useAppDispatch();
-  const { provider, chainId, walletAddress } = useSelector((state: RootState) => state.wallet);
+  const { provider, chainId, walletAddress, balance } = useSelector((state: RootState) => state.wallet);
+  const { balanceOfRocks } = useSelector((state: RootState) => state.contractRocks);
+
+  const haveWallet = useMemo(() => {
+    return !!walletAddress;
+  }, [walletAddress]);
+
+  const haveNft = useMemo(() => {
+    if (balance) {
+      return balance > 0;
+    } else {
+      return false;
+    }
+  }, [balance]);
+
+  const haveRocks = useMemo(() => {
+    if (balanceOfRocks) {
+      return balanceOfRocks >= 3000;
+    } else {
+      return false;
+    }
+  }, [balanceOfRocks]);
 
   const connectWallet = useCallback(
     async function () {
@@ -106,7 +127,10 @@ const useWallet = () => {
 
   return {
     connectWallet,
-    disconnect
+    disconnect,
+    haveWallet,
+    haveNft,
+    haveRocks,
   }
 }
 

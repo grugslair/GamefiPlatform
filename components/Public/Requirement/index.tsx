@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { join } from "tailwind-merge";
 import { Modal } from "antd";
 
@@ -9,6 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // Redux
 import { RootState } from "store";
 import { useSelector } from "react-redux";
+
+// Hooks
+import useWallet from "hooks/useWallet";
 
 export interface IRequirement {
   openRequirement: boolean;
@@ -39,28 +41,8 @@ const Requirement = ({
   handleClose,
   showRocks = true,
 }: IRequirement) => {
-  const wallet = useSelector((state: RootState) => state.wallet);
+  const { haveWallet, haveNft, haveRocks } = useWallet();
   const contractRocks = useSelector((state: RootState) => state.contractRocks);
-
-  const haveWallet = useMemo(() => {
-    return !!wallet.walletAddress;
-  }, [wallet.walletAddress]);
-
-  const haveNft = useMemo(() => {
-    if (wallet.balance) {
-      return wallet.balance > 0;
-    } else {
-      return false;
-    }
-  }, [wallet.balance]);
-
-  const haveRocks = useMemo(() => {
-    if (contractRocks.balanceOfRocks) {
-      return contractRocks.balanceOfRocks >= 3000;
-    } else {
-      return false;
-    }
-  }, [contractRocks.balanceOfRocks]);
 
   return (
     <div>

@@ -1,8 +1,8 @@
 import { Input } from "antd";
+import { useEffect, useState } from "react";
 import { Loading3QuartersOutlined } from "@ant-design/icons";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
 import { join } from "tailwind-merge";
+import Image from "next/image";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -21,23 +21,18 @@ import Requirement from "@/components/Public/Requirement";
 // Utils
 import { encodeUrl } from "helper/utilities";
 
+// Hooks
+import useWallet from "hooks/useWallet";
+
 const Reports = () => {
   const dispatch = useAppDispatch();
   const { loading, list } = useSelector(
     (state: RootState) =>
       state.launchpad?.reports || { loading: false, list: [] }
   );
-  const wallet = useSelector((state: RootState) => state.wallet);
+  const { haveNft } = useWallet();
   const [search, setSearch] = useState("");
   const [openRequirement, setOpenRequirement] = useState<boolean>(false);
-
-  const haveNft = useMemo(() => {
-    if (wallet.balance) {
-      return wallet.balance > 0;
-    } else {
-      return false;
-    }
-  }, [wallet.balance]);
 
   const searchResult = list.filter(
     (e) =>
