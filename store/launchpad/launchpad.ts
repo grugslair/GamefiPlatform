@@ -100,3 +100,7 @@ export interface ILaunchPadState {
   requirementsMeet: number
   reports: IReport
 }
+
+export interface IGetReportList {
+  haveNft?: boolean
+}

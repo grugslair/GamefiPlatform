@@ -54,7 +54,7 @@ const Reports = () => {
   };
 
   useEffect(() => {
-    dispatch(getReportList());
+    dispatch(getReportList(haveNft));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [haveNft]);
 
@@ -160,7 +160,7 @@ const Reports = () => {
                             <p
                               className={join(
                                 "mt-2 flex-1 font-sora text-xs leading-[18px] text-gray300 line-clamp-3",
-                                "tablet:text-sm"
+                                "tablet:text-sm tablet:h-[60px]"
                               )}
                             >
                               {subtitle}
