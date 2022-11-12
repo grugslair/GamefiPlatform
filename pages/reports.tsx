@@ -1,8 +1,8 @@
 import { Input } from "antd";
-import { Loading3QuartersOutlined } from "@ant-design/icons";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Loading3QuartersOutlined } from "@ant-design/icons";
 import { join } from "tailwind-merge";
+import Image from "next/image";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -12,13 +12,17 @@ import { useAppDispatch } from "hooks/useStoreHooks";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCrown, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 // Components
 import Button from "@/components/Button";
+import Requirement from "@/components/Public/Requirement";
 
 // Utils
 import { encodeUrl } from "helper/utilities";
+
+// Hooks
+import useWallet from "hooks/useWallet";
 
 const Reports = () => {
   const dispatch = useAppDispatch();
@@ -26,14 +30,15 @@ const Reports = () => {
     (state: RootState) =>
       state.launchpad?.reports || { loading: false, list: [] }
   );
+  const { haveNft } = useWallet();
   const [search, setSearch] = useState("");
+  const [openRequirement, setOpenRequirement] = useState<boolean>(false);
 
   const searchResult = list.filter(
     (e) =>
       e.title.toLowerCase().includes(search.toLowerCase()) ||
       e.subtitle.toLowerCase().includes(search.toLowerCase())
   );
-
 
   const openPdf = async (pdfUrl: string) => {
     const win = window.open("about:blank", "_blank");
@@ -49,9 +54,9 @@ const Reports = () => {
   };
 
   useEffect(() => {
-    dispatch(getReportList());
+    dispatch(getReportList(haveNft));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [haveNft]);
 
   return (
     <>
@@ -103,56 +108,105 @@ const Reports = () => {
                 "desktop:grid-cols-3"
               )}
             >
-              {searchResult.map(({ title, subtitle, imageUrl, pdfUrl }, i) => (
-                <div
-                  key={i}
-                  className="p-6 overflow-hidden border border-solid border-[#b546394d] bg-[#151011e6]"
-                >
-                  <div
-                    className={join(
-                      "flex gap-4 h-full",
-                      "tablet:flex-col tablet: gap-6"
-                    )}
-                  >
+              {searchResult.map(
+                ({ title, subtitle, imageUrl, pdfUrl, type }, i) => {
+                  const isLocked = type === "private" && !haveNft;
+                  return (
                     <div
-                      className={join(
-                        "relative w-12 h-12 rounded-full overflow-hidden",
-                        "tablet:w-[72px] tablet:h-[72px]"
-                      )}
+                      key={i}
+                      className="p-6 overflow-hidden border border-solid border-[#b546394d] bg-[#151011e6]"
                     >
-                      <Image src={imageUrl} alt="logo" layout="fill" />
-                    </div>
-                    <div className="flex-1 flex flex-col items-start">
-                      <h3
+                      <div
                         className={join(
-                          "font-avara font-black text-base text-white",
-                          "tablet:text-xl"
+                          "flex gap-4 h-full",
+                          "tablet:flex-col tablet: gap-6"
                         )}
                       >
-                        {title}
-                      </h3>
-                      <p
-                        className={join(
-                          "mt-2 flex-1 font-sora text-xs leading-[18px] text-gray300 line-clamp-3",
-                          "tablet:text-sm"
-                        )}
-                      >
-                        {subtitle}
-                      </p>
-                      <Button
-                        className={join("mt-4", "tablet:mt-8")}
-                        onClick={() => openPdf(pdfUrl)}
-                      >
-                        Read
-                      </Button>
+                        <div
+                          className={join(
+                            "relative w-12 h-12 rounded-full overflow-hidden",
+                            "tablet:w-[72px] tablet:h-[72px]",
+                            isLocked && "opacity-50"
+                          )}
+                        >
+                          <Image src={imageUrl} alt="logo" layout="fill" />
+                        </div>
+                        <div className="flex-1 flex flex-col items-start">
+                          <div className={join(isLocked && "opacity-50")}>
+                            <div className="flex gap-2">
+                              {isLocked && (
+                                <div
+                                  className={join(
+                                    "relative w-[18px] h-[18px]",
+                                    "tablet:w-6 tablet:h-6 tablet:-mt-[2px]"
+                                  )}
+                                >
+                                  <Image
+                                    src="/lock.svg"
+                                    alt="lock"
+                                    layout="fill"
+                                  />
+                                </div>
+                              )}
+                              <h3
+                                className={join(
+                                  "font-avara font-black text-base text-white",
+                                  "tablet:text-xl"
+                                )}
+                              >
+                                {title}
+                              </h3>
+                            </div>
+                            <p
+                              className={join(
+                                "mt-2 flex-1 font-sora text-xs leading-[18px] text-gray300 line-clamp-3",
+                                "tablet:text-sm tablet:h-[60px]"
+                              )}
+                            >
+                              {subtitle}
+                            </p>
+                          </div>
+                          <div
+                            className={join(
+                              "mt-4 flex flex-col gap-4 w-full ",
+                              "tablet:mt-8 tablet:flex-row tablet:justify-between"
+                            )}
+                          >
+                            <Button
+                              className="w-fit"
+                              onClick={() =>
+                                isLocked
+                                  ? setOpenRequirement(true)
+                                  : openPdf(pdfUrl || "")
+                              }
+                            >
+                              {isLocked ? "Unlock" : "Read"}
+                            </Button>
+                            {type === "private" && (
+                              <div className="flex items-center gap-1 font-avara font-black text-yellow-400 text-xs">
+                                <FontAwesomeIcon
+                                  icon={faCrown}
+                                  className="text-sm w-4 h-4 -mt-1"
+                                />
+                                Grug&apos;s Exclusive
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                }
+              )}
             </div>
           )}
         </div>
       </div>
+      <Requirement
+        openRequirement={openRequirement}
+        handleClose={() => setOpenRequirement(false)}
+        showRocks={false}
+      />
     </>
   );
 };

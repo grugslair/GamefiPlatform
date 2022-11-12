@@ -84,9 +84,10 @@ export interface IReportList {
   updatedAt: string 
   id: number
   imageUrl: string
-  pdfUrl: string
+  pdfUrl?: string
   subtitle: string
   title: string
+  type: string
 }
 
 export interface IReport {
@@ -103,4 +104,8 @@ export interface ILaunchPadState {
 export interface IRegisterProjectPayload {
   projectId: string | string[],
   walletAddress: string
+}
+
+export interface IGetReportList {
+  haveNft?: boolean
 }

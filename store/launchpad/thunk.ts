@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { IRegisterProjectPayload } from "./launchpad"
+import { IGetReportList } from "./launchpad"
 
 export const getProjectList = createAsyncThunk(
   'launchpad/projectList',
@@ -38,11 +39,11 @@ export const registerProject = createAsyncThunk(
   }
 )
 
-export const getReportList = createAsyncThunk(
+export const getReportList = createAsyncThunk<IGetReportList, any>(
   'launchpad/reportList',
-  async (): Promise<any> => {
+  async (haveNft): Promise<any> => {
     try {
-      const resp = await fetch('https://api-dev.grugslair.xyz/launchpad/api/reports')
+      const resp = await fetch(`https://api-dev.grugslair.xyz/launchpad/api/reports${haveNft ? '?isVerified=true' : ''}`)
       const data = await resp.json()
       return data
     } catch (error) {

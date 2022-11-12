@@ -8,9 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        yellow400: "#FAC515",
+        success600: "#1E9E3E",
         primary500: "#CA5D50",
         primary600: "#B54639",
         primary700: "#9B2C29",
+        gray100: "#F2F4F7",
         gray300: "#D0D5DD",
         gray400: "#98A2B3",
         gray600: "#475467",
