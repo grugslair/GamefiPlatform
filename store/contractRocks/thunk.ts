@@ -42,12 +42,18 @@ export const approveContractRocks = createAsyncThunk(
     const { contractStake, wallet }:any = getState()
 
     const { gasPrice } = contractStake as IContractStake
+
+    let dataIrocks
     
     try {
 
       const iRocks = new ethers.utils.Interface(rocksContractABI)
 
-      const dataIrocks = iRocks.encodeFunctionData("approve", [stakeContractAddress, amount])
+      // if(amount >= '100000000000000000000000') {
+        dataIrocks = iRocks.encodeFunctionData("approve", [stakeContractAddress, amount])
+      // } else {
+      //   dataIrocks = iRocks.encodeFunctionData("approve", [stakeContractAddress, '100000000000000000000000'])
+      // }
     
       const transactionParameters = {
         gasPrice: gasPrice._hex, // customizable by user during MetaMask confirmation.

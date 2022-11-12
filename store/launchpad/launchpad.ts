@@ -99,3 +99,8 @@ export interface ILaunchPadState {
   requirementsMeet: number
   reports: IReport
 }
+
+export interface IRegisterProjectPayload {
+  projectId: string | string[],
+  walletAddress: string
+}

@@ -17,6 +17,8 @@ import { IContractRocks } from "store/contractRocks/contractRocks"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
 import Requirement from "@/components/Public/Requirement"
+import { IContractStake } from "store/contractStake/contractStake"
+import IgoRegister from "@/components/IGO/IGORegister"
 
 const ProjectDetail = () => {
   const wallet = useSelector((state: RootState) => state.wallet)
@@ -24,6 +26,8 @@ const ProjectDetail = () => {
   const launchpad = useSelector((state: RootState) => state.launchpad) as ILaunchPadState
 
   const contractRocks = useSelector((state: RootState) => state.contractRocks) as IContractRocks
+
+  const contractStake: IContractStake  = useSelector((state: RootState) => state.contractStake)
 
   const [dataIGO, setDataIGO] = useState<IProject | null>(null)
 
@@ -184,8 +188,9 @@ const ProjectDetail = () => {
                       </Button>
                     </div>
                   </div>
-                  
-                  <IgoStake />
+                  {contractStake.balances > 3000 ? 
+                    <IgoStake /> : <IgoRegister /> 
+                  }
                 </div>
               </div>
             </div>

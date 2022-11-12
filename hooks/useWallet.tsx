@@ -102,8 +102,7 @@ const useWallet = () => {
       };
     }
   }, [provider, disconnect]);
-
-
+  
   return {
     connectWallet,
     disconnect

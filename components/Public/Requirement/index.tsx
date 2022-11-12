@@ -6,6 +6,7 @@ import { Modal } from "antd"
 import { useMemo } from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "store"
+import { IContractStake } from "store/contractStake/contractStake"
 
 export interface IRequirement {
   openRequirement: boolean,
@@ -14,7 +15,7 @@ export interface IRequirement {
 
 const Requirement = ({openRequirement, handleClose}:IRequirement) => {
   const wallet = useSelector((state: RootState) => state.wallet);
-  const contractRocks = useSelector((state: RootState) => state.contractRocks);
+  const contractStake: IContractStake = useSelector((state: RootState) => state.contractStake);
 
 
   const haveWallet = useMemo(() => {
@@ -30,12 +31,12 @@ const Requirement = ({openRequirement, handleClose}:IRequirement) => {
   }, [wallet.balance])
 
   const haveRocks = useMemo(() => {
-    if(contractRocks.balanceOfRocks) {
-      return contractRocks.balanceOfRocks >= 3000
+    if(contractStake.balances) {
+      return contractStake.balances >= 3000
     } else {
       return false
     }
-  }, [contractRocks.balanceOfRocks])
+  }, [contractStake.balances])
 
   return (
     <div>
@@ -64,7 +65,7 @@ const Requirement = ({openRequirement, handleClose}:IRequirement) => {
         </div>
         <div className="text-sm font-['sora']">
           {haveRocks ? <FontAwesomeIcon icon={faSquareCheck} size="lg" color="#1E9E3E"/> : <FontAwesomeIcon icon={faSquare} size="lg"/>}
-          &nbsp;Stake {contractRocks.balanceOfRocks}/3000 $ROCKS
+          &nbsp;Stake {contractStake.balances}/3000 $ROCKS
         </div>
       </Modal>
     </div>
