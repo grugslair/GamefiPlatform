@@ -35,6 +35,15 @@ a:hover {
   color: white;
 }
 
+.streaming-gradient {
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0.4) 80%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
