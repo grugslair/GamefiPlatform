@@ -1,13 +1,27 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { getGrugBalance, switchNetwork, walletConnect } from "store/wallet/thunk";
+import {
+  getGrugBalance,
+  switchNetwork,
+  walletConnect,
+} from "store/wallet/thunk";
 import { useAppDispatch } from "./useStoreHooks";
 import Web3Modal from "web3modal";
 import { validNetworkId } from "helper/environment";
-import { getAvailableWithdrawAmount, getStakeBalance, initiateStakingContract } from "store/contractStake/thunk";
-import { contractGetBalance, initiateRocksContract } from "store/contractRocks/thunk";
+import {
+  getAvailableWithdrawAmount,
+  getStakeBalance,
+  initiateStakingContract,
+} from "store/contractStake/thunk";
+import {
+  contractGetBalance,
+  initiateRocksContract,
+} from "store/contractRocks/thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { resetWalletAction, walletAddressAction } from "store/wallet/actions";
+
+import SignClient from "@walletconnect/sign-client";
+import { ModalCtrl } from "@web3modal/core";
 
 const providerOptions = {};
 
@@ -20,10 +34,23 @@ if (typeof window !== "undefined") {
   });
 }
 
+let signClient: SignClient | undefined = undefined;
+const namespaces = {
+  eip155: {
+    methods: ["eth_sign"],
+    chains: ["eip155:1"],
+    events: ["accountsChanged"],
+  },
+};
+
 const useWallet = () => {
   const dispatch = useAppDispatch();
-  const { provider, chainId, walletAddress, balance } = useSelector((state: RootState) => state.wallet);
-  const { balanceOfRocks } = useSelector((state: RootState) => state.contractRocks);
+  const { provider, chainId, walletAddress, balance } = useSelector(
+    (state: RootState) => state.wallet
+  );
+  const { balanceOfRocks } = useSelector(
+    (state: RootState) => state.contractRocks
+  );
 
   const haveWallet = useMemo(() => {
     return !!walletAddress;
@@ -47,19 +74,28 @@ const useWallet = () => {
 
   const connectWallet = useCallback(
     async function () {
-      await dispatch(walletConnect(web3Modal));
-
-      if (chainId != validNetworkId) {
-        await dispatch(switchNetwork());
+      const { uri, approval } = await signClient!.connect({
+        requiredNamespaces: namespaces,
+      });
+      console.log(approval);
+      if (uri) {
+        ModalCtrl.open({ uri, standaloneChains: namespaces.eip155.chains });
+        await approval();
+        ModalCtrl.close();
       }
-      await dispatch(getGrugBalance());
+      // await dispatch(walletConnect(web3Modal));
 
-      await dispatch(initiateStakingContract());
-      await dispatch(initiateRocksContract());
-      await dispatch(contractGetBalance());
+      // if (chainId != validNetworkId) {
+      //   await dispatch(switchNetwork());
+      // }
+      // await dispatch(getGrugBalance());
 
-      await dispatch(getStakeBalance());
-      await dispatch(getAvailableWithdrawAmount());
+      // await dispatch(initiateStakingContract());
+      // await dispatch(initiateRocksContract());
+      // await dispatch(contractGetBalance());
+
+      // await dispatch(getStakeBalance());
+      // await dispatch(getAvailableWithdrawAmount());
     },
     [walletAddress]
   );
@@ -67,10 +103,7 @@ const useWallet = () => {
   const disconnect = useCallback(
     async function () {
       await web3Modal.clearCachedProvider();
-      if (
-        provider?.disconnect &&
-        typeof provider.disconnect === "function"
-      ) {
+      if (provider?.disconnect && typeof provider.disconnect === "function") {
         const test = await provider.disconnect();
       }
       dispatch(resetWalletAction());
@@ -123,14 +156,23 @@ const useWallet = () => {
       };
     }
   }, [provider, disconnect]);
-  
+
+  useEffect(() => {
+    const initialize = async () => {
+      signClient = await SignClient.init({
+        projectId: "ac5a9cb50dde75f987bbb76555d229b4",
+      });
+    };
+    initialize();
+  }, []);
+
   return {
     connectWallet,
     disconnect,
     haveWallet,
     haveNft,
     haveRocks,
-  }
-}
+  };
+};
 
-export default useWallet
+export default useWallet;
