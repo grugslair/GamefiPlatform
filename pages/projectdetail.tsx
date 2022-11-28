@@ -193,7 +193,7 @@ const ProjectDetail = () => {
                       </Button>
                     </div>
                   </div>
-                  {contractStake.balances > 3000 ? 
+                  {contractStake.balances < 3000 ? 
                     <IgoStake /> : <IgoRegister /> 
                   }
                 </div>

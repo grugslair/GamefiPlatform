@@ -30,7 +30,7 @@ const IgoRegister = () => {
 
   return (
     <div className="px-20 absolute top-0 left-0 right-0 bottom-0 text-center bg-[#0b0b0be6] flex flex-col justify-center">
-      {!launchpad.projectDetail?.isRegistered ? 
+      {launchpad.projectDetail?.isRegistered ? 
       (
         <>
           <div className="mb-6">

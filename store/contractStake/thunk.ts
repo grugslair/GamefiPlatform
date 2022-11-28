@@ -109,7 +109,7 @@ export const contractStaking = createAsyncThunk(
         value: '0x00', // Only required to send ether to the recipient from the initiating external account.
         data: dataIStake, // Optional, but used for defining smart contract creation and interaction.
         chainId: '0x4', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-      }
+    }
 
       const ts = await wallet.etherProvider.getSigner().sendTransaction(transactionParametersStake)
       ts.wait()

@@ -8,6 +8,7 @@ import { contractGetBalance, initiateRocksContract } from "store/contractRocks/t
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { resetWalletAction, walletAddressAction } from "store/wallet/actions";
+import { initiateUSDCContract } from "store/contractUSDC/thunk";
 
 const providerOptions = {};
 
@@ -56,6 +57,7 @@ const useWallet = () => {
 
       await dispatch(initiateStakingContract());
       await dispatch(initiateRocksContract());
+      await dispatch(initiateUSDCContract());
       await dispatch(contractGetBalance());
 
       await dispatch(getStakeBalance());
