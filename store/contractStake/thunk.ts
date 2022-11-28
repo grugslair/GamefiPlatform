@@ -4,6 +4,7 @@ import { IContractRocks } from "../contractRocks/contractRocks";
 import { stakeContractABI, stakeContractAddress } from "../../helper/contract";
 import { IContractStake } from "./contractStake";
 import { weiToEth } from "helper/utilities";
+import { waitForDebugger } from "inspector";
 
 export const initiateStakingContract = createAsyncThunk(
   'contract/initiateStakeContract',
@@ -111,7 +112,7 @@ export const contractStaking = createAsyncThunk(
       }
 
       const ts = await wallet.etherProvider.getSigner().sendTransaction(transactionParametersStake)
-
+      ts.wait()
       return ts
     } catch(err) {
       return rejectWithValue(err)

@@ -11,7 +11,7 @@ import { IIGOProfileProp } from "../components/IGO/type"
 import { RootState } from "../store"
 import { ILaunchPadState, IProject } from "store/launchpad/launchpad"
 import { useAppDispatch } from "hooks/useStoreHooks"
-import { getProjectList } from '../store/launchpad/thunk'
+import { getProjectList, getProjectListById } from '../store/launchpad/thunk'
 import { Button, Divider, Input } from "antd"
 import { IContractRocks } from "store/contractRocks/contractRocks"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -30,6 +30,7 @@ const ProjectDetail = () => {
   const contractStake: IContractStake  = useSelector((state: RootState) => state.contractStake)
 
   const [dataIGO, setDataIGO] = useState<IProject | null>(null)
+  const [isRegistered, setIsRegistered] = useState<boolean>(false)
 
   const [amount, setAmount] = useState('0')
 
@@ -40,13 +41,17 @@ const ProjectDetail = () => {
   const router = useRouter()
 
   useEffect(() => {
-    if(launchpad.projectList.length === 0) {
-      dispatch(getProjectList())
-    } else {
-      const dataIGO = launchpad.projectList.filter((data) => data.id.toString() === router.query?.id?.toString())
-      setDataIGO(dataIGO[0])
-    }
-  }, [launchpad.projectList])
+    dispatch(getProjectListById({id: router.query?.id?.toString() || '0', walletAddress: router.query.walletAddress?.toString() || ''}))
+      .then(resp => {
+        setDataIGO(resp.payload.project)
+        setIsRegistered(resp.payload.isRegistered)
+      })
+    
+    // } else {
+    //   const dataIGO = launchpad.projectList.filter((data) => data.id.toString() === router.query?.id?.toString())
+    //   setDataIGO(dataIGO[0])
+    // }
+  }, [router])
 
   useEffect(() => {
     // if(wallet.balance === 0 || wallet.balance === null) {

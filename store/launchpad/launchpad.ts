@@ -45,6 +45,11 @@ export interface IProjectChain {
   updatedAt: string
 }
 
+export interface IProjectDetail {
+  isRegistered: boolean
+  project: IProject
+} 
+
 export interface IProject {
   id: number
   chainId: number // ini di polygon
@@ -97,6 +102,7 @@ export interface IReport {
 
 export interface ILaunchPadState {
   projectList: IProject[]
+  projectDetail: IProjectDetail | null
   requirementsMeet: number
   reports: IReport
 }
@@ -108,4 +114,9 @@ export interface IRegisterProjectPayload {
 
 export interface IGetReportList {
   haveNft?: boolean
+}
+
+export interface IProjectListByIdPayload {
+  id: string
+  walletAddress: string
 }

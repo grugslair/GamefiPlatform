@@ -21,6 +21,8 @@ interface IProps {
 const Project = (props: IProps) => {
   const router = useRouter()
 
+  const wallet = useSelector((state: RootState) => state.wallet)
+
   const {handleSetEndDate, countDown} = useCountDown()
 
   useEffect(() => {
@@ -88,7 +90,8 @@ const Project = (props: IProps) => {
               onClick={() => router.push({
                 pathname: '/projectdetail',
                 query: {
-                  id: props.dataproject.id
+                  id: props.dataproject.id,
+                  walletAddress: wallet.walletAddress
                 }
               })}
               size="large"

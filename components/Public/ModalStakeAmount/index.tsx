@@ -11,7 +11,7 @@ import { ethToWei, weiToEth } from "../../../helper/utilities";
 import { useAppDispatch } from "../../../hooks/useStoreHooks";
 import { RootState } from "../../../store";
 import { IContractRocks } from "../../../store/contractRocks/contractRocks";
-import { approveContractRocks } from "../../../store/contractRocks/thunk";
+import { approveContractRocks, contractGetBalance } from "../../../store/contractRocks/thunk";
 import { IContractStake } from "../../../store/contractStake/contractStake";
 import { contractStaking, getAllowance, getGasPrice } from "../../../store/contractStake/thunk";
 import { IwalletConnect } from "../../../store/wallet/walletType";
@@ -77,8 +77,6 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
 
       const weiAmount = ethToWei(stakeAmount.toString())
 
-      console.log(contractStake.allowance)
-
       if(contractStake.allowance) {
           const result = await dispatch(contractStaking(weiAmount))
           console.log({result})
@@ -91,6 +89,8 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
           if(result?.error?.message === 'Rejected') {
             await pushMessage('failed', result.payload.reason)
           }
+
+          setModalOpen(false)
       }
     }
   }
@@ -117,6 +117,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
 
   async function callAllowance() {
     await dispatch(getAllowance())
+    await dispatch(contractGetBalance());
   }
 
   useEffect(() => {
@@ -133,7 +134,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
       </button>
       <Modal
         width={400}
-        destroyOnClose={true}
+        destroyOnClose
         open={isModalOpen} 
         onCancel={handleCancel}
         closeIcon={

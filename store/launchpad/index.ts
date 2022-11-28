@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ILaunchPadState } from './launchpad'
-import { getProjectList, getReportList } from './thunk'
+import { getProjectList, getProjectListById, getReportList } from './thunk'
 
 const initialState = {
   projectList: [],
+  projectDetail: null,
   requirementsMeet: 0,
   reports: {
     loading: false,
@@ -19,6 +20,10 @@ const launchpad = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getProjectList.fulfilled, (state, action: any) => {
       state.projectList = action.payload
+    })
+
+    builder.addCase(getProjectListById.fulfilled, (state, action: any) => {
+      state.projectDetail = action.payload
     })
 
     builder.addCase(getReportList.pending, (state, action: any) => {

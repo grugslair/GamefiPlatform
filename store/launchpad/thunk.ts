@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { IRegisterProjectPayload } from "./launchpad"
+import { IProjectListByIdPayload, IRegisterProjectPayload } from "./launchpad"
 import { IGetReportList } from "./launchpad"
 
 export const getProjectList = createAsyncThunk(
@@ -12,7 +12,20 @@ export const getProjectList = createAsyncThunk(
     } catch (error) {
       return error;
     }
+  }
+)
 
+export const getProjectListById = createAsyncThunk(
+  'launchpad/projectListById',
+  async (payload: IProjectListByIdPayload): Promise<any> => {
+    const {id, walletAddress} = payload
+    try {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/launchpad/api/projects/${id}?walletAddress=${walletAddress}`);
+      const data = await resp.json();
+      return data;
+    } catch (error) {
+      return error;
+    }
   }
 )
 
@@ -20,7 +33,7 @@ export const registerProject = createAsyncThunk(
   'launchpad/registerProject',
   async (payload: IRegisterProjectPayload): Promise<any> => {
     try {
-      const resp = await fetch('https://api-dev.grugslair.xyz/launchpad/api/projects/register', {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/launchpad/api/projects/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
