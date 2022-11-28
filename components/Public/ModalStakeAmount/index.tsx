@@ -82,7 +82,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
           console.log({result})
 
           if(result?.payload?.hash) {
-            await pushMessage('success', result.payload.hash)
+            await pushMessage('success', '')
           }
           
           //@ts-ignore
@@ -104,7 +104,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
         const approveResult = await dispatch(approveContractRocks(weiAmount))
 
         if(approveResult?.payload?.hash) {
-          await pushMessage('success', approveResult.payload.hash)
+          await pushMessage('success', '')
         }
         
         //@ts-ignore

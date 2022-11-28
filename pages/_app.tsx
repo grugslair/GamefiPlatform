@@ -11,7 +11,7 @@ config.autoAddCss = false
 
 notification.config({
   maxCount: 5,
-  duration: 1000000,
+  duration: 3,
 })
 
 function MyApp({ Component, pageProps }: AppProps) {

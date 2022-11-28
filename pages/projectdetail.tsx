@@ -19,6 +19,7 @@ import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
 import Requirement from "@/components/Public/Requirement"
 import { IContractStake } from "store/contractStake/contractStake"
 import IgoRegister from "@/components/IGO/IGORegister"
+import { IContractUSDC } from "store/contractUSDC/contractUSDC"
 
 const ProjectDetail = () => {
   const wallet = useSelector((state: RootState) => state.wallet)
@@ -27,10 +28,11 @@ const ProjectDetail = () => {
 
   const contractRocks = useSelector((state: RootState) => state.contractRocks) as IContractRocks
 
+  const contractUSDC = useSelector((state: RootState) => state.contractUSDC) as IContractUSDC
+
   const contractStake: IContractStake  = useSelector((state: RootState) => state.contractStake)
 
   const [dataIGO, setDataIGO] = useState<IProject | null>(null)
-  const [isRegistered, setIsRegistered] = useState<boolean>(false)
 
   const [amount, setAmount] = useState('0')
 
@@ -44,13 +46,7 @@ const ProjectDetail = () => {
     dispatch(getProjectListById({id: router.query?.id?.toString() || '0', walletAddress: router.query.walletAddress?.toString() || ''}))
       .then(resp => {
         setDataIGO(resp.payload.project)
-        setIsRegistered(resp.payload.isRegistered)
       })
-    
-    // } else {
-    //   const dataIGO = launchpad.projectList.filter((data) => data.id.toString() === router.query?.id?.toString())
-    //   setDataIGO(dataIGO[0])
-    // }
   }, [router])
 
   useEffect(() => {
@@ -137,7 +133,7 @@ const ProjectDetail = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-2 mb-2">
                     <div className="text-[#D0D5DD]">My ${dataIGO.Currency.symbol} Balance:</div>
-                    <div className="text-right">200 ${dataIGO.Currency.symbol}</div>
+                    <div className="text-right">{contractUSDC.balanceUSDC} ${dataIGO.Currency.symbol}</div>
                   </div>
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     <div className="text-[#D0D5DD]">Max. Allocation:</div>
@@ -166,7 +162,7 @@ const ProjectDetail = () => {
                             active:text-[#CA5D50] active:bg-[#68121E1A] active:border-[#CA5D504D]
                             focus:text-[#CA5D50] focus:bg-[#68121E1A] focus:border-[#CA5D504D]
                           "
-                          onClick={() => setAmount(contractRocks.balanceOfRocks.toString())}
+                          onClick={() => setAmount(contractUSDC.balanceUSDC.toString())}
                         >
                           Max
                         </Button>
@@ -183,7 +179,7 @@ const ProjectDetail = () => {
                         To get (${dataIGO.tokenSymbol})
                       </div>
                       <div className="mb-4 text-2xl font-['avara']">
-                        0
+                        {parseInt(amount, 10) * dataIGO.publicSalePrice || '0'}
                       </div>
                     </div>
 
@@ -193,9 +189,9 @@ const ProjectDetail = () => {
                       </Button>
                     </div>
                   </div>
-                  {contractStake.balances < 3000 ? 
+                  {/* {contractStake.balances < 3000 ? 
                     <IgoStake /> : <IgoRegister /> 
-                  }
+                  } */}
                 </div>
               </div>
             </div>

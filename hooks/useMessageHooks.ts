@@ -10,17 +10,6 @@ const useMessage = () => {
   const message = useSelector((state: RootState) => state.message)
   const dispatch = useAppDispatch();
 
-  const handleMessage = async (result:any) => {
-    if(result?.payload?.hash) {
-      await pushMessage('success', result.payload.hash)
-    }
-
-    if(result?.error?.message === 'Rejected') {
-      await pushMessage('failed', result.payload.reason)
-    }
-  }
-
-
   const pushMessage = (status:string, payload: any) => {
     console.log(payload)
     const data: IMessageState = {
@@ -66,7 +55,6 @@ const useMessage = () => {
   return {
     clearMessage,
     pushMessage,
-    handleMessage
   }
 }
 

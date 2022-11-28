@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import contractRocks from './contractRocks'
 import contractStake from './contractStake'
+import contractUSDC from './contractUSDC'
 import launchpad from './launchpad'
 import message from './message'
 import walletReducer from './wallet/index'
@@ -10,6 +11,7 @@ const reducer = {
   launchpad: launchpad,
   contractRocks: contractRocks,
   contractStake: contractStake,
+  contractUSDC: contractUSDC,
   message: message
 }
 
@@ -33,7 +35,8 @@ const store = configureStore({
           'wallet.etherProvider', 
           'wallet.contract', 
           'contractRocks.rocksContract', 
-          'contractStake.stakeContract'
+          'contractStake.stakeContract',
+          'contractUSDC.usdcContract'
         ],
       },
     }),

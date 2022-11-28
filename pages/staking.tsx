@@ -38,8 +38,6 @@ const Staking: NextPage = () => {
   }
 
   useEffect(() => {
-    
-    console.log(wallet)
     // if(wallet.balance === 0 || wallet.balance === null) {
     //   router.push('/verify')
     // }
@@ -52,7 +50,7 @@ const Staking: NextPage = () => {
     console.log({result})
 
     if(result?.payload?.hash) {
-      await pushMessage('success', result.payload.hash)
+      await pushMessage('success', '')
     }
     
     //@ts-ignore
