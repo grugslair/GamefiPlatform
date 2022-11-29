@@ -70,7 +70,7 @@ const Staking: NextPage = () => {
             <div className="font-['avara'] text-xl text-[#CA5D50]">claim</div>
             <div className='mt-6'>
               <div className='text-sm text-[#D0D5DD] mb-2'>You own</div>
-              <div className="font-['avara'] text-3xl">{wallet.balance} Grug&apos;s</div>
+              <div className="font-['avara'] text-3xl">{wallet.balance || 0} Grug&apos;s</div>
             </div>
             <button className="absolute bottom-6 px-4 py-2 bg-[#B54639] font-['avara'] text-sm">Claim ROCKS</button>
           </div>
@@ -80,14 +80,14 @@ const Staking: NextPage = () => {
               <div className='mt-6 grid grid-cols-2'>
                 <div>
                   <div className='text-sm text-[#D0D5DD] mb-2 px-'>ROCKS Balance</div>
-                  <div className="font-['avara'] text-3xl">{changeToOneDecimal(contractRocks.balanceOfRocks)}</div>
+                  <div className="font-['avara'] text-3xl">{changeToOneDecimal(contractRocks.balanceOfRocks) || '0'}</div>
                 </div>
                 <div className='text-right'>
                   <ModalStakeAmount actionTitle='Stake' paddingButton={'py-2 px-8'}/>
                 </div>
               </div>
               <div className='mt-6'>
-                <div className='text-sm text-[#D0D5DD] mb-2 mt-6'>Unlock Stake Balance: {contractStake.unlockRocks} ROCKS</div>
+                <div className='text-sm text-[#D0D5DD] mb-2 mt-6'>Unlock Stake Balance: {contractStake.unlockRocks || '0'} ROCKS</div>
                 <div className='p-4 bg-[#68121E1A]'>
                   <div>
                     Amount to Unstake
@@ -138,18 +138,18 @@ const Staking: NextPage = () => {
             <div className="font-['avara'] text-xl text-[#CA5D50]">Overview</div>
             <div className='mt-6'>
               <div className='text-sm text-[#D0D5DD] mb-2'>$ROCKS Stake</div>
-              <div className="font-['avara'] text-3xl">{changeToOneDecimal(contractStake.balances)}</div>
+              <div className="font-['avara'] text-3xl">{changeToOneDecimal(contractStake.balances) || 0}</div>
             </div>
             <div className='absolute bottom-6'>
               <div className='mb-4 grid grid-cols-5'>
                 <FontAwesomeIcon icon={faLock} color="#475467"/>
                 <div className="col-span-3 text-xs text-[#D0D5DD]">$ROCKS Lock</div>
-                <div className="font-['avara'] text-xs">{contractStake.balances - contractStake.unlockRocks}</div>
+                <div className="font-['avara'] text-xs">{contractStake.balances - contractStake.unlockRocks || '0'}</div>
               </div>
               <div className='grid grid-cols-5'>
                 <FontAwesomeIcon icon={faLockOpen} color="#B54639"/>
                 <div className="col-span-3 text-xs text-[#D0D5DD]">$ROCKS Unlock</div>
-                <div className="font-['avara'] text-xs">{contractStake.unlockRocks}</div>
+                <div className="font-['avara'] text-xs">{contractStake.unlockRocks || '0'}</div>
               </div>
             </div>
           </div>
