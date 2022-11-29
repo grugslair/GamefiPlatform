@@ -38,8 +38,6 @@ const ProjectDetail = () => {
 
   const [openRequirement, setOpenRequirement] = useState<boolean>(false)
 
-  const [canCommit, setCanCommit] = useState<boolean>(false)
-
   const dispatch = useAppDispatch()
 
   const { pushMessage } = useMessage()
