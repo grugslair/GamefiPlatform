@@ -1,8 +1,7 @@
-import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { faDiscord, faMedium, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { useRouter } from "next/router"
-import { ChangeEvent, useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux"
-import IGOClaimStatus from "@/components/IGO/IGOClaimStatus"
 import IGOPoolTimeline from "../components/IGO/IGOPoolTimeline"
 import IGOProfile from "../components/IGO/IGOProfile"
 import IgoStake from "../components/IGO/IGORegister/IgoStake"
@@ -11,9 +10,8 @@ import { IIGOProfileProp } from "../components/IGO/type"
 import { RootState } from "../store"
 import { ILaunchPadState, IProject } from "store/launchpad/launchpad"
 import { useAppDispatch } from "hooks/useStoreHooks"
-import { getProjectList, getProjectListById, registerProject } from '../store/launchpad/thunk'
+import { getProjectListById, registerProject } from '../store/launchpad/thunk'
 import { Button, Divider, Input } from "antd"
-import { IContractRocks } from "store/contractRocks/contractRocks"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons"
 import Requirement from "@/components/Public/Requirement"
@@ -21,6 +19,7 @@ import { IContractStake } from "store/contractStake/contractStake"
 import IgoRegister from "@/components/IGO/IGORegister"
 import { IContractUSDC } from "store/contractUSDC/contractUSDC"
 import useMessage from "hooks/useMessageHooks"
+import useCountDown from "hooks/useCountDown"
 
 const ProjectDetail = () => {
   const wallet = useSelector((state: RootState) => state.wallet)
@@ -39,11 +38,21 @@ const ProjectDetail = () => {
 
   const [openRequirement, setOpenRequirement] = useState<boolean>(false)
 
+  const [canCommit, setCanCommit] = useState<boolean>(false)
+
   const dispatch = useAppDispatch()
 
   const { pushMessage } = useMessage()
 
+  const { countDown, handleSetEndDate} = useCountDown()
+
   const router = useRouter()
+
+  useEffect(() => {
+    if(launchpad.projectDetail?.project.periodStart) {
+      handleSetEndDate(new Date(launchpad.projectDetail?.project.periodStart).getTime())
+    }
+  }, [])
 
   useEffect(() => {
     if(router.query.id && wallet.walletAddress) {
@@ -211,13 +220,16 @@ const ProjectDetail = () => {
                       </Button>
                     </div>
                   </div>
-                  {contractStake.balances < 3000 ? 
+                  {
+                    contractStake.balances < 3000 ? 
                     <IgoStake /> : 
-                    <IgoRegister 
-                      isRegistered={isRegistered}
-                      submitRegistrationProject={submitRegistrationProject}
-                      loadingRegister={launchpad.loadingRegisterProject}
-                    /> 
+                      countDown ?
+                        <IgoRegister 
+                          isRegistered={isRegistered}
+                          submitRegistrationProject={submitRegistrationProject}
+                          loadingRegister={launchpad.loadingRegisterProject}
+                        /> : 
+                        <></>
                   }
                 </div>
               </div>
