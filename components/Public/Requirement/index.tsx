@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 
 // Hooks
 import useWallet from "hooks/useWallet";
+import { useMemo } from "react";
 
 export interface IRequirement {
   openRequirement: boolean;
@@ -41,8 +42,14 @@ const Requirement = ({
   handleClose,
   showRocks = true,
 }: IRequirement) => {
-  const { haveWallet, haveNft, haveRocks } = useWallet();
-  const contractRocks = useSelector((state: RootState) => state.contractRocks);
+  const { haveWallet, haveNft, haveStakeRocks } = useWallet();
+  const { lockRocks } = useSelector((state: RootState) => state.contractStake);
+
+  const countRequirement = useMemo(() => {
+    const requirement = [haveWallet, haveNft, haveStakeRocks]
+
+    return requirement.filter((value) => value === true).length
+  }, [haveWallet, haveNft, haveStakeRocks])
 
   return (
     <div>
@@ -82,8 +89,8 @@ const Requirement = ({
         </div>
         {showRocks && (
           <div className="text-sm font-['sora'] flex items-center">
-            <Checkbox checked={haveRocks} />
-            Stake {contractRocks.balanceOfRocks}/3000 $ROCKS
+            <Checkbox checked={haveStakeRocks} />
+            Stake {lockRocks}/3000 $ROCKS
           </div>
         )}
       </Modal>

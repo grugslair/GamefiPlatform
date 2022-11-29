@@ -5,7 +5,10 @@ import { contractStaking, getAllowance, getAvailableWithdrawAmount, getGasPrice,
 const initialState = {
   stakeContract: null,
   allowance: null,
-  gasPrice: null
+  gasPrice: null,
+  balances: 0,
+  unlockRocks: 0,
+  lockRocks: 0
 } as IContractStake
 
 const contractStake = createSlice({
@@ -32,6 +35,7 @@ const contractStake = createSlice({
 
     builder.addCase(getAvailableWithdrawAmount.fulfilled, (state: IContractStake, action: any) => {
       state.unlockRocks = action.payload.unlockAmount
+      state.lockRocks = state.balances - action.payload.unlockAmount
     })
 
   }

@@ -144,7 +144,7 @@ const Staking: NextPage = () => {
               <div className='mb-4 grid grid-cols-5'>
                 <FontAwesomeIcon icon={faLock} color="#475467"/>
                 <div className="col-span-3 text-xs text-[#D0D5DD]">$ROCKS Lock</div>
-                <div className="font-['avara'] text-xs">{contractStake.balances - contractStake.unlockRocks || '0'}</div>
+                <div className="font-['avara'] text-xs">{contractStake.lockRocks || '0'}</div>
               </div>
               <div className='grid grid-cols-5'>
                 <FontAwesomeIcon icon={faLockOpen} color="#B54639"/>

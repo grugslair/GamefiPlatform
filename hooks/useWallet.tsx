@@ -24,7 +24,7 @@ if (typeof window !== "undefined") {
 const useWallet = () => {
   const dispatch = useAppDispatch();
   const { provider, chainId, walletAddress, balance } = useSelector((state: RootState) => state.wallet);
-  const { balanceOfRocks } = useSelector((state: RootState) => state.contractRocks);
+  const { lockRocks } = useSelector((state: RootState) => state.contractStake);
 
   const haveWallet = useMemo(() => {
     return !!walletAddress;
@@ -38,13 +38,13 @@ const useWallet = () => {
     }
   }, [balance]);
 
-  const haveRocks = useMemo(() => {
-    if (balanceOfRocks) {
-      return balanceOfRocks >= 3000;
+  const haveStakeRocks = useMemo(() => {
+    if (lockRocks) {
+      return lockRocks >= 3000;
     } else {
       return false;
     }
-  }, [balanceOfRocks]);
+  }, [lockRocks]);
 
   const connectWallet = useCallback(
     async function () {
@@ -132,7 +132,7 @@ const useWallet = () => {
     disconnect,
     haveWallet,
     haveNft,
-    haveRocks,
+    haveStakeRocks,
   }
 }
 

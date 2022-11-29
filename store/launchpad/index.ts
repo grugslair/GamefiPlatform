@@ -5,7 +5,6 @@ import { getProjectList, getProjectListById, getReportList } from './thunk'
 const initialState = {
   projectList: [],
   projectDetail: null,
-  requirementsMeet: 0,
   reports: {
     loading: false,
     list: [],

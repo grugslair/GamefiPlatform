@@ -103,7 +103,6 @@ export interface IReport {
 export interface ILaunchPadState {
   projectList: IProject[]
   projectDetail: IProjectDetail | null
-  requirementsMeet: number
   reports: IReport
 }
 
