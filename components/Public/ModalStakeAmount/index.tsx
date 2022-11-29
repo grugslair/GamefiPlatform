@@ -79,15 +79,20 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
 
       if(contractStake.allowance) {
           const result = await dispatch(contractStaking(weiAmount))
-          console.log({result})
 
           if(result?.payload?.hash) {
-            await pushMessage('success', '')
+            await pushMessage('success', {
+              title: 'Successfully stake token',
+              description: 'You’ve stake ROCKS'
+            })
           }
           
           //@ts-ignore
           if(result?.error?.message === 'Rejected') {
-            await pushMessage('failed', result.payload.reason)
+            await pushMessage('failed', {
+              title: '',
+              description: result.payload.reason 
+            })
           }
 
           setModalOpen(false)
@@ -104,12 +109,18 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
         const approveResult = await dispatch(approveContractRocks(weiAmount))
 
         if(approveResult?.payload?.hash) {
-          await pushMessage('success', '')
+          await pushMessage('success', {
+            title: 'Successfully approve token',
+            description: ''
+          })
         }
         
         //@ts-ignore
         if(approveResult?.error?.message === 'Rejected') {
-          await pushMessage('failed', approveResult.payload.reason)
+          await pushMessage('failed', {
+            title: '',
+            description: approveResult.payload.reason
+          })
         }
       }
     }

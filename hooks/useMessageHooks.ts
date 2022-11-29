@@ -10,23 +10,22 @@ const useMessage = () => {
   const message = useSelector((state: RootState) => state.message)
   const dispatch = useAppDispatch();
 
-  const pushMessage = (status:string, payload: any) => {
-    console.log(payload)
+  const pushMessage = (status:string, payload: IMessageState) => {
     const data: IMessageState = {
       title: '',
       description: '',
       style: {}
     }
     if(status === 'success') {
-      data.title = 'Successfully unstake token',
-      data.description = `You’ve unstake ${payload} ROCKS`,
+      data.title = payload.title,
+      data.description = payload.description,
       data.style = {
         backgroundColor: '#15873D',
       }
     }
     if(status === 'failed') {
-      data.title = '',
-      data.description = payload,
+      data.title = payload.title,
+      data.description = payload.description,
       data.style = {
         backgroundColor: '#890D30'
       }

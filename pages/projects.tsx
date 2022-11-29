@@ -4,7 +4,6 @@ import Banner from '../components/Public/Banner'
 import Project from '../components/Landing/Project'
 import { RootState } from '../store'
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
 import { getProjectList } from '../store/launchpad/thunk'
 import { useAppDispatch } from '../hooks/useStoreHooks'
 import { Tabs } from 'antd'
@@ -12,17 +11,8 @@ import { Tabs } from 'antd'
 
 
 const Landing: NextPage = () => {
-  const wallet  = useSelector((state: RootState) => state.wallet)
   const launchpad = useSelector((state: RootState) => state.launchpad)
   const dispatch = useAppDispatch()
-  const router = useRouter()
-
-
-  useEffect(() => {
-    if(wallet.balance === 0 || wallet.balance === null) {
-      router.push('/verify')
-    }
-  }, [wallet])
 
   useEffect(() => {
     dispatch(getProjectList())
@@ -30,7 +20,6 @@ const Landing: NextPage = () => {
 
   return (
     <div>
-
       <div>
         <Banner />
         <>

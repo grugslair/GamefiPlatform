@@ -72,10 +72,10 @@ const LINKS = [
   //   label: "Launchpad",
   //   url: "/",
   // },
-  // {
-  //   label: "Stake ROCKS",
-  //   url: "/Stake",
-  // },
+  {
+    label: "Stake ROCKS",
+    url: "/staking",
+  },
   {
     label: "Reports",
     url: "/reports",

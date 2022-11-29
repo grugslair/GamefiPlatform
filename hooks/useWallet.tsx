@@ -7,12 +7,12 @@ import { getAvailableWithdrawAmount, getStakeBalance, initiateStakingContract } 
 import { contractGetBalance, initiateRocksContract } from "store/contractRocks/thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { resetWalletAction, walletAddressAction } from "store/wallet/actions";
+import { resetWalletAction } from "store/wallet/actions";
 import { getUSDCBalance, initiateUSDCContract } from "store/contractUSDC/thunk";
 
 const providerOptions = {};
 
-let web3Modal: Web3Modal;
+export let web3Modal: Web3Modal;
 if (typeof window !== "undefined") {
   web3Modal = new Web3Modal({
     network: "mainnet", // optional
@@ -46,23 +46,32 @@ const useWallet = () => {
     }
   }, [lockRocks]);
 
+  const isAuthorize = useMemo(() => {
+    if(balance === 0 || balance === null) {
+      return false
+    }
+    return true
+  }, [balance])
+
   const connectWallet = useCallback(
     async function () {
-      await dispatch(walletConnect(web3Modal));
+      if(!walletAddress) { 
+        await dispatch(walletConnect(web3Modal));
 
-      if (chainId != validNetworkId) {
-        await dispatch(switchNetwork());
+        if (chainId != validNetworkId) {
+          await dispatch(switchNetwork());
+        }
+        await dispatch(getGrugBalance());
+
+        await dispatch(initiateStakingContract());
+        await dispatch(initiateRocksContract());
+        await dispatch(initiateUSDCContract());
+        await dispatch(contractGetBalance());
+
+        await dispatch(getStakeBalance());
+        await dispatch(getAvailableWithdrawAmount());
+        await dispatch(getUSDCBalance());
       }
-      await dispatch(getGrugBalance());
-
-      await dispatch(initiateStakingContract());
-      await dispatch(initiateRocksContract());
-      await dispatch(initiateUSDCContract());
-      await dispatch(contractGetBalance());
-
-      await dispatch(getStakeBalance());
-      await dispatch(getAvailableWithdrawAmount());
-      await dispatch(getUSDCBalance());
     },
     [walletAddress]
   );
@@ -82,33 +91,19 @@ const useWallet = () => {
   );
 
   useEffect(() => {
-    if (web3Modal.cachedProvider) {
-      connectWallet();
-    }
-  }, [connectWallet]);
-
-  useEffect(() => {
     if (provider?.on) {
       const handleAccountsChanged = async (accounts: string[]) => {
         // eslint-disable-next-line no-console
-        await dispatch(getGrugBalance());
-        console.log("accountsChanged", accounts);
-        dispatch(
-          walletAddressAction({
-            walletAddress: accounts[0],
-          })
-        );
+        window.location.reload();
       };
 
       // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
       const handleChainChanged = async (_hexChainId: string) => {
-        console.log(_hexChainId);
         window.location.reload();
       };
 
       const handleDisconnect = (error: { code: number; message: string }) => {
         // eslint-disable-next-line no-console
-        console.log("disconnect", error);
         disconnect();
       };
 
@@ -133,6 +128,7 @@ const useWallet = () => {
     haveWallet,
     haveNft,
     haveStakeRocks,
+    isAuthorize
   }
 }
 

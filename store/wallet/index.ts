@@ -28,9 +28,6 @@ const wallet = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(walletConnect.pending, (state, action: any) => {
-      console.log('pending request')
-    })
     builder.addCase(walletConnect.fulfilled, (state, action: any) => {
       state.walletAddress = action.payload.walletAddress
       state.provider = action.payload.provider
@@ -38,33 +35,9 @@ const wallet = createSlice({
       state.etherProvider = action.payload.etherProvider
 
     })
-    builder.addCase(walletConnect.rejected, (state, action) => {
-      console.log('rejected async thunk', action)
-    })
-
-    builder.addCase(getGrugBalance.pending, (state, action: any) => {
-      console.log('pending request')
-    })
     builder.addCase(getGrugBalance.fulfilled, (state, action: any) => {
       state.balance = parseInt(action.payload.balance)
 
-    })
-    builder.addCase(getGrugBalance.rejected, (state, action) => {
-      console.log('rejected async thunk', action)
-    })
-
-    builder.addCase(addNetwork.pending, (state, action: any) => {
-      console.log('pending request')
-    })
-    builder.addCase(addNetwork.rejected, (state, action) => {
-      console.log('rejected async thunk', action)
-    })
-
-    builder.addCase(switchNetwork.pending, (state, action: any) => {
-      console.log('pending request')
-    })
-    builder.addCase(switchNetwork.rejected, (state, action) => {
-      console.log('rejected async thunk', action)
     })
   }
 })

@@ -37,25 +37,24 @@ const Staking: NextPage = () => {
     }    
   }
 
-  useEffect(() => {
-    // if(wallet.balance === 0 || wallet.balance === null) {
-    //   router.push('/verify')
-    // }
-  }, [wallet])
-
   async function unStake() {
     await dispatch(getGasPrice())
     const weiAmount = ethToWei(unStakeAmount.toString())
     const result = await dispatch(contractUnstaking(weiAmount))
-    console.log({result})
 
     if(result?.payload?.hash) {
-      await pushMessage('success', '')
+      await pushMessage('success', {
+        title: '',
+        description: 'Successfully unstake token'
+      })
     }
     
     //@ts-ignore
     if(result?.error?.message === 'Rejected') {
-      await pushMessage('failed', result.payload.reason)
+      await pushMessage('failed', {
+        title: '',
+        description: result.payload.reason
+      })
     }
   }
 

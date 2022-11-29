@@ -103,6 +103,7 @@ export interface IReport {
 export interface ILaunchPadState {
   projectList: IProject[]
   projectDetail: IProjectDetail | null
+  loadingRegisterProject: boolean
   reports: IReport
 }
 

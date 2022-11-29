@@ -11,7 +11,7 @@ import { IIGOProfileProp } from "../components/IGO/type"
 import { RootState } from "../store"
 import { ILaunchPadState, IProject } from "store/launchpad/launchpad"
 import { useAppDispatch } from "hooks/useStoreHooks"
-import { getProjectList, getProjectListById } from '../store/launchpad/thunk'
+import { getProjectList, getProjectListById, registerProject } from '../store/launchpad/thunk'
 import { Button, Divider, Input } from "antd"
 import { IContractRocks } from "store/contractRocks/contractRocks"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -20,13 +20,12 @@ import Requirement from "@/components/Public/Requirement"
 import { IContractStake } from "store/contractStake/contractStake"
 import IgoRegister from "@/components/IGO/IGORegister"
 import { IContractUSDC } from "store/contractUSDC/contractUSDC"
+import useMessage from "hooks/useMessageHooks"
 
 const ProjectDetail = () => {
   const wallet = useSelector((state: RootState) => state.wallet)
 
   const launchpad = useSelector((state: RootState) => state.launchpad) as ILaunchPadState
-
-  const contractRocks = useSelector((state: RootState) => state.contractRocks) as IContractRocks
 
   const contractUSDC = useSelector((state: RootState) => state.contractUSDC) as IContractUSDC
 
@@ -36,24 +35,47 @@ const ProjectDetail = () => {
 
   const [amount, setAmount] = useState('0')
 
+  const [isRegistered, setIsRegistered] = useState<boolean>(false)
+
   const [openRequirement, setOpenRequirement] = useState<boolean>(false)
 
   const dispatch = useAppDispatch()
 
+  const { pushMessage } = useMessage()
+
   const router = useRouter()
 
   useEffect(() => {
-    dispatch(getProjectListById({id: router.query?.id?.toString() || '0', walletAddress: wallet.walletAddress?.toString() || ''}))
-      .then(resp => {
-        setDataIGO(resp.payload.project)
-      })
-  }, [router])
+    if(router.query.id && wallet.walletAddress) {
+      dispatch(getProjectListById({id: router.query?.id?.toString() || '0', walletAddress: wallet.walletAddress?.toString() || ''}))
+        .then(resp => {
+          setDataIGO(resp.payload.project)
+          setIsRegistered(resp.payload.isRegistered)
+        })
+    }
+  }, [router, wallet.walletAddress])
 
-  useEffect(() => {
-    // if(wallet.balance === 0 || wallet.balance === null) {
-    //   router.push('/verify')
-    // }
-  }, [wallet])
+  function submitRegistrationProject() {
+    const projectId = router.query.id || '0'
+    const walletAddress = wallet.walletAddress || ''
+
+    dispatch(registerProject({
+      projectId: projectId,
+      walletAddress: walletAddress
+    }))
+    .then((resp) => {
+      if(resp.payload.success) {
+        pushMessage('success', {
+          title: '',
+          description: 'Successfully register project'
+        })
+        dispatch(getProjectListById({
+          id: projectId.toString(),
+          walletAddress: walletAddress
+        }))
+      }
+    })
+  }
 
   const IgoProfile: IIGOProfileProp = {
     companyLogo: {
@@ -190,7 +212,12 @@ const ProjectDetail = () => {
                     </div>
                   </div>
                   {contractStake.balances < 3000 ? 
-                    <IgoStake /> : <IgoRegister /> 
+                    <IgoStake /> : 
+                    <IgoRegister 
+                      isRegistered={isRegistered}
+                      submitRegistrationProject={submitRegistrationProject}
+                      loadingRegister={launchpad.loadingRegisterProject}
+                    /> 
                   }
                 </div>
               </div>
