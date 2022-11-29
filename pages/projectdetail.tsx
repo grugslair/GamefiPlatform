@@ -43,7 +43,7 @@ const ProjectDetail = () => {
   const router = useRouter()
 
   useEffect(() => {
-    dispatch(getProjectListById({id: router.query?.id?.toString() || '0', walletAddress: router.query.walletAddress?.toString() || ''}))
+    dispatch(getProjectListById({id: router.query?.id?.toString() || '0', walletAddress: wallet.walletAddress?.toString() || ''}))
       .then(resp => {
         setDataIGO(resp.payload.project)
       })

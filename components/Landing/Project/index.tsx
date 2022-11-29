@@ -90,8 +90,7 @@ const Project = (props: IProps) => {
               onClick={() => router.push({
                 pathname: '/projectdetail',
                 query: {
-                  id: props.dataproject.id,
-                  walletAddress: wallet.walletAddress
+                  id: props.dataproject.id
                 }
               })}
               size="large"
