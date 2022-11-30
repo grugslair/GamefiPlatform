@@ -1,28 +1,21 @@
-import { useSelector } from "react-redux"
-import Banner from "../components/Public/Banner"
-import NotVerifiedGrug from "../components/Verification/NotVerifiedGrug"
-import { RootState } from "../store"
+// Redux
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+
+// Components
+import Banner from "../components/Public/Banner";
+import NotVerifiedGrug from "../components/Verification/NotVerifiedGrug";
 
 const Verify = () => {
-  const wallet  = useSelector((state: RootState) => state.wallet)
-
+  const wallet = useSelector((state: RootState) => state.wallet);
   return (
     <>
-      <div>
-        <div>
-          <Banner />
-          <>
-            <div className="relative">
-              {wallet.walletAddress && (wallet.balance && wallet.balance > 0) ?
-                (<></>) : (<NotVerifiedGrug />)
-              }
-            </div>
-          </>
-          
-        </div>
-      </div>
+      <Banner />
+      {!(wallet.walletAddress && wallet.balance && wallet.balance > 0) && (
+        <NotVerifiedGrug />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default Verify
+export default Verify;
