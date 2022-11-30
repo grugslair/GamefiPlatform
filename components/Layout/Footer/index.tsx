@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { join } from "tailwind-merge";
+import { twJoin } from "tailwind-merge";
 import footerStyles from "./Footer.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -80,16 +80,16 @@ const Footer = () => {
   return (
     <footer
       id="footer"
-      className={join("footer-bg bg-grugBlack pt-20", "tablet:pt-96")}
+      className={twJoin("footer-bg bg-grugBlack pt-20", "tablet:pt-32")}
     >
-      <div className={join("h-[130px] w-full", footerStyles.footerGrugs)} />
+      <div className={twJoin("h-[130px] w-full", footerStyles.footerGrugs)} />
       <div
-        className={join(
+        className={twJoin(
           "mx-8 border-t border-solid border-t-grayCool25 border-opacity-40 py-8"
         )}
       >
         <div
-          className={join(
+          className={twJoin(
             "mx-auto flex max-w-screen-largeDesktop flex-col flex-wrap justify-between gap-10",
             "tablet:flex-row"
           )}
@@ -107,12 +107,12 @@ const Footer = () => {
               our Discord server
             </div>
           </div>
-          <div className={join("flex flex-wrap gap-8", "tablet:gap-10")}>
+          <div className={twJoin("flex flex-wrap gap-8", "tablet:gap-10")}>
             {FOOTER_MENUS.map(({ title, list }) => {
               return (
                 <div
                   key={title}
-                  className={join("w-full min-w-[136px]", "tablet:w-auto")}
+                  className={twJoin("w-full min-w-[136px]", "tablet:w-auto")}
                 >
                   <div className="font-avara text-base font-black text-white">
                     {title}
@@ -151,7 +151,7 @@ const Footer = () => {
               })}
             </div>
             <div
-              className={join(
+              className={twJoin(
                 "font-sora text-xs font-light text-gray600 mt-3 text-left",
                 "tablet:mt-6 tablet:text-right"
               )}

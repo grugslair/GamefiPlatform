@@ -7,13 +7,13 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 // Redux
 import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
+import { RootState } from "store";
 
 // Hooks
 import useWallet from "hooks/useWallet";
 
 // Components
-import Button from "@/components/Button";
+import Button from "components/Button";
 
 export interface IVerifyStep {
   key: number;
@@ -107,8 +107,8 @@ const NotVerifiedGrug = () => {
   return (
     <>
       <div className="mx-auto -mt-12 box-content grid max-w-[1144px] grid-cols-2 gap-4 px-6">
-        <div className="h-[282px] border border-solid border-grugBorder bg-grugCardBackground" />
-        <div className="h-[282px] border border-solid border-grugBorder bg-grugCardBackground" />
+        <div className="h-[282px] rounded-sm border border-solid border-grugBorder bg-grugCardBackground" />
+        <div className="h-[282px] rounded-sm border border-solid border-grugBorder bg-grugCardBackground" />
       </div>
       <div className="verifyGradient relative -mt-[182px] h-full w-full">
         <div className="mx-auto max-w-[682px] pt-[365px]">

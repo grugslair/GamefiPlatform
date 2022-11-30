@@ -1,10 +1,10 @@
 // Redux
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "store";
 
 // Components
-import Banner from "../components/Public/Banner";
-import NotVerifiedGrug from "../components/Verification/NotVerifiedGrug";
+import Banner from "components/Public/Banner";
+import NotVerifiedGrug from "components/Verification/NotVerifiedGrug";
 
 const Verify = () => {
   const wallet = useSelector((state: RootState) => state.wallet);

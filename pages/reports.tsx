@@ -15,8 +15,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCrown, faSearch } from "@fortawesome/free-solid-svg-icons";
 
 // Components
-import Button from "@/components/Button";
-import Requirement from "@/components/Public/Requirement";
+import Button from "components/Button";
+import Requirement from "components/Public/Requirement";
 
 // Utils
 import { encodeUrl } from "helper/utilities";
