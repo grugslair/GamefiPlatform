@@ -1,5 +1,5 @@
 import { getReturnValues } from 'helper/utilities'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const useCountDown = () => {
   const [countDown, setCountDown] = useState<number[]>()
@@ -18,7 +18,6 @@ const useCountDown = () => {
     } else {
       setCountDown(undefined)
     }
-
   }, [countDown, endDate])
 
   return {

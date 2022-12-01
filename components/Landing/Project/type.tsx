@@ -11,6 +11,7 @@ export interface IProjectDescriptionProp {
 export interface IProjectBannerProp {
   companyProfile: string | null
   companyLogo: string | null
+  countDown?: number[],
 }
 
 export interface IProjectTarget {

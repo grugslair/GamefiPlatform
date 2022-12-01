@@ -9,7 +9,9 @@ module.exports = {
     extend: {
       colors: {
         yellow400: "#FAC515",
+        yellow500: "#EAAA08",
         success600: "#1E9E3E",
+        primary100: "#FBE7D8",
         primary500: "#CA5D50",
         primary600: "#B54639",
         primary700: "#9B2C29",

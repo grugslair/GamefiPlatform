@@ -1,0 +1,25 @@
+.ProjectsTab :global(.ant-tabs-nav) {
+  margin-bottom: 48px;
+}
+
+.ProjectsTab :global(.ant-tabs-nav::before) {
+  border-bottom: 0 !important;
+}
+
+.ProjectsTab :global(.ant-tabs-tab) {
+  padding: 0;
+  padding-bottom: 12px;
+}
+
+.ProjectsTab :global(.ant-tabs-tab-btn) {
+  font-family: Avara;
+  font-size: 30px;
+  line-height: 38px;
+  font-weight: 800;
+  color: theme("colors.white") !important;
+}
+
+.ProjectsTab :global(.ant-tabs-ink-bar) {
+  height: 4px !important;
+  background-color: theme("colors.primary600");
+}

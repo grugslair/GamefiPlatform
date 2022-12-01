@@ -28,7 +28,7 @@ const tailwind = resolveConfig(tailwindConfig);
 
 import { INavLink } from "./type";
 
-import Button from "@/components/Button";
+import Button from "components/Button";
 import useWallet from "hooks/useWallet";
 import { ellipseAddress } from "helper/utilities";
 

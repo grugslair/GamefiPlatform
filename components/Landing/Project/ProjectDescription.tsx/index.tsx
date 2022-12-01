@@ -1,43 +1,48 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Image from "next/image"
-import Link from "next/link"
-import { ISocialMediaIcon } from "../../../../types/globalTypes"
-import { IProjectDescriptionProp } from "../type"
-import style from './style.module.css'
+import { memo } from "react";
+import isEqual from "lodash/isEqual";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { ISocialMediaIcon } from "types/globalTypes";
+import { IProjectDescriptionProp } from "../type";
 
 const ProjectDescription = (prop: IProjectDescriptionProp) => {
   return (
     <div>
-      <div className="font-bold text-3xl mb-1 font-['avara']">
+      <div className="font-avara text-3xl font-extrabold leading-[38px] text-white">
         {prop.companyName}
       </div>
-      <div className="font-[300] text-xl mb-4 font-['avara']">
+      <div className="mt-1 font-avara text-xl font-bold leading-[30px] text-white">
         ${prop.companyToken}
       </div>
-      <div className="text-[#D0D5DD] text-base mb-7 line-clamp-2">
+      <div className="mt-4 font-sora text-base text-grayCool300 line-clamp-2">
         {prop.companyDescription}
       </div>
-      <div className="mt-4 mb-4">
-        <ul className="flex">
-          {
-            prop.companySosMedList.map((sosMed: ISocialMediaIcon, index) => {
-              if(sosMed.url !== '/' && sosMed.url) {
-                return (
-                  <li className='mr-[14px]' key={index}>
-                    <Link passHref href={sosMed.url} className={style.test}>
-                      <a>
-                        <FontAwesomeIcon icon={sosMed.icon} className="fa-xl" color="#CA5D50"/>
-                      </a>
-                    </Link>
-                  </li>
-                )
-              }
-            })
-          }
+      <div className="mt-6">
+        <ul className="flex gap-4">
+          {prop.companySosMedList.map((sosMed: ISocialMediaIcon, index) => {
+            if (sosMed.url !== "/" && sosMed.url) {
+              return (
+                <li key={index}>
+                  <a
+                    className="flex h-8 w-8 items-center justify-center"
+                    onClick={() => window.open(sosMed.url)}
+                  >
+                    <FontAwesomeIcon
+                      icon={sosMed.icon}
+                      className="text-2xl text-primary500"
+                    />
+                  </a>
+                </li>
+              );
+            }
+          })}
         </ul>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProjectDescription
+export default memo(ProjectDescription, (prevProps, nextProps) =>
+  isEqual(prevProps, nextProps)
+);
