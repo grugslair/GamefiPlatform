@@ -33,7 +33,8 @@ const store = configureStore({
           'payload.maxFeePerGas',
           'payload.gasLimit',
           'payload.value',
-          'payload.wait'
+          'payload.wait',
+          'payload'
         ],
         // Ignore these paths in the state
         ignoredPaths: [
