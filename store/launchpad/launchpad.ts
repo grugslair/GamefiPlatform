@@ -50,7 +50,7 @@ export interface IProjectDetail {
   project: IProject
 } 
 
-export interface IProject {
+export interface IProjectList {
   id: number
   chainId: number // ini di polygon
   vestingRuleId: number // ada tambahan object label
@@ -83,6 +83,11 @@ export interface IProject {
   Chain: IProjectChain
 }
 
+export interface IProject {
+  loading: boolean
+  list: IProjectList[]
+}
+
 export interface IReportList {
   createdAt: string
   deletedAt: string
@@ -101,7 +106,7 @@ export interface IReport {
 }
 
 export interface ILaunchPadState {
-  projectList: IProject[]
+  projects: IProject
   projectDetail: IProjectDetail | null
   loadingRegisterProject: boolean
   reports: IReport

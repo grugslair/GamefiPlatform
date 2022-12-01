@@ -2,15 +2,15 @@ import { Tabs } from "antd";
 import { useEffect } from "react";
 import type { NextPage } from "next";
 
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "tailwind.config";
-const tailwind = resolveConfig(tailwindConfig);
-
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "store/index";
-import { IProject } from "store/launchpad/launchpad";
 import { getProjectList } from "store/launchpad/thunk";
+import type { IProjectList } from "store/launchpad/launchpad";
+
+// Fontawesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 // Hooks
 import { useAppDispatch } from "hooks/useStoreHooks";
@@ -22,31 +22,44 @@ import Project from "components/Landing/Project";
 import styles from "styles/Projects.module.css";
 
 interface IGridWrapper {
-  projects: IProject[];
+  projects: IProjectList[];
+  loading: boolean;
 }
 
-const GridWrapper = ({ projects }: IGridWrapper) =>
-  projects.length ? (
+const GridWrapper = ({ projects, loading }: IGridWrapper) => {
+  if (!projects.length) {
+    return (
+      <div className="flex h-96 flex-col items-center justify-center">
+        {loading ? (
+          <FontAwesomeIcon icon={faSpinner} className="text-primary600 text-6xl" spin />
+        ) : (
+          <>
+            <div className="font-avara text-3xl font-extrabold leading-[38px] text-white">
+              No available projects
+            </div>
+            <div className="mt-2 text-center font-sora text-xl font-light leading-[30px] text-grayCool300">
+              Projects will be shown here when it&quot;s available.
+              <br />
+              Join our Discord to be the first to know
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
+  return (
     <div className="grid grid-cols-2 gap-x-4 gap-y-14">
       {projects.map((project, i) => (
         <Project key={i} dataproject={project} />
       ))}
     </div>
-  ) : (
-    <div className="flex h-96 flex-col items-center justify-center">
-      <div className="font-avara text-3xl font-extrabold leading-[38px] text-white">
-        No available projects
-      </div>
-      <div className="mt-2 text-center font-sora text-xl font-light leading-[30px] text-grayCool300">
-        Projects will be shown here when it&quot;s available.
-        <br />
-        Join our Discord to be the first to know
-      </div>
-    </div>
   );
+};
 
 const Landing: NextPage = () => {
-  const launchpad = useSelector((state: RootState) => state.launchpad);
+  const { loading, list } = useSelector(
+    (state: RootState) => state.launchpad.projects
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -58,16 +71,15 @@ const Landing: NextPage = () => {
     {
       label: "All",
       key: "all",
-      children: <GridWrapper projects={launchpad.projectList} />,
+      children: <GridWrapper projects={list} loading={loading} />,
     },
     {
       label: "Ongoing",
       key: "ongoing",
       children: (
         <GridWrapper
-          projects={launchpad.projectList.filter(
-            (e) => e.status === "on_going"
-          )}
+          projects={list.filter((e) => e.status === "on_going")}
+          loading={loading}
         />
       ),
     },
@@ -76,9 +88,8 @@ const Landing: NextPage = () => {
       key: "upcoming",
       children: (
         <GridWrapper
-          projects={launchpad.projectList.filter(
-            (e) => e.status === "upcoming"
-          )}
+          projects={list.filter((e) => e.status === "upcoming")}
+          loading={loading}
         />
       ),
     },
@@ -87,9 +98,8 @@ const Landing: NextPage = () => {
       key: "participated",
       children: (
         <GridWrapper
-          projects={launchpad.projectList.filter(
-            (e) => e.status === "participate"
-          )}
+          projects={list.filter((e) => e.status === "participate")}
+          loading={loading}
         />
       ),
     },

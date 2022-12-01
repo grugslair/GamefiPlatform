@@ -3,7 +3,10 @@ import { ILaunchPadState } from './launchpad'
 import { getProjectList, getProjectListById, getReportList, registerProject } from './thunk'
 
 const initialState = {
-  projectList: [],
+  projects: {
+    loading: false,
+    list: [],
+  },
   projectDetail: null,
   loadingRegisterProject: false,
   reports: {
@@ -18,8 +21,16 @@ const launchpad = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getProjectList.pending, (state, action: any) => {
+      state.projects.loading = true;
+    })
     builder.addCase(getProjectList.fulfilled, (state, action: any) => {
-      state.projectList = action.payload
+      state.projects.loading = false;
+      state.projects.list = action.payload;
+    })
+    builder.addCase(getProjectList.rejected, (state, action) => {
+      state.projects.loading = false;
+      state.projects.list = [];
     })
 
     builder.addCase(getProjectListById.fulfilled, (state, action: any) => {

@@ -10,7 +10,7 @@ import {
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 
 //Redux
-import { IProject } from "store/launchpad/launchpad";
+import type { IProjectList } from "store/launchpad/launchpad";
 
 // Hooks
 import useCountDown from "hooks/useCountDown";
@@ -28,7 +28,7 @@ import {
 } from "./type";
 
 interface IProps {
-  dataproject: IProject;
+  dataproject: IProjectList;
 }
 
 const Project = (props: IProps) => {
