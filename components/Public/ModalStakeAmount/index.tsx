@@ -1,13 +1,12 @@
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Checkbox, Input, Modal, Radio, RadioChangeEvent } from "antd"
+import { Button, Checkbox, Input, InputNumber, Modal, Radio, RadioChangeEvent } from "antd"
 import type { CheckboxChangeEvent } from "antd/lib/checkbox";
-import { BigNumber, ethers } from "ethers";
 import useMessage from "hooks/useMessageHooks";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
-import { ethToWei, weiToEth } from "../../../helper/utilities";
+import { ethToWei } from "../../../helper/utilities";
 import { useAppDispatch } from "../../../hooks/useStoreHooks";
 import { RootState } from "../../../store";
 import { IContractRocks } from "../../../store/contractRocks/contractRocks";
@@ -25,7 +24,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
 
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
   const [method, setMethod] = useState(1);
-  const [stakeAmount, setStakeAmount] = useState('0')
+  const [stakeAmount, setStakeAmount] = useState('')
   const [disclaimer, setDisclaimer] = useState(false)
   const contractRocks: IContractRocks = useSelector((state: RootState) => state.contractRocks)
   const contractStake: IContractStake = useSelector((state: RootState) => state.contractStake)
@@ -35,15 +34,11 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
 
   const dispatch = useAppDispatch()
 
-  function changeStakeAmount(event: ChangeEvent<HTMLInputElement>) {
-    if(event.target.value === "" || parseInt(event.target.value, 10) < 0) {
-      setStakeAmount('0')      
-    } else {
-      setStakeAmount(event.target.value)
-      if(parseInt(event.target.value, 10) > contractRocks.balanceOfRocks) {
-        setDisclaimer(false)
-      }
-    }    
+  function changeStakeAmount(value: string) {
+    setStakeAmount(value)
+    if(parseInt(value, 10) > contractRocks.balanceOfRocks) {
+      setDisclaimer(false)
+    }
   }
 
   function handleCancel() {
@@ -63,7 +58,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
   }
 
   const isAllowed = useMemo(() => {
-    const weiAmount = ethToWei(stakeAmount.toString())
+    const weiAmount = ethToWei(stakeAmount?.toString() || '0')
     if(contractStake.allowance) {
       return parseInt(weiAmount, 10) <= contractStake.allowance
     }
@@ -75,7 +70,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
     if(parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
       await dispatch(getGasPrice())
 
-      const weiAmount = ethToWei(stakeAmount.toString())
+      const weiAmount = ethToWei(stakeAmount?.toString() || '0')
 
       if(contractStake.allowance) {
           const result = await dispatch(contractStaking(weiAmount))
@@ -104,14 +99,14 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
     if(parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
       await dispatch(getGasPrice())
 
-      const weiAmount = ethToWei(stakeAmount.toString())
+      const weiAmount = ethToWei(stakeAmount?.toString() || '0')
       if(contractStake.allowance) {
         const approveResult = await dispatch(approveContractRocks(weiAmount))
 
         if(approveResult?.payload?.hash) {
           await pushMessage('success', {
-            title: 'Successfully approve token',
-            description: ''
+            title: '',
+            description: 'Successfully approve token'
           })
         }
         
@@ -170,14 +165,13 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
           </div>
           <div className="mb-6">
             <Input.Group compact>
-              <Input 
+              <InputNumber
                 style={{ width: 'calc(100% - 100px)' }} 
                 className="bg-[#68121E1A] text-white border border-[#CA5D504D]" 
                 value={stakeAmount} 
                 size="large"
-                defaultValue={0}
                 onChange={changeStakeAmount}
-                type="number"
+                controls={false}
               />
               <Button
                 size="large"

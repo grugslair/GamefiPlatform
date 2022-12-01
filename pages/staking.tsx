@@ -9,11 +9,12 @@ import { walletState } from 'store/wallet/walletType'
 import { IContractRocks } from 'store/contractRocks/contractRocks'
 import ModalStakeAmount from '@/components/Public/ModalStakeAmount'
 import { changeToOneDecimal, ethToWei } from 'helper/utilities'
-import { Button, Input } from 'antd'
+import { Button, Input, InputNumber } from 'antd'
 import { useAppDispatch } from 'hooks/useStoreHooks'
 import { contractUnstaking, getGasPrice } from 'store/contractStake/thunk'
 import { IContractStake } from 'store/contractStake/contractStake'
 import useMessage from 'hooks/useMessageHooks'
+import ModalClaimRocks from '@/components/Public/ModalClaimRocks'
 
 
 
@@ -27,19 +28,15 @@ const Staking: NextPage = () => {
 
   const dispatch = useAppDispatch()
 
-  const [unStakeAmount, setUnStakeAmount] = useState('0');
+  const [unStakeAmount, setUnStakeAmount] = useState('');
 
-  function changeUnStakeAmount(event: ChangeEvent<HTMLInputElement>) {
-    if(event.target.value === "" || parseInt(event.target.value, 10) < 0) {
-      setUnStakeAmount('0')      
-    } else {
-      setUnStakeAmount(event.target.value)
-    }    
+  function changeUnStakeAmount(value: string) {
+    setUnStakeAmount(value)
   }
 
   async function unStake() {
     await dispatch(getGasPrice())
-    const weiAmount = ethToWei(unStakeAmount.toString())
+    const weiAmount = ethToWei(unStakeAmount?.toString() || '0')
     const result = await dispatch(contractUnstaking(weiAmount))
 
     if(result?.payload?.hash) {
@@ -71,7 +68,9 @@ const Staking: NextPage = () => {
               <div className='text-sm text-[#D0D5DD] mb-2'>You own</div>
               <div className="font-['avara'] text-3xl">{wallet.balance || 0} Grug&apos;s</div>
             </div>
-            <button className="absolute bottom-6 px-4 py-2 bg-[#B54639] font-['avara'] text-sm">Claim ROCKS</button>
+            <div className='absolute bottom-6'>
+              <ModalClaimRocks actionTitle='Claim $ROCKS' paddingButton='px-4 py-2'/>
+            </div>
           </div>
           <div className='p-6 bg-[#151011] border border-[#B546394D] col-span-2'>
             <div className="font-['avara'] text-xl text-[#CA5D50]">stake and unstake</div>
@@ -93,14 +92,13 @@ const Staking: NextPage = () => {
                   </div>
                   <div>
                   <Input.Group compact>
-                    <Input
+                    <InputNumber
                       style={{ width: 'calc(100% - 200px)', border:'unset' }} 
                       className="bg-[#68121d00] text-white"
                       value={unStakeAmount} 
                       size="large"
-                      defaultValue={0}
                       onChange={changeUnStakeAmount}
-                      type="number"
+                      controls={false}
                     />
                     <Button
                       size="large"

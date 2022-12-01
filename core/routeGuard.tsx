@@ -25,7 +25,7 @@ function RouteGuard({ children }: any) {
 
     function authCheck(url: string) {
         // redirect to login page if accessing a private page and not logged in 
-        const publicPaths = ['/verify'];
+        const publicPaths = ['/verify', '/reports'];
         const path = url.split('?')[0];
         console.log(isAuthorize)
         if (!isAuthorize && !publicPaths.includes(path)) {

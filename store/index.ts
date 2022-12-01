@@ -27,7 +27,13 @@ const store = configureStore({
           'payload.etherProvider', 
           'payload.provider',
           'payload.contract',
-          'meta.arg'
+          'meta.arg',
+          'payload.gasPrice',
+          'payload.maxPriorityFeePerGas',
+          'payload.maxFeePerGas',
+          'payload.gasLimit',
+          'payload.value',
+          'payload.wait'
         ],
         // Ignore these paths in the state
         ignoredPaths: [
