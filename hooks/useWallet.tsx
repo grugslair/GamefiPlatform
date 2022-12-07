@@ -7,7 +7,7 @@ import { getAvailableWithdrawAmount, getStakeBalance, initiateStakingContract } 
 import { contractGetBalance, initiateRocksContract } from "store/contractRocks/thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { resetWalletAction } from "store/wallet/actions";
+import { resetWalletAction, setLoadingAction } from "store/wallet/actions";
 import { getUSDCBalance, initiateUSDCContract } from "store/contractUSDC/thunk";
 
 const providerOptions = {};
@@ -55,23 +55,24 @@ const useWallet = () => {
 
   const connectWallet = useCallback(
     async function () {
-      if(!walletAddress) { 
-        await dispatch(walletConnect(web3Modal));
+      dispatch(setLoadingAction(true))
+      await dispatch(walletConnect(web3Modal));
 
-        if (chainId != validNetworkId) {
-          await dispatch(switchNetwork());
-        }
-        await dispatch(getGrugBalance());
-
-        await dispatch(initiateStakingContract());
-        await dispatch(initiateRocksContract());
-        await dispatch(initiateUSDCContract());
-        await dispatch(contractGetBalance());
-
-        await dispatch(getStakeBalance());
-        await dispatch(getAvailableWithdrawAmount());
-        await dispatch(getUSDCBalance());
+      if (chainId != validNetworkId) {
+        await dispatch(switchNetwork());
       }
+
+      await dispatch(getGrugBalance());
+
+      await dispatch(initiateStakingContract());
+      await dispatch(initiateRocksContract());
+      await dispatch(initiateUSDCContract());
+      await dispatch(contractGetBalance());
+
+      await dispatch(getStakeBalance());
+      await dispatch(getAvailableWithdrawAmount());
+      await dispatch(getUSDCBalance());
+      dispatch(setLoadingAction(false))
     },
     [walletAddress]
   );
@@ -128,7 +129,7 @@ const useWallet = () => {
     haveWallet,
     haveNft,
     haveStakeRocks,
-    isAuthorize
+    isAuthorize,
   }
 }
 

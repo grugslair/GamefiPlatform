@@ -8,7 +8,8 @@ const initialState = {
   provider: null,
   etherProvider: null,
   contract: null,
-  balance: null
+  balance: null,
+  loading: false
 } as walletState
 
 const wallet = createSlice({
@@ -25,6 +26,9 @@ const wallet = createSlice({
       state.balance = null,
       state.etherProvider = null,
       state.contract = null
+    },
+    setLoading(state, action) {
+      state.loading = action.payload.loading
     }
   },
   extraReducers: (builder) => {

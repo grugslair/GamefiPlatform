@@ -1,6 +1,6 @@
 import { faDiscord, faMedium, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { useRouter } from "next/router"
-import { ChangeEvent, useEffect, useMemo, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import IGOPoolTimeline from "../components/IGO/IGOPoolTimeline"
 import IGOProfile from "../components/IGO/IGOProfile"
@@ -8,7 +8,7 @@ import IgoStake from "../components/IGO/IGORegister/IgoStake"
 import IGOTargetRaise from "../components/IGO/IGOTargetRaise"
 import { IIGOProfileProp } from "../components/IGO/type"
 import { RootState } from "../store"
-import { ILaunchPadState, IProject } from "store/launchpad/launchpad"
+import { ILaunchPadState, IProjectList } from "store/launchpad/launchpad"
 import { useAppDispatch } from "hooks/useStoreHooks"
 import { getProjectListById, registerProject } from '../store/launchpad/thunk'
 import { Button, Divider, Input } from "antd"
@@ -30,7 +30,7 @@ const ProjectDetail = () => {
 
   const contractStake: IContractStake  = useSelector((state: RootState) => state.contractStake)
 
-  const [dataIGO, setDataIGO] = useState<IProject | null>(null)
+  const [dataIGO, setDataIGO] = useState<IProjectList | null>(null)
 
   const [amount, setAmount] = useState('0')
 

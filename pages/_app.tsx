@@ -19,11 +19,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Provider store={store}>
-      <RouteGuard>
-        <Layout>
+      <Layout>
+        <RouteGuard>
           <Component {...pageProps} />
-        </Layout>
-      </RouteGuard>
+        </RouteGuard>
+      </Layout>
     </Provider>
   )
 }

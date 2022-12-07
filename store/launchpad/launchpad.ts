@@ -47,7 +47,7 @@ export interface IProjectChain {
 
 export interface IProjectDetail {
   isRegistered: boolean
-  project: IProject
+  project: IProjectList
 } 
 
 export interface IProjectList {

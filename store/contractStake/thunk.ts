@@ -96,8 +96,6 @@ export const contractStaking = createAsyncThunk(
 
       //threshold value lebih dari amount input set too threshold value otherwise set to amount value 
 
-      console.log(contractStake)
-
       const iStake = new ethers.utils.Interface(stakeContractABI)
 
       const dataIStake = iStake.encodeFunctionData("lockToken", [amount])
