@@ -75,6 +75,7 @@ export interface IProjectList {
   discordUrl: string | null
   twitterUrl: string | null
   mediumUrl: string | null
+  telegramUrl: string | null
   officialUrl: string | null
   createdAt: string
   updatedAt: string 

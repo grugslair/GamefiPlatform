@@ -1,68 +1,104 @@
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import useCountDown from "hooks/useCountDown"
-import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/router"
-import { useEffect } from "react"
-import { IIGOProfileProp } from "../type"
+/* eslint-disable @next/next/no-img-element */
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+// Fontawesome
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+// Hooks
+import useCountDown from "hooks/useCountDown";
+
+// Types
+import { ISocialMediaIcon } from "types/globalTypes";
+import { IIGOProfileProp } from "../type";
 
 const IGOProfile = (prop: IIGOProfileProp) => {
-  const router = useRouter()
+  const router = useRouter();
 
-  const {countDown, handleSetEndDate} = useCountDown()
+  const [readMoreExpanded, setReadMoreExpanded] = useState(false);
+  const { countDown, handleSetEndDate } = useCountDown();
+
+  const descMoreThan200 = prop.companyDesc?.length > 200;
+
+  const endedDaysAgo = prop?.companyEndDate
+    ? Math.floor(
+        (new Date().getTime() - new Date(prop.companyEndDate).getTime()) /
+          (24 * 60 * 60 * 1000)
+      )
+    : 0;
 
   useEffect(() => {
-    const endDate = new Date(prop.companyEndDate)
-    handleSetEndDate(endDate.getTime())
-  }, [])
+    const endDate = new Date(prop.companyEndDate);
+    handleSetEndDate(endDate.getTime());
+  }, []);
 
   return (
     <>
-      <div className="border p-4 border-[#B546394D] bg-[#151011]">
-        <div className="grid grid-cols-2 mb-4">
-          <div className="text-left">
-            <button onClick={() => router.push('/projects')}>
-              <FontAwesomeIcon icon={faArrowLeft} />
-              <span className="ml-4">Back</span>
-            </button>
-          </div>
-          <div className="text-right">
-            {countDown ?
-              <p 
-                className="text-[#EAAA08] text-sm rounded-full px-4 py-1 border border-[#EAAA08]"
-              >
-                Ends in {countDown[0]}d : {countDown[1]}h : {countDown[2]}m : {countDown[3]}s
-              </p> : <p>Expired</p>
-            }
+      <div className="border border-solid border-grugBorder bg-grugCardBackground p-6">
+        <div className="flex items-center justify-between">
+          <button onClick={() => router.push("/projects")}>
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              className="mr-3 h-6 w-6 text-lg text-white"
+            />
+            <span className="font-sora text-lg text-white">Back</span>
+          </button>
+          <div className="w-fit rounded-full border border-solid border-yellow500 px-3 py-1 font-sora text-sm text-yellow500">
+            {!!countDown ? (
+              <>
+                Ends in {countDown[0]}d : {countDown[1]}h : {countDown[2]}m :{" "}
+                {countDown[3]}s
+              </>
+            ) : (
+              <>Ended {endedDaysAgo ? `${endedDaysAgo}d ago` : "today"}</>
+            )}
           </div>
         </div>
-        <div className="grid grid-cols-5 grid-flow-col gap-6">
-          <div className="w-12 h-12 col-span-1">
-            <img
-              src={prop.companyLogo.img}
-              className="max-w-none w-20 h-20"
-            />
-          </div>
-          <div className="col-span-4">
-            <div className="font-bold text-xl font-['avara'] mb-1">{prop.companyName}</div>
-            <div className="font-[300] mb-4 font-['avara']">${prop.companyToken}</div>
-            <div className="line-clamp-4 mb-5 text-[#D0D5DD]">
-              {prop.companyDesc}
+        <div className="mt-8 flex gap-6">
+          <img
+            src={prop.companyLogo.img}
+            className="h-20 w-20 rounded-full"
+            alt="logo"
+          />
+          <div>
+            <div className="font-avara text-3xl font-extrabold leading-[38px] text-white">
+              {prop.companyName}
             </div>
-            <div>
-              <ul className="flex">
-                {prop.companySosMedia.map((sosMed, index) => {
-                  if(sosMed.url !== '/' && sosMed.url){ 
+            <div className="mt-1 font-avara text-xl font-bold leading-[30px] text-white">
+              ${prop.companyToken}
+            </div>
+            <div className="mt-4 font-sora text-base text-grayCool300">
+              {descMoreThan200 && !readMoreExpanded
+                ? `${prop.companyDesc?.slice(0, 200)}...`
+                : prop.companyDesc}
+              &nbsp;
+              {descMoreThan200 ? (
+                <div
+                  className="inline-block whitespace-nowrap text-primary500 underline"
+                  onClick={() => setReadMoreExpanded((prev) => !prev)}
+                >
+                  {readMoreExpanded ? "Show Less" : "Read More"}
+                </div>
+              ) : null}
+            </div>
+            <div className="mt-6">
+              <ul className="flex gap-4">
+                {prop.companySosMedia.map((sosMed: ISocialMediaIcon, index) => {
+                  if (sosMed.url !== "/" && sosMed.url) {
                     return (
                       <li key={index}>
-                        <Link passHref href={sosMed.url}>
-                          <a>
-                            <FontAwesomeIcon icon={sosMed.icon} color="#CA5D50" className="fa-xl mr-6"/>
-                          </a>
-                        </Link>
+                        <a
+                          className="flex h-8 w-8 items-center justify-center"
+                          onClick={() => window.open(sosMed.url)}
+                        >
+                          <FontAwesomeIcon
+                            icon={sosMed.icon}
+                            className="text-2xl text-primary500"
+                          />
+                        </a>
                       </li>
-                    )
+                    );
                   }
                 })}
               </ul>
@@ -71,7 +107,7 @@ const IGOProfile = (prop: IIGOProfileProp) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default IGOProfile
+export default IGOProfile;

@@ -1,14 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-// Fontawesome
-import {
-  faDiscord,
-  faMedium,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
-
 //Redux
 import type { IProjectList } from "store/launchpad/launchpad";
 
@@ -26,6 +18,7 @@ import {
   IProjectDescriptionProp,
   IProjectTarget,
 } from "./type";
+import { getSocialMedias } from "helper/utilities";
 
 interface IProps {
   dataproject: IProjectList;
@@ -51,24 +44,7 @@ const Project = (props: IProps) => {
     companyDescription: props.dataproject.description,
     companyName: props.dataproject.name,
     companyToken: props.dataproject.tokenSymbol,
-    companySosMedList: [
-      {
-        url: props.dataproject.twitterUrl || "/",
-        icon: faTwitter,
-      },
-      {
-        url: props.dataproject.mediumUrl || "/",
-        icon: faMedium,
-      },
-      {
-        url: props.dataproject.discordUrl || "/",
-        icon: faDiscord,
-      },
-      {
-        url: props.dataproject.officialUrl || "/",
-        icon: faGlobe,
-      },
-    ],
+    companySosMedList: getSocialMedias(props.dataproject),
   };
 
   const projectTarget: IProjectTarget = {

@@ -1,4 +1,10 @@
-import { BigNumber, ethers } from "ethers"
+import { ethers } from "ethers"
+
+import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { faGlobe } from "@fortawesome/free-solid-svg-icons"
+
+import { IProjectList } from "store/launchpad/launchpad"
+
 import { IChainData } from "../types/chainList"
 import supportedChains from "./chainList"
 
@@ -92,4 +98,29 @@ export const encodeUrl = (pdfUrl: string) => {
   return encode(
     "141r6ru6" + encode("541ty6ru6" + pdfUrl + "541ty141r") + "6ru6541ty"
   )
+}
+
+export const getSocialMedias = (data: IProjectList) => {
+  return [
+    {
+      url: data?.twitterUrl || "",
+      icon: faTwitter,
+    },
+    {
+      url: data?.mediumUrl || "",
+      icon: faMedium,
+    },
+    {
+      url: data?.discordUrl || "",
+      icon: faDiscord,
+    },
+    {
+      url: data?.telegramUrl || "",
+      icon: faTelegram,
+    },
+    {
+      url: data?.officialUrl || "",
+      icon: faGlobe,
+    },
+  ].filter(e => !!e.url)
 }
