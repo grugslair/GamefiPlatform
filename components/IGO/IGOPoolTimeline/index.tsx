@@ -1,85 +1,158 @@
-import { Timeline } from 'antd'
-import { grugDateFormat, numberWithCommas } from "helper/utilities"
+import { Timeline } from "antd";
+import { twJoin } from "tailwind-merge";
 
-const IGOPoolTimeline = ({data}: any) => {
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
 
-  const dataTest = [
+import { grugDateFormat, numberWithCommas } from "helper/utilities";
+
+interface IIGOPoolTimeline {
+  data: IIGOPoolTimelineData[];
+  currentIndex: number;
+}
+
+interface IIGOPoolTimelineData {
+  title: string;
+  date: string;
+}
+
+const PoolTimeline = ({ data, currentIndex }: IIGOPoolTimeline) => (
+  <Timeline className="ml-2 -mb-8 pt-2">
+    {data.map((entry, i) => {
+      const isCurrent = i === currentIndex;
+      const isInactive = i > currentIndex;
+      return (
+        <Timeline.Item
+          key={i}
+          dot={
+            <div
+              className={twJoin(
+                "flex h-6 w-6 items-center justify-center rounded-full",
+                isCurrent
+                  ? "bg-primary600"
+                  : isInactive
+                  ? "bg-gray-500"
+                  : "bg-success600"
+              )}
+            >
+              <FontAwesomeIcon
+                icon={!isCurrent && !isInactive ? faCheck : faCircle}
+                className={twJoin(
+                  isInactive ? "text-gray400" : "text-white",
+                  !isCurrent && !isInactive ? "text-xs" : "text-[8px]"
+                )}
+              />
+            </div>
+          }
+        >
+          <div
+            className={twJoin(
+              "font-avara text-sm font-extrabold",
+              isInactive ? "text-gray500" : "text-white"
+            )}
+          >
+            {entry.title}
+          </div>
+          <div
+            className={twJoin(
+              "mb-1 font-sora text-sm font-light",
+              isInactive ? "text-gray600" : "text-gray400"
+            )}
+          >
+            {entry.date}
+          </div>
+        </Timeline.Item>
+      );
+    })}
+  </Timeline>
+);
+
+const IGOPoolTimeline = ({ data }: any) => {
+  const tokenData = [
     {
-      text: 'Symbol',
-      value: `$${data.tokenSymbol}`
+      text: "Symbol",
+      value: `$${data.tokenSymbol}`,
     },
     {
-      text: 'Token Price',
-      value: `${data.publicSalePrice} $${data.Currency.symbol}`
+      text: "Token Price",
+      value: `${data.publicSalePrice} $${data.Currency.symbol}`,
     },
     {
-      text: 'Token Network',
-      value: 'Polygon'
+      text: "Token Network",
+      value: "Polygon",
     },
     {
-      text: 'Initial Supply',
-      value: `${numberWithCommas(data.tokenInitialSupply)} $${data.tokenSymbol}`
+      text: "Initial Supply",
+      value: `${numberWithCommas(data.tokenInitialSupply)} $${
+        data.tokenSymbol
+      }`,
     },
     {
-      text: 'Total Supply',
-      value: `${numberWithCommas(data.tokenTotalSupply)} $${data.tokenSymbol}`
+      text: "Total Supply",
+      value: `${numberWithCommas(data.tokenTotalSupply)} $${data.tokenSymbol}`,
     },
     {
-      text: 'Initial Market Cap',
-      value: `$${numberWithCommas(data.targetAmount)}`
+      text: "Initial Market Cap",
+      value: `$${numberWithCommas(data.targetAmount)}`,
     },
     {
-      text: 'Listing Date',
-      value: `${grugDateFormat(data.periodStart)}`
+      text: "Listing Date",
+      value: `${grugDateFormat(data.periodStart)}`,
     },
     {
-      text: 'Contract Address',
-      value: `${data.tokenContractAddress.slice(0,15)}`
-    }
-  ]
+      text: "Contract Address",
+      value: `${data.tokenContractAddress.slice(0, 15)}`,
+    },
+  ];
 
   return (
     <>
-      <div className="p-4 mt-4 border border-[#B546394D] divide-y divide-dashed divide-[#FCFCFD] bg-[#151011]">
-        <div>
-          <div className="grid grid-cols-2 my-3">
-            <div className="text-lg font-bold font-['avara'] text-[#CA5D50]">Pool Timeline</div>
-          </div>
-          <Timeline>
-            <Timeline.Item className="text-white" color="#B54639">
-              <div className="text-[#FCFCFD]">Registration Phase</div>
-              <div className="text-[#98A2B3]">20 May&apos;22 11:00 - 20 May&apos;22 16:00</div>
-            </Timeline.Item>
-            <Timeline.Item className="text-white" color="#98A2B3">
-              <div className="text-[#667085]">Buying Phase</div>
-              <div className="text-[#475467]">20 May&apos;22 11:00 - 20 May&apos;22 16:00</div>
-            </Timeline.Item>
-            <Timeline.Item className="text-white" color="#98A2B3">
-              <div className="text-[#667085]">Claim Start (10% TGE)</div>
-              <div className="text-[#475467]">20 May&apos;22 11:00 - 20 May&apos;22 16:00</div>
-            </Timeline.Item>
-          </Timeline>
+      {/* divide-y divide-solid divide-grayCool25 divide-opacity-10 */}
+      <div className="mt-4 border border-solid border-grugBorder bg-grugCardBackground p-6">
+        <div className="mb-6 font-avara text-xl font-extrabold text-primary500">
+          Pool Timeline
         </div>
-        <div>
-          <div className="font-bold text-xl my-6 text-[#CA5D50] font-['avara']">
-            Token Info
-          </div>
-          <div className="grid grid-cols-2">
-            <div className="text-[#D0D5DD]">
-              {dataTest.map(item => <div className="mb-4" key={item.text}>{item.text}</div>)}
+        <PoolTimeline
+          data={[
+            {
+              title: "Registration Phase",
+              date: "20 May'22 11:00 - 20 May'22 16:00",
+            },
+            {
+              title: "Buying Phase",
+              date: "20 May'22 11:00 - 20 May'22 16:00",
+            },
+            {
+              title: "Claim Start (10% TGE)",
+              date: "20 May'22 11:00 - 20 May'22 16:00",
+            },
+          ]}
+          currentIndex={1}
+        />
+
+        <div className="my-6 h-px bg-grayCool25 opacity-10" />
+
+        <div className="mb-6 font-avara text-xl font-extrabold text-primary500">
+          Token Info
+        </div>
+        <div className="flex flex-col gap-4">
+          {tokenData.map((item, i) => (
+            <div key={i} className="flex">
+              <div className="w-44 font-sora text-base font-light text-gray300">
+                <div key={item.text}>{item.text}</div>
+              </div>
+              <div
+                className="flex-1 font-avara text-base font-bold text-white"
+                key={item.value}
+              >
+                {item.value}
+              </div>
             </div>
-            <div>
-              {dataTest.map(item => {
-                return (
-                  <div className="mb-4 font-['avara']" key={item.value}>{item.value}</div>
-                )
-              })}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default IGOPoolTimeline
+export default IGOPoolTimeline;

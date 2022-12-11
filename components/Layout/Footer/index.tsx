@@ -101,7 +101,7 @@ const Footer = () => {
               width={150}
               height={40}
             />
-            <div className="mt-6 max-w-[212px] font-sora text-xs font-light leading-[18px] text-gray400">
+            <div className="mt-6 max-w-[212px] font-sora text-xs font-light text-gray400">
               Grug&apos;s DAO will allow both GameFi and crypto trading
               enthusiasts to take part in the activities that we will offer in
               our Discord server

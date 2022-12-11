@@ -161,7 +161,7 @@ const Reports = () => {
                             </div>
                             <p
                               className={twJoin(
-                                "mt-2 flex-1 font-sora text-xs leading-[18px] text-gray300 line-clamp-3",
+                                "mt-2 flex-1 font-sora text-xs text-gray300 line-clamp-3",
                                 "tablet:h-[60px] tablet:text-sm"
                               )}
                             >

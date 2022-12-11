@@ -43,6 +43,10 @@ a:hover {
   color: white;
 }
 
+.ant-timeline-item-head {
+  background-color: transparent;
+}
+
 .streaming-gradient {
   background: rgb(0, 0, 0);
   background: linear-gradient(

@@ -9,10 +9,10 @@ import { IProjectDescriptionProp } from "../type";
 const ProjectDescription = (prop: IProjectDescriptionProp) => {
   return (
     <div>
-      <div className="font-avara text-3xl font-extrabold leading-[38px] text-white">
+      <div className="font-avara text-3xl font-extrabold text-white">
         {prop.companyName}
       </div>
-      <div className="mt-1 font-avara text-xl font-bold leading-[30px] text-white">
+      <div className="mt-1 font-avara text-xl font-bold text-white">
         ${prop.companyToken}
       </div>
       <div className="mt-4 font-sora text-base text-grayCool300 line-clamp-2">

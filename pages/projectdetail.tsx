@@ -1,31 +1,36 @@
 /* eslint-disable @next/next/no-img-element */
-import {
-  faDiscord,
-  faMedium,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import { useRouter } from "next/router";
+import { Button, Divider, Input } from "antd";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
+// Redux
 import { useSelector } from "react-redux";
+import { RootState } from "store";
+import { ILaunchPadState, IProjectList } from "store/launchpad/launchpad";
+import { getProjectListById, registerProject } from "store/launchpad/thunk";
+import { IContractStake } from "store/contractStake/contractStake";
+import { IContractUSDC } from "store/contractUSDC/contractUSDC";
+
+// Fontawesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
+
+// Global utils
+import { useAppDispatch } from "hooks/useStoreHooks";
+import useMessage from "hooks/useMessageHooks";
+import useCountDown from "hooks/useCountDown";
+import { getSocialMedias } from "helper/utilities";
+
+// Global components
+import Requirement from "components/Public/Requirement";
+import IgoRegister from "components/IGO/IGORegister";
+
+// Local components
 import IGOPoolTimeline from "../components/IGO/IGOPoolTimeline";
 import IGOProfile from "../components/IGO/IGOProfile";
 import IgoStake from "../components/IGO/IGORegister/IgoStake";
 import IGOTargetRaise from "../components/IGO/IGOTargetRaise";
 import { IIGOProfileProp } from "../components/IGO/type";
-import { RootState } from "../store";
-import { ILaunchPadState, IProjectList } from "store/launchpad/launchpad";
-import { useAppDispatch } from "hooks/useStoreHooks";
-import { getProjectListById, registerProject } from "../store/launchpad/thunk";
-import { Button, Divider, Input } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
-import Requirement from "@/components/Public/Requirement";
-import { IContractStake } from "store/contractStake/contractStake";
-import IgoRegister from "@/components/IGO/IGORegister";
-import { IContractUSDC } from "store/contractUSDC/contractUSDC";
-import useMessage from "hooks/useMessageHooks";
-import useCountDown from "hooks/useCountDown";
-import { getSocialMedias } from "helper/utilities";
 
 const ProjectDetail = () => {
   const wallet = useSelector((state: RootState) => state.wallet);
@@ -150,8 +155,7 @@ const ProjectDetail = () => {
                   companySosMedia={IgoProfile.companySosMedia}
                 />
                 <IGOPoolTimeline data={dataIGO} />
-                {/* <IGOClaimStatus
-                /> */}
+                {/* <IGOClaimStatus /> */}
               </div>
               <div>
                 <IGOTargetRaise

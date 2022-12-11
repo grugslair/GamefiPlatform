@@ -62,10 +62,10 @@ const IGOProfile = (prop: IIGOProfileProp) => {
             alt="logo"
           />
           <div>
-            <div className="font-avara text-3xl font-extrabold leading-[38px] text-white">
+            <div className="font-avara text-3xl font-extrabold text-white">
               {prop.companyName}
             </div>
-            <div className="mt-1 font-avara text-xl font-bold leading-[30px] text-white">
+            <div className="mt-1 font-avara text-xl font-bold text-white">
               ${prop.companyToken}
             </div>
             <div className="mt-4 font-sora text-base text-grayCool300">
@@ -75,7 +75,7 @@ const IGOProfile = (prop: IIGOProfileProp) => {
               &nbsp;
               {descMoreThan200 ? (
                 <div
-                  className="inline-block whitespace-nowrap text-primary500 underline"
+                  className="inline-block cursor-pointer whitespace-nowrap text-primary500 underline"
                   onClick={() => setReadMoreExpanded((prev) => !prev)}
                 >
                   {readMoreExpanded ? "Show Less" : "Read More"}

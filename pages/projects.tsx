@@ -38,10 +38,10 @@ const GridWrapper = ({ projects, loading }: IGridWrapper) => {
           />
         ) : (
           <>
-            <div className="font-avara text-3xl font-extrabold leading-[38px] text-white">
+            <div className="font-avara text-3xl font-extrabold text-white">
               No available projects
             </div>
-            <div className="mt-2 text-center font-sora text-xl font-light leading-[30px] text-grayCool300">
+            <div className="mt-2 text-center font-sora text-xl font-light text-grayCool300">
               Projects will be shown here when it&quot;s available.
               <br />
               Join our Discord to be the first to know

@@ -15,7 +15,7 @@ const Banner = () => {
         "bg-[url('/grugbackground.png')] bg-cover bg-center "
       )}
     >
-      <div className="mx-auto max-w-[912px] font-avara text-6xl font-black leading-[72px]">
+      <div className="mx-auto max-w-[912px] font-avara text-6xl font-black">
         <span className="relative overflow-hidden">
           <div
             id="intro-title-background"

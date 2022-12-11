@@ -113,7 +113,7 @@ const NotVerifiedGrug = () => {
           <div className="font-avara text-xl font-extrabold">
             Reveal the projects
           </div>
-          <p className="mt-2 font-sora text-xl font-light leading-[30px] text-grayCool300">
+          <p className="mt-2 font-sora text-xl font-light text-grayCool300">
             Simply own a Grug&apos;s NFT then connect your <br /> wallet to
             reveal the project list
           </p>
