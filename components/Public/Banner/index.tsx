@@ -31,7 +31,7 @@ const Banner = () => {
           </div>
           <span className="relative">Multichain</span>
         </span>
-        &nbsp;launchpad for every Grug&apos;s
+        &nbsp;launchpad for every Grug
       </div>
       <div className="mt-6 font-sora text-2xl font-light text-grayCool300">
         Top tier quality project from the Blockchain. <br />

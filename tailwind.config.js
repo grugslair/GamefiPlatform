@@ -10,6 +10,7 @@ module.exports = {
       colors: {
         yellow400: "#FAC515",
         yellow500: "#EAAA08",
+        success300: "#74E17A",
         success600: "#1E9E3E",
         primary100: "#FBE7D8",
         primary500: "#CA5D50",

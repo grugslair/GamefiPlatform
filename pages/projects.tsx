@@ -31,7 +31,11 @@ const GridWrapper = ({ projects, loading }: IGridWrapper) => {
     return (
       <div className="flex h-96 flex-col items-center justify-center">
         {loading ? (
-          <FontAwesomeIcon icon={faSpinner} className="text-primary600 text-6xl" spin />
+          <FontAwesomeIcon
+            icon={faSpinner}
+            className="text-6xl text-primary600"
+            spin
+          />
         ) : (
           <>
             <div className="font-avara text-3xl font-extrabold leading-[38px] text-white">
@@ -60,18 +64,21 @@ const Landing: NextPage = () => {
   const { loading, list } = useSelector(
     (state: RootState) => state.launchpad.projects
   );
+  const wallet = useSelector((state: RootState) => state.wallet);
   const dispatch = useAppDispatch();
+  const isLoading = loading || !wallet.walletAddress;
 
   useEffect(() => {
-    dispatch(getProjectList());
+    wallet.walletAddress &&
+      dispatch(getProjectList({ walletAddress: wallet.walletAddress }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [wallet.walletAddress]);
 
   const items = [
     {
       label: "All",
       key: "all",
-      children: <GridWrapper projects={list} loading={loading} />,
+      children: <GridWrapper projects={list} loading={isLoading} />,
     },
     {
       label: "Ongoing",
@@ -79,7 +86,7 @@ const Landing: NextPage = () => {
       children: (
         <GridWrapper
           projects={list.filter((e) => e.status === "on_going")}
-          loading={loading}
+          loading={isLoading}
         />
       ),
     },
@@ -89,7 +96,7 @@ const Landing: NextPage = () => {
       children: (
         <GridWrapper
           projects={list.filter((e) => e.status === "upcoming")}
-          loading={loading}
+          loading={isLoading}
         />
       ),
     },
@@ -99,7 +106,7 @@ const Landing: NextPage = () => {
       children: (
         <GridWrapper
           projects={list.filter((e) => e.status === "participate")}
-          loading={loading}
+          loading={isLoading}
         />
       ),
     },

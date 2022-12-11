@@ -95,10 +95,8 @@ const NotVerifiedGrug = () => {
       isCompleted: !!wallet.walletAddress,
       title: wallet.walletAddress ? "Wallet connected" : "Connect Wallet",
       subtitle: wallet.walletAddress
-        ? "You've successfully connected your wallet"
+        ? "You've successfully connected to your wallet"
         : "Connect your wallet",
-      // ? "You've successfully connected to Metamask"
-      // : "Connect your Metamask/Trustwallet",
       buttonLabel: "Connect Wallet",
       onClick: connectWallet,
     },

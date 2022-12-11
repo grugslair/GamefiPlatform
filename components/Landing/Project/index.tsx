@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 // Fontawesome
@@ -34,15 +34,11 @@ interface IProps {
 const Project = (props: IProps) => {
   const router = useRouter();
 
-  const [initialized, setInitialized] = useState(false);
   const { handleSetEndDate, countDown } = useCountDown();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const date = new Date(props.dataproject.periodEnd);
     handleSetEndDate(date.getTime());
-    setTimeout(() => {
-      setInitialized(true);
-    }, 1200);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
 
@@ -93,6 +89,7 @@ const Project = (props: IProps) => {
           companyProfile={projectBanner.companyProfile}
           companyLogo={projectBanner.companyLogo}
           countDown={countDown}
+          endDate={props.dataproject.periodEnd}
         />
         <div className="px-10 pt-6 pb-24">
           <ProjectDescription
@@ -103,24 +100,22 @@ const Project = (props: IProps) => {
           />
           <ProjectTarget projectTarget={projectTarget} />
         </div>
-        {initialized && (
-          <div className="absolute -bottom-4 w-full px-10">
-            <Button
-              disabled={!countDown}
-              className="w-full justify-center"
-              onClick={() =>
-                router.push({
-                  pathname: "/projectdetail",
-                  query: {
-                    id: props.dataproject.id,
-                  },
-                })
-              }
-            >
-              {countDown ? "Participate" : "Expired"}
-            </Button>
-          </div>
-        )}
+        <div className="absolute -bottom-4 w-full px-10">
+          <Button
+            className="w-full justify-center"
+            onClick={() =>
+              router.push({
+                pathname: "/projectdetail",
+                query: {
+                  id: props.dataproject.id,
+                },
+              })
+            }
+          >
+            {countDown ? "Participate" : "See Project Detail"}
+          </Button>
+        </div>
+        {/* )} */}
       </div>
     </>
   );

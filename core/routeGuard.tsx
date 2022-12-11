@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import useWallet, { web3Modal } from 'hooks/useWallet';
-import { RootState } from 'store';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'hooks/useStoreHooks';
-import { getGrugBalance } from 'store/wallet/thunk';
-import { PayloadAction } from '@reduxjs/toolkit';
 import { isNumber } from 'lodash';
 
+import { RootState } from 'store';
+import { useSelector } from 'react-redux';
+
+import useWallet, { web3Modal } from 'hooks/useWallet';
+
 export { RouteGuard };
+
+const isDevBypassRoute = false;
 
 function RouteGuard({ children }: any) {
     const prevBalanceRef = useRef();
@@ -31,6 +32,7 @@ function RouteGuard({ children }: any) {
     }, []);
 
     useEffect(() => {
+        if (isDevBypassRoute) return;
         if (wallet.balance !== null || isNumber(prevBalanceRef.current) || !web3Modal.cachedProvider) {
             if (isAuthorize) {
                 setCanShow(true)
@@ -50,10 +52,11 @@ function RouteGuard({ children }: any) {
         }
         //@ts-ignore
         prevBalanceRef.current = wallet.balance
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [wallet.balance])
 
 
-    if (canShow || isCurrentPathPublic) {
+    if (canShow || isCurrentPathPublic || isDevBypassRoute) {
         return (children);
     } else {
         return "Loading..."

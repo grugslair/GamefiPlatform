@@ -121,6 +121,10 @@ export interface IGetReportList {
   haveNft?: boolean
 }
 
+export interface IProjectListPayload {
+  walletAddress: string
+}
+
 export interface IProjectListByIdPayload {
   id: string
   walletAddress: string
