@@ -40,7 +40,7 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
   }
 
   const disclaimer = useMemo(() => {
-    if(stakeAmount && parseInt(stakeAmount, 10) < contractClaim.unClaimNft.length) {
+    if(stakeAmount && contractClaim.unClaimNft.length !== 0 && parseInt(stakeAmount, 10) <= contractClaim.unClaimNft.length) {
       return false
     }
     return true
