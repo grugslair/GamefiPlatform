@@ -33,5 +33,6 @@ export interface walletState {
   etherProvider: any
   contract: any
   balance: number | null | undefined
-  loading: boolean
+  loading: boolean,
+  tokenIds: number[]
 }

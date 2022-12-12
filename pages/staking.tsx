@@ -15,6 +15,9 @@ import { contractUnstaking, getGasPrice } from 'store/contractStake/thunk'
 import { IContractStake } from 'store/contractStake/contractStake'
 import useMessage from 'hooks/useMessageHooks'
 import ModalClaimRocks from '@/components/Public/ModalClaimRocks'
+import { getRocksFromNFT } from 'store/wallet/thunk'
+import { resetTokenIdsAction } from 'store/wallet/actions'
+import { isNFTClaimed } from 'store/contractClaim/thunk'
 
 
 
@@ -54,6 +57,15 @@ const Staking: NextPage = () => {
       })
     }
   }
+
+  useEffect(() => {
+    // const { balance, tokenId } = wallet
+    dispatch(getRocksFromNFT())
+    .then(() => {
+      dispatch(isNFTClaimed())
+    })
+
+  }, [wallet.walletAddress])
 
   return (
     <div className='px-36 pt-40'>

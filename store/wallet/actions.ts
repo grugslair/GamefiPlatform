@@ -7,3 +7,4 @@ export const walletBalanceAction = createAction<setWalletBalance>('wallet/setBal
 export const walletChainAction = createAction('wallet/setChainId')
 export const resetWalletAction = createAction('wallet/resetWallet')
 export const setLoadingAction = createAction<boolean>('wallet/setLoading')
+export const resetTokenIdsAction = createAction('wallet/resetTokenId')

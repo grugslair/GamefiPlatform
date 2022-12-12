@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
+import { error } from "console"
 import { ethers } from 'ethers'
 import supportedChains from "../../helper/chainList"
 import { grugContractABI, grugContractAddress } from "../../helper/contract"
@@ -14,12 +15,15 @@ export const walletConnect = createAsyncThunk<IwalletConnect, any>(
       const signer = etherProvider.getSigner()
       const walletAddress = await signer.getAddress()
       const network = await etherProvider.getNetwork()
+      const contract = await new ethers.Contract(grugContractAddress, grugContractABI, etherProvider);
+
 
       return {
         walletAddress,
         etherProvider,
         provider,
-        chainId: network.chainId
+        chainId: network.chainId,
+        contract
       } as IwalletConnect
       
     } catch (error) {
@@ -33,12 +37,38 @@ export const getGrugBalance = createAsyncThunk(
   'wallet/grugBalance',
   async (arg, { getState }) => {
     const { wallet }: any = getState()
-    const contract = new ethers.Contract(grugContractAddress, grugContractABI, wallet.etherProvider);
-    const balance: number = await contract.balanceOf(wallet.walletAddress);
+    const balance: number = await wallet.contract.balanceOf(wallet.walletAddress);
 
     return {
       balance: balance.toString()
     } ;
+  }
+)
+
+export const getRocksFromNFT = createAsyncThunk(
+  'wallet/getRocksFromNFT',
+  async (args, { getState, rejectWithValue }) => {
+    const { wallet }: any = getState()
+
+    const { balance, tokenIds } = wallet
+
+    let createPromiseTokens:any = []
+
+    if(balance !== null && balance && balance > 0 && tokenIds.length === 0){
+      for(let token = 0; token < balance; token++) {
+        createPromiseTokens.push(wallet.contract.tokenOfOwnerByIndex(wallet.walletAddress, token))
+      }
+    }
+
+    const tempTokenIds = await Promise.all(createPromiseTokens).then((value) => {
+      return value.map(data => data.toString())
+    }).catch(error => {
+      rejectWithValue(error)
+    })
+
+    return {
+      tokenIds: tempTokenIds
+    }
   }
 )
 

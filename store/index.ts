@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import contractClaim from './contractClaim'
 import contractRocks from './contractRocks'
 import contractStake from './contractStake'
 import contractUSDC from './contractUSDC'
@@ -12,6 +13,7 @@ const reducer = {
   contractRocks: contractRocks,
   contractStake: contractStake,
   contractUSDC: contractUSDC,
+  contractClaim: contractClaim,
   message: message
 }
 
@@ -19,33 +21,7 @@ const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these action types
-        ignoredActions: ['wallet/setWallet'],
-        // Ignore these field paths in all actions
-        ignoredActionPaths: [
-          'payload.etherProvider', 
-          'payload.provider',
-          'payload.contract',
-          'meta.arg',
-          'payload.gasPrice',
-          'payload.maxPriorityFeePerGas',
-          'payload.maxFeePerGas',
-          'payload.gasLimit',
-          'payload.value',
-          'payload.wait',
-          'payload'
-        ],
-        // Ignore these paths in the state
-        ignoredPaths: [
-          'wallet.provider', 
-          'wallet.etherProvider', 
-          'wallet.contract', 
-          'contractRocks.rocksContract', 
-          'contractStake.stakeContract',
-          'contractUSDC.usdcContract'
-        ],
-      },
+      serializableCheck: false
     }),
 })
 

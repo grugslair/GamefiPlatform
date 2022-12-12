@@ -6,6 +6,8 @@ import useMessage from "hooks/useMessageHooks";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
+import { IContractClaim } from "store/contractClaim/contractClaim";
+import { claimNFT } from "store/contractClaim/thunk";
 import { ethToWei } from "../../../helper/utilities";
 import { useAppDispatch } from "../../../hooks/useStoreHooks";
 import { RootState } from "../../../store";
@@ -23,11 +25,10 @@ interface IModalStakeAmountProps {
 const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) => {
 
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
-  const [method, setMethod] = useState(1);
   const [stakeAmount, setStakeAmount] = useState('')
-  const [disclaimer, setDisclaimer] = useState(false)
   const contractRocks: IContractRocks = useSelector((state: RootState) => state.contractRocks)
   const contractStake: IContractStake = useSelector((state: RootState) => state.contractStake)
+  const contractClaim: IContractClaim = useSelector((state: RootState) => state.contractClaim)
   const wallet: IwalletConnect = useSelector((state: RootState) => state.wallet)
 
   const { pushMessage } = useMessage()
@@ -36,35 +37,18 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
 
   function changeStakeAmount(value: string) {
     setStakeAmount(value)
-    if(parseInt(value, 10) > contractRocks.balanceOfRocks) {
-      setDisclaimer(false)
-    }
   }
+
+  const disclaimer = useMemo(() => {
+    if(stakeAmount && parseInt(stakeAmount, 10) < contractClaim.unClaimNft.length) {
+      return false
+    }
+    return true
+  }, [stakeAmount])
 
   function handleCancel() {
     setModalOpen(false)
   }
-
-  function chooseMethod(event: RadioChangeEvent) {
-    setMethod(event.target.value)
-  }
-  
-  function checkDisclaimer(event: CheckboxChangeEvent) {
-    if(event.target.checked && parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
-      setDisclaimer(true)
-    } else {
-      setDisclaimer(false)
-    }
-  }
-
-  const isAllowed = useMemo(() => {
-    const weiAmount = ethToWei(stakeAmount?.toString() || '0')
-    if(contractStake.allowance) {
-      return parseInt(weiAmount, 10) <= contractStake.allowance
-    }
-    return false
-    
-  }, [stakeAmount])
 
   async function callAllowance() {
     await dispatch(getAllowance())
@@ -75,6 +59,10 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
     callAllowance()
   }, [isModalOpen])
 
+  async function claimNft() {
+    await dispatch(getGasPrice())
+    dispatch(claimNFT(stakeAmount))
+  }
 
   return (
     <div>
@@ -103,7 +91,7 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
             Each Grug’s could contain 3000 $ROCKS. Claimed $ROCKS will yet to be staked
           </div>
           <div className="text-[#98A2B3] mb-2">
-            Grug’s eligible to claim: 300 Grug’s
+            Grug’s eligible to claim: {contractClaim.unClaimNft.length} Grug’s
           </div>
           <div className="mb-6 p-4 bg-[#68121E1A] border border-solid border-[#CA5D504D]">
             <div>
@@ -126,7 +114,7 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
                     active:text-[#CA5D50] active:bg-[#68121E1A] active:border-[#CA5D504D]
                     focus:text-[#CA5D50] focus:bg-[#68121E1A] focus:border-[#CA5D504D]
                   "
-                  onClick={() => setStakeAmount(contractRocks.balanceOfRocks.toString())}
+                  onClick={() => setStakeAmount(contractClaim.unClaimNft.length.toString())}
                 >
                   Max
                 </Button>
@@ -138,7 +126,7 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
             <div>
               <div>Estimated $ROCKS</div>
               <div>
-                0
+                {stakeAmount ? parseInt(stakeAmount, 10) * 3000 : 0}
               </div>
             </div>
           </div>
@@ -146,7 +134,8 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
           
           <Button 
             className="w-full mb-6 py-2 bg-[#B54639] text-base font-['avara']"
-            disabled={!disclaimer}
+            disabled={disclaimer}
+            onClick={claimNft}
           >
             Claim
           </Button>
