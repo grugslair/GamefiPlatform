@@ -24,6 +24,8 @@ import {
 import { join, twMerge } from "tailwind-merge";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "tailwind.config";
+
+//@ts-ignore
 const tailwind = resolveConfig(tailwindConfig);
 
 import { INavLink } from "./type";
