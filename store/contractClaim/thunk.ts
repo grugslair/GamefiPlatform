@@ -93,12 +93,9 @@ export const claimNFT = createAsyncThunk(
 
       const tx = await wallet.etherProvider.getSigner().sendTransaction(transactionParameters)
 
-      console.log(tx)
+      const receipt = await wallet.etherProvider.waitForTransaction(tx.hash, 1, 150000)
 
-      tx.wait()
-
-
-      return tx
+      return receipt
 
     } catch(err) {
       return rejectWithValue(err)

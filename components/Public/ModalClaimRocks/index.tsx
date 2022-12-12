@@ -7,7 +7,8 @@ import Link from "next/link";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
 import { IContractClaim } from "store/contractClaim/contractClaim";
-import { claimNFT } from "store/contractClaim/thunk";
+import { claimNFT, isNFTClaimed } from "store/contractClaim/thunk";
+import { getRocksFromNFT } from "store/wallet/thunk";
 import { ethToWei } from "../../../helper/utilities";
 import { useAppDispatch } from "../../../hooks/useStoreHooks";
 import { RootState } from "../../../store";
@@ -30,6 +31,8 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
   const contractStake: IContractStake = useSelector((state: RootState) => state.contractStake)
   const contractClaim: IContractClaim = useSelector((state: RootState) => state.contractClaim)
   const wallet: IwalletConnect = useSelector((state: RootState) => state.wallet)
+  const [loadingClaim, setLoadingClaim] = useState<boolean>(false)
+
 
   const { pushMessage } = useMessage()
 
@@ -60,8 +63,25 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
   }, [isModalOpen])
 
   async function claimNft() {
+    setLoadingClaim(true)
     await dispatch(getGasPrice())
-    dispatch(claimNFT(stakeAmount))
+    dispatch(claimNFT(stakeAmount)).then((resp) => {
+      console.log(resp)
+      if(resp.payload?.transactionHash) {
+        pushMessage('success', {
+          title: '',
+          description: 'you are successfully claim rocks'
+        })
+      } else {
+        pushMessage('failed', {
+          title: '',
+          description: resp.payload.reason
+        })
+      }
+      setLoadingClaim(false)
+      setStakeAmount('')
+      setModalOpen(false)
+    })
   }
 
   return (
@@ -135,6 +155,7 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
           <Button 
             className="w-full mb-6 py-2 bg-[#B54639] text-base font-['avara']"
             disabled={disclaimer}
+            loading={loadingClaim}
             onClick={claimNft}
           >
             Claim
