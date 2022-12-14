@@ -12,7 +12,14 @@ const IgoStake = () => {
         Staked min.3000 ROCKS to unlock. Staked token will be lock until 7 days after IGO ended
       </div>
       <div>
-        <ModalStakeAmountButton actionTitle={'Stake ROCKS'} paddingButton={'px-4 py-2'}/>
+        <ModalStakeAmountButton 
+          actionTitle={'Stake ROCKS'} 
+          buttonProps={{
+          size: "small",
+          className:
+            "m-auto",
+          disabled: false,
+        }}/>
       </div>
     </div>
   )
