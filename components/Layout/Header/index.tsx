@@ -80,7 +80,7 @@ const SOCIAL_MEDIAS = [
   },
   {
     label: "Discord",
-    url: "https://discord.gg/NPsHvxvg",
+    url: "https://discord.gg/gDyJBYUNDq",
     icon: faDiscord,
     logo: "/discord.svg",
     target: "_blank",
