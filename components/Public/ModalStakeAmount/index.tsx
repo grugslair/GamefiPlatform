@@ -2,7 +2,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Checkbox, Input, InputNumber, Modal, Radio, RadioChangeEvent } from "antd"
 import type { CheckboxChangeEvent } from "antd/lib/checkbox";
-import useMessage from "hooks/useMessageHooks";
+import { pushMessage } from "core/notification";
 import Link from "next/link";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
@@ -29,8 +29,6 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
   const contractRocks: IContractRocks = useSelector((state: RootState) => state.contractRocks)
   const contractStake: IContractStake = useSelector((state: RootState) => state.contractStake)
   const wallet: IwalletConnect = useSelector((state: RootState) => state.wallet)
-
-  const { pushMessage } = useMessage()
 
   const dispatch = useAppDispatch()
 
@@ -79,7 +77,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
             await pushMessage('success', {
               title: 'Successfully stake token',
               description: 'You’ve stake ROCKS'
-            })
+            }, dispatch)
           }
           
           //@ts-ignore
@@ -87,7 +85,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
             await pushMessage('failed', {
               title: '',
               description: result.payload.reason 
-            })
+            }, dispatch)
           }
 
           setModalOpen(false)
@@ -107,7 +105,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
           await pushMessage('success', {
             title: '',
             description: 'Successfully approve token'
-          })
+          }, dispatch)
         }
         
         //@ts-ignore
@@ -115,7 +113,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
           await pushMessage('failed', {
             title: '',
             description: approveResult.payload.reason
-          })
+          }, dispatch)
         }
       }
     }
@@ -197,7 +195,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
             <Button 
               className="w-full mb-6 py-2 bg-[#B54639] text-base font-['avara']"
               disabled={!disclaimer}
-              onClick={staking}
+              onClick={() => staking()}
             >
               Stake
             </Button>
@@ -205,7 +203,7 @@ const ModalStakeAmount = ({actionTitle, paddingButton}: IModalStakeAmountProps) 
             <Button 
               className="w-full mb-6 py-2 bg-[#B54639] text-base font-['avara']"
               disabled={!disclaimer}
-              onClick={approve}
+              onClick={() => approve()}
             >
               Approve
             </Button>

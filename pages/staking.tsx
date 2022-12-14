@@ -13,11 +13,11 @@ import { Button, Input, InputNumber } from 'antd'
 import { useAppDispatch } from 'hooks/useStoreHooks'
 import { contractUnstaking, getGasPrice } from 'store/contractStake/thunk'
 import { IContractStake } from 'store/contractStake/contractStake'
-import useMessage from 'hooks/useMessageHooks'
 import ModalClaimRocks from '@/components/Public/ModalClaimRocks'
 import { getRocksFromNFT } from 'store/wallet/thunk'
 import { resetTokenIdsAction } from 'store/wallet/actions'
 import { isNFTClaimed } from 'store/contractClaim/thunk'
+import { pushMessage } from 'core/notification'
 
 
 
@@ -26,8 +26,6 @@ const Staking: NextPage = () => {
   const contractRocks: IContractRocks  = useSelector((state: RootState) => state.contractRocks)
   const contractStake: IContractStake  = useSelector((state: RootState) => state.contractStake)
   const router = useRouter()
-
-  const { pushMessage } = useMessage()
 
   const dispatch = useAppDispatch()
 
@@ -46,7 +44,7 @@ const Staking: NextPage = () => {
       await pushMessage('success', {
         title: '',
         description: 'Successfully unstake token'
-      })
+      }, dispatch)
     }
     
     //@ts-ignore
@@ -54,7 +52,7 @@ const Staking: NextPage = () => {
       await pushMessage('failed', {
         title: '',
         description: result.payload.reason
-      })
+      }, dispatch)
     }
   }
 

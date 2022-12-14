@@ -17,7 +17,6 @@ import { faCircleArrowDown } from "@fortawesome/free-solid-svg-icons";
 
 // Global utils
 import { useAppDispatch } from "hooks/useStoreHooks";
-import useMessage from "hooks/useMessageHooks";
 import useCountDown from "hooks/useCountDown";
 import { getSocialMedias } from "helper/utilities";
 
@@ -31,6 +30,7 @@ import IGOProfile from "../components/IGO/IGOProfile";
 import IgoStake from "../components/IGO/IGORegister/IgoStake";
 import IGOTargetRaise from "../components/IGO/IGOTargetRaise";
 import { IIGOProfileProp } from "../components/IGO/type";
+import { pushMessage } from "core/notification";
 
 const ProjectDetail = () => {
   const wallet = useSelector((state: RootState) => state.wallet);
@@ -56,8 +56,6 @@ const ProjectDetail = () => {
   const [openRequirement, setOpenRequirement] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
-
-  const { pushMessage } = useMessage();
 
   const { countDown, handleSetEndDate } = useCountDown();
 
@@ -99,7 +97,7 @@ const ProjectDetail = () => {
         pushMessage("success", {
           title: "",
           description: "Successfully register project",
-        });
+        }, dispatch);
         dispatch(
           getProjectListById({
             id: projectId.toString(),

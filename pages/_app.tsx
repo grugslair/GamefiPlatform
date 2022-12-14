@@ -7,6 +7,7 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { notification } from 'antd'
 import { RouteGuard } from 'core/routeGuard'
+import Notification from 'core/notification'
 
 config.autoAddCss = false
 
@@ -19,11 +20,13 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Provider store={store}>
-      <Layout>
-        <RouteGuard>
-          <Component {...pageProps} />
-        </RouteGuard>
-      </Layout>
+      <Notification>
+        <Layout>
+          <RouteGuard>
+            <Component {...pageProps} />
+          </RouteGuard>
+        </Layout>
+      </Notification>
     </Provider>
   )
 }

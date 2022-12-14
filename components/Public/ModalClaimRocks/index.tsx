@@ -1,21 +1,17 @@
 import { faArrowAltCircleDown, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Checkbox, Divider, Input, InputNumber, Modal, Radio, RadioChangeEvent } from "antd"
-import type { CheckboxChangeEvent } from "antd/lib/checkbox";
-import useMessage from "hooks/useMessageHooks";
-import Link from "next/link";
+import { pushMessage } from "core/notification";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
 import { IContractClaim } from "store/contractClaim/contractClaim";
 import { claimNFT, isNFTClaimed } from "store/contractClaim/thunk";
-import { getRocksFromNFT } from "store/wallet/thunk";
-import { ethToWei } from "../../../helper/utilities";
 import { useAppDispatch } from "../../../hooks/useStoreHooks";
 import { RootState } from "../../../store";
 import { IContractRocks } from "../../../store/contractRocks/contractRocks";
-import { approveContractRocks, contractGetBalance } from "../../../store/contractRocks/thunk";
+import { contractGetBalance } from "../../../store/contractRocks/thunk";
 import { IContractStake } from "../../../store/contractStake/contractStake";
-import { contractStaking, getAllowance, getGasPrice } from "../../../store/contractStake/thunk";
+import { getAllowance, getGasPrice } from "../../../store/contractStake/thunk";
 import { IwalletConnect } from "../../../store/wallet/walletType";
 
 interface IModalStakeAmountProps {
@@ -32,9 +28,6 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
   const contractClaim: IContractClaim = useSelector((state: RootState) => state.contractClaim)
   const wallet: IwalletConnect = useSelector((state: RootState) => state.wallet)
   const [loadingClaim, setLoadingClaim] = useState<boolean>(false)
-
-
-  const { pushMessage } = useMessage()
 
   const dispatch = useAppDispatch()
 
@@ -66,17 +59,16 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
     setLoadingClaim(true)
     await dispatch(getGasPrice())
     dispatch(claimNFT(stakeAmount)).then((resp) => {
-      console.log(resp)
       if(resp.payload?.transactionHash) {
         pushMessage('success', {
           title: '',
           description: 'you are successfully claim rocks'
-        })
+        }, dispatch)
       } else {
         pushMessage('failed', {
           title: '',
           description: resp.payload.reason
-        })
+        }, dispatch)
       }
       setLoadingClaim(false)
       setStakeAmount('')
@@ -156,7 +148,7 @@ const ModalClaimRocks = ({actionTitle, paddingButton}: IModalStakeAmountProps) =
             className="w-full mb-6 py-2 bg-[#B54639] text-base font-['avara']"
             disabled={disclaimer}
             loading={loadingClaim}
-            onClick={claimNft}
+            onClick={() => claimNft()}
           >
             Claim
           </Button>
