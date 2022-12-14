@@ -116,7 +116,7 @@ const Landing: NextPage = () => {
     <div>
       <div>
         <Banner />
-        <div className="mx-auto -mt-24 box-content max-w-[1144px] px-6">
+        <div className="mx-auto -mt-24 box-content max-w-screen-maxContent px-6">
           <Tabs
             items={items}
             className={styles.ProjectsTab}

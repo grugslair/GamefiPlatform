@@ -104,7 +104,7 @@ const NotVerifiedGrug = () => {
 
   return (
     <>
-      <div className="mx-auto -mt-12 box-content grid max-w-[1144px] grid-cols-2 gap-4 px-6">
+      <div className="mx-auto -mt-12 box-content grid max-w-screen-maxContent grid-cols-2 gap-4 px-6">
         <div className="h-[282px] rounded-sm border border-solid border-grugBorder bg-grugCardBackground" />
         <div className="h-[282px] rounded-sm border border-solid border-grugBorder bg-grugCardBackground" />
       </div>

@@ -33,7 +33,11 @@ a:hover {
 }
 
 .projectDetailsGradient {
-  background: linear-gradient(360deg, #0B0B0B 57.24%, rgba(11, 11, 11, 0.2) 98.26%);
+  background: linear-gradient(
+    360deg,
+    #0b0b0b 57.24%,
+    rgba(11, 11, 11, 0.2) 98.26%
+  );
 }
 
 .reports-search > input {
@@ -45,6 +49,18 @@ a:hover {
 
 .ant-timeline-item-head {
   background-color: transparent;
+}
+
+.staking-input-number {
+  border: none !important;
+  box-shadow: none !important;
+}
+.staking-input-number input {
+  padding: 0;
+}
+
+.staking-input-number input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
 }
 
 .streaming-gradient {

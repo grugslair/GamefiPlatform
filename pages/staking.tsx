@@ -1,170 +1,224 @@
-import type { NextPage } from 'next'
-import { useSelector } from 'react-redux'
-import { RootState } from '../store'
-import { ChangeEvent, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faLockOpen } from '@fortawesome/free-solid-svg-icons'
-import { walletState } from 'store/wallet/walletType'
-import { IContractRocks } from 'store/contractRocks/contractRocks'
-import ModalStakeAmount from '@/components/Public/ModalStakeAmount'
-import { changeToOneDecimal, ethToWei } from 'helper/utilities'
-import { Button, Input, InputNumber } from 'antd'
-import { useAppDispatch } from 'hooks/useStoreHooks'
-import { contractUnstaking, getGasPrice } from 'store/contractStake/thunk'
-import { IContractStake } from 'store/contractStake/contractStake'
-import ModalClaimRocks from '@/components/Public/ModalClaimRocks'
-import { getRocksFromNFT } from 'store/wallet/thunk'
-import { resetTokenIdsAction } from 'store/wallet/actions'
-import { isNFTClaimed } from 'store/contractClaim/thunk'
-import { pushMessage } from 'core/notification'
+import { useEffect, useState } from "react";
+import { twJoin } from "tailwind-merge";
+import type { NextPage } from "next";
+import { InputNumber } from "antd";
 
+// Redux
+import { useSelector } from "react-redux";
+import { RootState } from "store";
+import { walletState } from "store/wallet/walletType";
+import { getRocksFromNFT } from "store/wallet/thunk";
+import { isNFTClaimed } from "store/contractClaim/thunk";
+import { IContractRocks } from "store/contractRocks/contractRocks";
+import { IContractStake } from "store/contractStake/contractStake";
+import { contractUnstaking, getGasPrice } from "store/contractStake/thunk";
 
+// Fontawesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
+
+// Utils
+import { useAppDispatch } from "hooks/useStoreHooks";
+import { formatNumber, ethToWei } from "helper/utilities";
+import { pushMessage } from "core/notification";
+
+// Components
+import Button from "components/Button";
+import ModalClaimRocksButton from "components/Public/ModalClaimRocksButton";
+import ModalStakeAmountButton from "components/Public/ModalStakeAmountButton";
 
 const Staking: NextPage = () => {
-  const wallet: walletState  = useSelector((state: RootState) => state.wallet)
-  const contractRocks: IContractRocks  = useSelector((state: RootState) => state.contractRocks)
-  const contractStake: IContractStake  = useSelector((state: RootState) => state.contractStake)
-  const router = useRouter()
+  const wallet: walletState = useSelector((state: RootState) => state.wallet);
+  const contractRocks: IContractRocks = useSelector(
+    (state: RootState) => state.contractRocks
+  );
+  const contractStake: IContractStake = useSelector(
+    (state: RootState) => state.contractStake
+  );
 
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const [unStakeAmount, setUnStakeAmount] = useState('');
+  const [unStakeAmount, setUnStakeAmount] = useState("");
+
+  const unstakeDisabled = !(contractRocks?.balanceOfRocks > 0);
 
   function changeUnStakeAmount(value: string) {
-    setUnStakeAmount(value)
+    setUnStakeAmount(value);
   }
 
   async function unStake() {
-    await dispatch(getGasPrice())
-    const weiAmount = ethToWei(unStakeAmount?.toString() || '0')
-    const result = await dispatch(contractUnstaking(weiAmount))
+    await dispatch(getGasPrice());
+    const weiAmount = ethToWei(unStakeAmount?.toString() || "0");
+    const result = await dispatch(contractUnstaking(weiAmount));
 
-    if(result?.payload?.hash) {
-      await pushMessage('success', {
-        title: '',
-        description: 'Successfully unstake token'
-      }, dispatch)
+    if (result?.payload?.hash) {
+      await pushMessage(
+        "success",
+        {
+          title: "",
+          description: "Successfully unstake token",
+        },
+        dispatch
+      );
     }
-    
+
     //@ts-ignore
-    if(result?.error?.message === 'Rejected') {
-      await pushMessage('failed', {
-        title: '',
-        description: result.payload.reason
-      }, dispatch)
+    if (result?.error?.message === "Rejected") {
+      await pushMessage(
+        "failed",
+        {
+          title: "",
+          description: result.payload.reason,
+        },
+        dispatch
+      );
     }
   }
 
   useEffect(() => {
     // const { balance, tokenId } = wallet
-    dispatch(getRocksFromNFT())
-    .then(() => {
-      dispatch(isNFTClaimed())
-    })
-
-  }, [wallet.walletAddress])
+    dispatch(getRocksFromNFT()).then(() => {
+      dispatch(isNFTClaimed());
+    });
+  }, [wallet.walletAddress]);
 
   return (
-    <div className='px-36 pt-40'>
-      <div className="font-bold text-5xl font-['avara'] mb-10">
-        Stake Rocks
+    <div className="mx-auto mt-40 box-content max-w-screen-maxContent px-6">
+      <div className="font-avara text-5xl font-extrabold text-white">
+        Claim & Stake
       </div>
-      <div className="mb-32">
-        <div className='grid grid-cols-4 gap-3'>
-          <div className="relative p-6 bg-[#151011] border border-[#B546394D]">
-            <div className="font-['avara'] text-xl text-[#CA5D50]">claim</div>
-            <div className='mt-6'>
-              <div className='text-sm text-[#D0D5DD] mb-2'>You own</div>
-              <div className="font-['avara'] text-3xl">{wallet.balance || 0} Grug&apos;s</div>
+      <div className="mt-10 flex gap-4">
+        <div className="flex flex-1 flex-col border border-solid border-grugBorder bg-grugCardBackground p-6">
+          <div className="font-avara text-xl font-extrabold text-primary500">
+            Claim
+          </div>
+          <div className="mt-6 font-sora text-sm text-gray300">You own</div>
+          <div className="mt-2 font-avara text-3xl font-extrabold text-white">
+            {wallet.balance || 0} Grug&apos;s
+          </div>
+          <ModalClaimRocksButton
+            actionTitle="Claim $ROCKS"
+            buttonProps={{
+              size: "small",
+              className: "mt-auto w-fit",
+            }}
+          />
+        </div>
+        <div className="flex-[2] border border-solid border-grugBorder bg-grugCardBackground p-6">
+          <div className="font-avara text-xl font-extrabold text-primary500">
+            Stake & Unstake (Soon)
+          </div>
+          <div className="flex justify-between">
+            <div>
+              <div className="mt-6 font-sora text-sm text-gray300">
+                $ROCKS Balance
+              </div>
+              <div className="mt-2 font-avara text-3xl font-extrabold text-white">
+                {formatNumber(contractRocks.balanceOfRocks) || 0}
+              </div>
             </div>
-            <div className='absolute bottom-6'>
-              <ModalClaimRocks actionTitle='Claim $ROCKS' paddingButton='px-4 py-2'/>
+            <ModalStakeAmountButton
+              actionTitle="Stake"
+              buttonProps={{
+                size: "small",
+                className:
+                  "mt-auto w-[120px] justify-center self-end opacity-[0.15]",
+                disabled: true,
+              }}
+            />
+          </div>
+          <div className="my-6 border-b border-dashed border-b-grayCool25 opacity-10" />
+          <div className="font-sora text-sm text-gray300 opacity-10">
+            Unlocked Stake Balance: {contractStake.unlockRocks || 0} $ROCKS
+          </div>
+          <div className="pointer-events-none mt-3 border border-solid border-primary500 border-opacity-10 bg-grugAltCardBackground10 p-4 pr-6 opacity-50">
+            <div className="flex items-center gap-6">
+              <div className="flex-1">
+                <div className="font-sora text-xs font-light text-gray300">
+                  Amount to Unstake
+                </div>
+                <InputNumber
+                  type="number"
+                  className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-2xl font-extrabold text-white"
+                  value={unStakeAmount}
+                  size="large"
+                  onChange={changeUnStakeAmount}
+                  placeholder="0"
+                  controls={false}
+                />
+              </div>
+              <div className="flex items-center gap-6">
+                <a
+                  className={twJoin(
+                    "font-avara text-base font-bold text-primary600 underline hover:text-primary600",
+                    unstakeDisabled && "opacity-30"
+                  )}
+                  onClick={() =>
+                    !unstakeDisabled &&
+                    setUnStakeAmount(
+                      contractRocks.balanceOfRocks?.toString() || ""
+                    )
+                  }
+                >
+                  Max
+                </a>
+                <Button
+                  size="small"
+                  onClick={unStake}
+                  disabled={unstakeDisabled}
+                >
+                  Unstake
+                </Button>
+              </div>
             </div>
           </div>
-          <div className='p-6 bg-[#151011] border border-[#B546394D] col-span-2'>
-            <div className="font-['avara'] text-xl text-[#CA5D50]">stake and unstake</div>
-            <div className='divide-y divide-[#FCFCFD] divide-dashed'>
-              <div className='mt-6 grid grid-cols-2'>
-                <div>
-                  <div className='text-sm text-[#D0D5DD] mb-2 px-'>ROCKS Balance</div>
-                  <div className="font-['avara'] text-3xl">{changeToOneDecimal(contractRocks.balanceOfRocks) || '0'}</div>
-                </div>
-                <div className='text-right'>
-                  <ModalStakeAmount actionTitle='Stake' paddingButton={'py-2 px-8'}/>
-                </div>
-              </div>
-              <div className='mt-6'>
-                <div className='text-sm text-[#D0D5DD] mb-2 mt-6'>Unlock Stake Balance: {contractStake.unlockRocks || '0'} ROCKS</div>
-                <div className='p-4 bg-[#68121E1A]'>
-                  <div>
-                    Amount to Unstake
+        </div>
+        <div className="flex flex-1 flex-col border border-solid border-grugBorder bg-grugCardBackground p-6">
+          <div className="flex flex-1 flex-col opacity-10">
+            <div className="font-avara text-xl font-extrabold text-primary500">
+              Overview
+            </div>
+            <div className="mt-6 font-sora text-sm text-gray300">
+              $ROCKS Staked
+            </div>
+            <div className="mt-2 font-avara text-3xl font-extrabold text-white">
+              {formatNumber(contractStake.balances) || 0}
+            </div>
+            <div className="mt-auto flex flex-col gap-4">
+              <div className="flex items-center">
+                <div className="flex flex-1">
+                  <FontAwesomeIcon
+                    icon={faLock}
+                    className="mr-2 w-[18px] text-base text-gray600 "
+                  />
+                  <div className="font-sora text-xs font-light text-gray300">
+                    $ROCKS Locked:
                   </div>
-                  <div>
-                  <Input.Group compact>
-                    <InputNumber
-                      style={{ width: 'calc(100% - 200px)', border:'unset' }} 
-                      className="bg-[#68121d00] text-white"
-                      value={unStakeAmount} 
-                      size="large"
-                      onChange={changeUnStakeAmount}
-                      controls={false}
-                    />
-                    <Button
-                      size="large"
-                      style={{border:'unset'}}
-                      className="
-                        text-[#CA5D50] bg-[#68121E00] border-0 font-['avara'] 
-                        hover:text-[#CA5D50] hover:bg-[#68121E00] hover:border-[#CA5D504D]
-                        active:text-[#CA5D50] active:bg-[#68121E00] active:border-[#CA5D504D]
-                        focus:text-[#CA5D50] focus:bg-[#68121E00] focus:border-[#CA5D504D]
-                      "
-                      onClick={() => setUnStakeAmount(contractRocks.balanceOfRocks.toString())}
-                    >
-                      Max
-                    </Button>
-                    <Button
-                      style={{border:'unset'}} 
-                      className="
-                      bg-[#B54639] text-white font-['avara'] py-2 px-4
-                      hover:text-white hover:bg-[#B54639] hover:border-[#CA5D5000]
-                      active:text-white active:bg-[#B54639] active:border-[#CA5D5000]
-                      focus:text-white focus:bg-[#B54639] focus:border-[#CA5D5000]
-                      "
-                      onClick={unStake}
-                    >
-                      Unstake
-                    </Button>
-                  </Input.Group>
+                </div>
+                <div className="font-avara font-extrabold text-white">
+                  {contractStake.lockRocks || 0}
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="flex flex-1">
+                  <FontAwesomeIcon
+                    icon={faLock}
+                    className="mr-2 w-[18px] text-base text-primary600"
+                  />
+                  <div className="font-sora text-xs font-light text-gray300">
+                    $ROCKS Unlocked:
                   </div>
+                </div>
+                <div className="font-avara font-extrabold text-white">
+                  {contractStake.unlockRocks || 0}
                 </div>
               </div>
             </div>
           </div>
-          <div className="relative p-6 bg-[#151011] border border-[#B546394D]">
-            <div className="font-['avara'] text-xl text-[#CA5D50]">Overview</div>
-            <div className='mt-6'>
-              <div className='text-sm text-[#D0D5DD] mb-2'>$ROCKS Stake</div>
-              <div className="font-['avara'] text-3xl">{changeToOneDecimal(contractStake.balances) || 0}</div>
-            </div>
-            <div className='absolute bottom-6'>
-              <div className='mb-4 grid grid-cols-5'>
-                <FontAwesomeIcon icon={faLock} color="#475467"/>
-                <div className="col-span-3 text-xs text-[#D0D5DD]">$ROCKS Lock</div>
-                <div className="font-['avara'] text-xs">{contractStake.lockRocks || '0'}</div>
-              </div>
-              <div className='grid grid-cols-5'>
-                <FontAwesomeIcon icon={faLockOpen} color="#B54639"/>
-                <div className="col-span-3 text-xs text-[#D0D5DD]">$ROCKS Unlock</div>
-                <div className="font-['avara'] text-xs">{contractStake.unlockRocks || '0'}</div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Staking
+export default Staking;

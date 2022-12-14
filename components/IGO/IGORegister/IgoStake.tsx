@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic"
 
-const ModalStakeAmount = dynamic(() => import('../../Public/ModalStakeAmount'), {ssr: false})
+const ModalStakeAmountButton = dynamic(() => import('../../Public/ModalStakeAmountButton'), {ssr: false})
 
 const IgoStake = () => {
   return (
@@ -12,7 +12,7 @@ const IgoStake = () => {
         Staked min.3000 ROCKS to unlock. Staked token will be lock until 7 days after IGO ended
       </div>
       <div>
-        <ModalStakeAmount actionTitle={'Stake ROCKS'} paddingButton={'px-4 py-2'}/>
+        <ModalStakeAmountButton actionTitle={'Stake ROCKS'} paddingButton={'px-4 py-2'}/>
       </div>
     </div>
   )

@@ -1,35 +1,34 @@
 import { twMerge } from "tailwind-merge";
-import PropTypes from "prop-types";
 
-const Button = ({ size, children, className, disabled, onClick }: any) => {
+export interface IButton {
+  size?: "large" | "small";
+  disabled?: boolean;
+  children?: any;
+  className?: string;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+const Button = ({
+  size = "large",
+  children,
+  className,
+  disabled = false,
+  onClick,
+}: IButton) => {
   return (
     <button
       className={twMerge(
         "flex h-10 items-center rounded-sm bg-primary600 px-4 font-avara text-sm font-black text-white",
         "tablet:h-12 tablet:px-5 tablet:text-base",
         size === "small" && "tablet:h-9 tablet:text-sm",
-        disabled && "cursor-not-allowed bg-gray400",
+        disabled && "cursor-not-allowed opacity-30",
         className
       )}
-      onClick={!disabled ? onClick : null}
+      onClick={!disabled ? onClick : undefined}
     >
       {children}
     </button>
   );
-};
-
-Button.defaultProps = {
-  size: "large",
-  disabled: false,
-  onClick: () => null,
-};
-
-Button.propTypes = {
-  size: PropTypes.oneOf(["large", "small"]),
-  disabled: PropTypes.bool,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default Button;

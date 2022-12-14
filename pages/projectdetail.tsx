@@ -141,7 +141,7 @@ const ProjectDetail = () => {
             <img src={dataIGO.banner || ""} alt="banner" />
             <div className="projectDetailsGradient absolute bottom-0 h-full w-full" />
           </div>
-          <div className="relative mx-auto mt-[280px] box-content max-w-[1144px] px-6">
+          <div className="relative mx-auto mt-[280px] box-content max-w-screen-maxContent px-6">
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-2">
                 <IGOProfile

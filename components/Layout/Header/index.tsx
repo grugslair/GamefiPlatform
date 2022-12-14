@@ -75,7 +75,7 @@ const LINKS = [
   //   url: "/",
   // },
   {
-    label: "Stake ROCKS",
+    label: "Claim & Stake",
     url: "/staking",
   },
   {

@@ -59,6 +59,7 @@ module.exports = {
         desktop: '1280px',
         largeDesktop: '1440px',
         secondSectionFit: '1550px',
+        maxContent: '1144px',
       }
     },
   },

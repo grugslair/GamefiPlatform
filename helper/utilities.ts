@@ -60,9 +60,17 @@ export function numberWithCommas(x: any) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export function changeToOneDecimal (x: any) {
-  return Math.round(x * 10) / 10
-}
+export const formatNumber = (amount: any, decimals = 4) => {
+  const numberedAmount = Number(amount);
+  if (!amount || !numberedAmount) {
+    return 0;
+  }
+  const decimalSplit = numberedAmount.toString().split('.');
+  return [
+    decimalSplit[0]?.replace?.(/\B(?=(\d{3})+(?!\d))/g, ","),
+    decimalSplit[1]?.slice(0, decimals),
+  ].filter(Boolean).join('.');
+};
 
 export function grugDateFormat(unFomatDate:string) {
   const date = new Date(unFomatDate)
