@@ -34,19 +34,19 @@ const FOOTER_MENUS: {
       },
     ],
   },
-  // {
-  //   title: "Launchpad",
-  //   list: [
-  //     {
-  //       label: "Projects",
-  //       url: "/",
-  //     },
-  //     {
-  //       label: "Stake ROCKS",
-  //       url: "/staking",
-  //     },
-  //   ],
-  // },
+  {
+    title: "Launchpad",
+    list: [
+      // {
+      //   label: "Projects",
+      //   url: "/",
+      // },
+      {
+        label: "Claim & Stake",
+        url: "/rocks",
+      },
+    ],
+  },
   {
     title: "Help",
     list: [

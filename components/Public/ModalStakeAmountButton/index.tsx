@@ -100,9 +100,9 @@ const ModalStakeAmountButton = ({
         const result = await dispatch(contractStaking(weiAmount));
 
         if (result?.payload?.hash) {
-          await pushMessage(
-            "success",
+          pushMessage(
             {
+              status: "success",
               title: "Successfully stake token",
               description: "You’ve stake ROCKS",
             },
@@ -112,9 +112,9 @@ const ModalStakeAmountButton = ({
 
         //@ts-ignore
         if (result?.error?.message === "Rejected") {
-          await pushMessage(
-            "failed",
+          pushMessage(
             {
+              status: "error",
               title: "",
               description: result.payload.reason,
             },
@@ -136,9 +136,9 @@ const ModalStakeAmountButton = ({
         const approveResult = await dispatch(approveContractRocks(weiAmount));
 
         if (approveResult?.payload?.hash) {
-          await pushMessage(
-            "success",
+          pushMessage(
             {
+              status: "success",
               title: "",
               description: "Successfully approve token",
             },
@@ -148,9 +148,9 @@ const ModalStakeAmountButton = ({
 
         //@ts-ignore
         if (approveResult?.error?.message === "Rejected") {
-          await pushMessage(
-            "failed",
+          pushMessage(
             {
+              status: "error",
               title: "",
               description: approveResult.payload.reason,
             },
@@ -266,7 +266,7 @@ const ModalStakeAmountButton = ({
 
           <div>
             Dont have ROCKS? &nbsp;
-            <Link passHref href={"/staking"}>
+            <Link passHref href={"/rocks"}>
               <a className="font-['avara'] text-[#CA5D50]">Claim</a>
             </Link>
           </div>

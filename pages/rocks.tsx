@@ -52,9 +52,9 @@ const Staking: NextPage = () => {
     const result = await dispatch(contractUnstaking(weiAmount));
 
     if (result?.payload?.hash) {
-      await pushMessage(
-        "success",
+      pushMessage(
         {
+          status: "success",
           title: "",
           description: "Successfully unstake token",
         },
@@ -64,9 +64,9 @@ const Staking: NextPage = () => {
 
     //@ts-ignore
     if (result?.error?.message === "Rejected") {
-      await pushMessage(
-        "failed",
+      pushMessage(
         {
+          status: "error",
           title: "",
           description: result.payload.reason,
         },
@@ -94,7 +94,7 @@ const Staking: NextPage = () => {
           </div>
           <div className="mt-6 font-sora text-sm text-gray300">You own</div>
           <div className="mt-2 font-avara text-3xl font-extrabold text-white">
-            {wallet.balance || 0} Grug&apos;s
+            {formatNumber(wallet.balance || 0)} Grug&apos;s
           </div>
           <ModalClaimRocksButton
             actionTitle="Claim $ROCKS"
@@ -114,7 +114,7 @@ const Staking: NextPage = () => {
                 $ROCKS Balance
               </div>
               <div className="mt-2 font-avara text-3xl font-extrabold text-white">
-                {formatNumber(contractRocks.balanceOfRocks) || 0}
+                {formatNumber(contractRocks.balanceOfRocks || 0)}
               </div>
             </div>
             <ModalStakeAmountButton
@@ -129,7 +129,8 @@ const Staking: NextPage = () => {
           </div>
           <div className="my-6 border-b border-dashed border-b-grayCool25 opacity-10" />
           <div className="font-sora text-sm text-gray300 opacity-10">
-            Unlocked Stake Balance: {contractStake.unlockRocks || 0} $ROCKS
+            Unlocked Stake Balance:{" "}
+            {formatNumber(contractStake.unlockRocks || 0)} $ROCKS
           </div>
           <div className="pointer-events-none mt-3 border border-solid border-primary500 border-opacity-10 bg-grugAltCardBackground10 p-4 pr-6 opacity-50">
             <div className="flex items-center gap-6">
@@ -150,7 +151,7 @@ const Staking: NextPage = () => {
               <div className="flex items-center gap-6">
                 <a
                   className={twJoin(
-                    "font-avara text-base font-bold text-primary600 underline hover:text-primary600",
+                    "font-avara text-base font-extrabold text-primary600 underline hover:text-primary600",
                     unstakeDisabled && "opacity-30"
                   )}
                   onClick={() =>
@@ -182,7 +183,7 @@ const Staking: NextPage = () => {
               $ROCKS Staked
             </div>
             <div className="mt-2 font-avara text-3xl font-extrabold text-white">
-              {formatNumber(contractStake.balances) || 0}
+              {formatNumber(contractStake.balances || 0)}
             </div>
             <div className="mt-auto flex flex-col gap-4">
               <div className="flex items-center">
@@ -196,7 +197,7 @@ const Staking: NextPage = () => {
                   </div>
                 </div>
                 <div className="font-avara font-extrabold text-white">
-                  {contractStake.lockRocks || 0}
+                  {formatNumber(contractStake.lockRocks || 0)}
                 </div>
               </div>
               <div className="flex items-center">
@@ -210,7 +211,7 @@ const Staking: NextPage = () => {
                   </div>
                 </div>
                 <div className="font-avara font-extrabold text-white">
-                  {contractStake.unlockRocks || 0}
+                  {formatNumber(contractStake.unlockRocks || 0)}
                 </div>
               </div>
             </div>

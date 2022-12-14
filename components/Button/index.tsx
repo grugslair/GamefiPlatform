@@ -1,8 +1,12 @@
 import { twMerge } from "tailwind-merge";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
 export interface IButton {
   size?: "large" | "small";
   disabled?: boolean;
+  loading?: boolean;
   children?: any;
   className?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -13,6 +17,7 @@ const Button = ({
   children,
   className,
   disabled = false,
+  loading = false,
   onClick,
 }: IButton) => {
   return (
@@ -21,12 +26,23 @@ const Button = ({
         "flex h-10 items-center rounded-sm bg-primary600 px-4 font-avara text-sm font-black text-white",
         "tablet:h-12 tablet:px-5 tablet:text-base",
         size === "small" && "tablet:h-9 tablet:text-sm",
-        disabled && "cursor-not-allowed opacity-30",
+        (disabled || loading) && "cursor-not-allowed opacity-30",
         className
       )}
-      onClick={!disabled ? onClick : undefined}
+      onClick={!disabled && !loading ? onClick : undefined}
     >
-      {children}
+      {loading ? (
+        <FontAwesomeIcon
+          icon={faSpinner}
+          className={twMerge(
+            "text-2xl text-white",
+            size === "small" && "text-base"
+          )}
+          spin
+        />
+      ) : (
+        children
+      )}
     </button>
   );
 };

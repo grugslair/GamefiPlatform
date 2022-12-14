@@ -26,6 +26,7 @@ module.exports = {
         success300: "#74E17A",
         success600: "#1E9E3E",
         success700: "#15873D",
+        warning500: "#D88D1A",
         primary50: "#FFF2E8",
         primary100: "#FBE7D8",
         primary500: "#CA5D50",

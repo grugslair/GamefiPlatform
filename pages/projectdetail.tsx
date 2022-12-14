@@ -94,10 +94,14 @@ const ProjectDetail = () => {
       })
     ).then((resp) => {
       if (resp.payload.success) {
-        pushMessage("success", {
-          title: "",
-          description: "Successfully register project",
-        }, dispatch);
+        pushMessage(
+          {
+            status: "success",
+            title: "",
+            description: "Successfully register project",
+          },
+          dispatch
+        );
         dispatch(
           getProjectListById({
             id: projectId.toString(),

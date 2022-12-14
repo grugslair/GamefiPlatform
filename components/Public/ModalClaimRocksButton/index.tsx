@@ -1,22 +1,24 @@
-import {
-  faArrowAltCircleDown,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Divider, Input, InputNumber, Modal } from "antd";
-import { pushMessage } from "core/notification";
+import { InputNumber, Modal } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
-import { IContractClaim } from "store/contractClaim/contractClaim";
-import { claimNFT } from "store/contractClaim/thunk";
-import { useAppDispatch } from "../../../hooks/useStoreHooks";
-import { RootState } from "../../../store";
-import { IContractRocks } from "../../../store/contractRocks/contractRocks";
-import { contractGetBalance } from "../../../store/contractRocks/thunk";
-import { IContractStake } from "../../../store/contractStake/contractStake";
-import { getAllowance, getGasPrice } from "../../../store/contractStake/thunk";
-import { IwalletConnect } from "../../../store/wallet/walletType";
 
+// Redux
+import { useSelector } from "react-redux";
+import { RootState } from "store";
+import { claimNFT } from "store/contractClaim/thunk";
+import { contractGetBalance } from "store/contractRocks/thunk";
+import { IContractClaim } from "store/contractClaim/contractClaim";
+import { getAllowance, getGasPrice } from "store/contractStake/thunk";
+import { walletState } from "store/wallet/walletType";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown, faXmark } from "@fortawesome/free-solid-svg-icons";
+
+// Utils
+import { formatNumber } from "helper/utilities";
+import { useAppDispatch } from "hooks/useStoreHooks";
+import { pushMessage } from "core/notification";
+
+// Components
 import Button, { IButton } from "components/Button";
 
 interface IModalClaimRocksButtonProps {
@@ -30,18 +32,10 @@ const ModalClaimRocksButton = ({
 }: IModalClaimRocksButtonProps) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [stakeAmount, setStakeAmount] = useState("");
-  const contractRocks: IContractRocks = useSelector(
-    (state: RootState) => state.contractRocks
-  );
-  const contractStake: IContractStake = useSelector(
-    (state: RootState) => state.contractStake
-  );
   const contractClaim: IContractClaim = useSelector(
     (state: RootState) => state.contractClaim
   );
-  const wallet: IwalletConnect = useSelector(
-    (state: RootState) => state.wallet
-  );
+  const wallet: walletState = useSelector((state: RootState) => state.wallet);
   const [loadingClaim, setLoadingClaim] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
@@ -80,19 +74,21 @@ const ModalClaimRocksButton = ({
     dispatch(claimNFT(stakeAmount)).then((resp) => {
       if (resp.payload?.transactionHash) {
         pushMessage(
-          "success",
           {
-            title: "",
-            description: "you are successfully claim rocks",
+            status: "success",
+            title: "$ROCKS succesfully claimed",
+            description: `You've claimed ${formatNumber(
+              stakeAmount ? parseInt(stakeAmount, 10) * 3000 : 0
+            )} $ROCKS`,
           },
           dispatch
         );
       } else {
         pushMessage(
-          "failed",
           {
-            title: "",
-            description: resp.payload.reason,
+            status: "error",
+            title: "Failed to claim $ROCKS",
+            description: "Please wait a little bit then try again",
           },
           dispatch
         );
@@ -109,71 +105,78 @@ const ModalClaimRocksButton = ({
         {actionTitle}
       </Button>
       <Modal
-        width={400}
+        width={448}
         destroyOnClose
         open={isModalOpen}
         onCancel={handleCancel}
-        closeIcon={<FontAwesomeIcon icon={faXmark} color="white" />}
+        closable={false}
         footer={null}
-        className="p-0"
         bodyStyle={{
           padding: "0px",
         }}
       >
-        <div className="border border-[#B546394D] bg-[#151011] p-6 text-white">
-          <div className="mb-4 font-['avara'] text-lg">Claim $ROCKS</div>
-          <div>
-            Each Grug&nbsp;s could contain 3000 $ROCKS. Claimed $ROCKS will yet
-            to be staked
-          </div>
-          <div className="mb-2 text-[#98A2B3]">
-            Grug&nbsp;s eligible to claim: {contractClaim.unClaimNft.length}{" "}
-            Grug&nbsp;s
-          </div>
-          <div className="mb-6 border border-solid border-[#CA5D504D] bg-[#68121E1A] p-4">
-            <div>
-              <div>Amount of Grug&apos;s</div>
-              <Input.Group compact>
-                <InputNumber
-                  style={{ width: "calc(100% - 100px)", border: "unset" }}
-                  className="border border-[#CA5D504D] bg-[#68121E1A] text-white"
-                  value={stakeAmount}
-                  size="large"
-                  onChange={changeStakeAmount}
-                  controls={false}
-                />
-                <Button
-                  size="large"
-                  style={{ border: "unset" }}
-                  className="
-                    border border-[#CA5D504D] bg-[#68121E1A] font-['avara'] text-[#CA5D50] 
-                    hover:border-[#CA5D504D] hover:bg-[#68121E1A] hover:text-[#CA5D50]
-                    focus:border-[#CA5D504D] focus:bg-[#68121E1A] focus:text-[#CA5D50]
-                    active:border-[#CA5D504D] active:bg-[#68121E1A] active:text-[#CA5D50]
-                  "
-                  onClick={() =>
-                    setStakeAmount(contractClaim.unClaimNft.length.toString())
-                  }
-                >
-                  Max
-                </Button>
-              </Input.Group>
+        <div className="border border-solid border-grugBorder bg-grugCardBackground p-6">
+          <div className="flex items-center justify-between">
+            <div className="font-avara text-lg font-extrabold text-white">
+              Claim $ROCKS
             </div>
-            <Divider dashed>
-              <FontAwesomeIcon
-                icon={faArrowAltCircleDown}
-                color="#B54639"
-                size="xl"
+            <FontAwesomeIcon
+              icon={faXmark}
+              className="h-6 w-6 cursor-pointer text-xl text-gray500"
+              onClick={handleCancel}
+            />
+          </div>
+          <div className="text-sora mt-2 text-sm font-light text-white">
+            <span className="text-warning500">
+              {formatNumber(wallet.balance || 0)}/
+              {formatNumber(contractClaim.unClaimNft.length)} Grug&apos;s
+              claimed
+            </span>
+            .&nbsp;Each Grug contain 3,000 $ROCKS
+          </div>
+          <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4 pt-6">
+            <div className="text-sora text-xs font-light text-gray300">
+              Amount of Grug&apos;s
+            </div>
+            <div className="mt-1 flex items-center gap-6">
+              <InputNumber
+                type="number"
+                className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-xl font-extrabold text-white"
+                value={stakeAmount}
+                size="large"
+                onChange={changeStakeAmount}
+                placeholder="Type Here"
+                controls={false}
               />
-            </Divider>
-            <div>
-              <div>Estimated $ROCKS</div>
-              <div>{stakeAmount ? parseInt(stakeAmount, 10) * 3000 : 0}</div>
+              <a
+                className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
+                onClick={() =>
+                  setStakeAmount(contractClaim.unClaimNft.length.toString())
+                }
+              >
+                Max
+              </a>
+            </div>
+            <div className="my-2 flex items-center gap-2">
+              <div className="flex-1 border-b border-dashed border-b-grayCool25 opacity-10" />
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary600">
+                <FontAwesomeIcon
+                  icon={faArrowDown}
+                  className="text-base text-white"
+                />
+              </div>
+              <div className="flex-1 border-b border-dashed border-b-grayCool25 opacity-10" />
+            </div>
+            <div className="font-sora text-xs font-light text-gray300">
+              Estimated $ROCKS
+            </div>
+            <div className="mt-1 font-avara text-2xl font-extrabold text-white">
+              {stakeAmount ? formatNumber(parseInt(stakeAmount, 10) * 3000) : 0}
             </div>
           </div>
 
           <Button
-            className="mb-6 w-full bg-[#B54639] py-2 font-['avara'] text-base"
+            className="mt-6 w-full justify-center"
             disabled={disclaimer}
             loading={loadingClaim}
             onClick={() => claimNft()}
