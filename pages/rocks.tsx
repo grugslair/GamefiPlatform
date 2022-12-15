@@ -93,7 +93,7 @@ const Staking: NextPage = () => {
           </div>
           <div className="mt-6 font-sora text-sm text-gray300">You own</div>
           <div className="mt-2 font-avara text-3xl font-extrabold text-white">
-            {formatNumber(wallet.balance || 0)} Grug
+            {formatNumber(wallet.balance || 0)} Grug(s)
           </div>
           <ModalClaimRocksButton
             actionTitle="Claim $ROCKS"
