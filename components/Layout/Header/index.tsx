@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import Web3Modal from "web3modal";
@@ -248,7 +248,7 @@ const DesktopSocialMedias = () => {
 };
 
 const Header = () => {
-  const mobile = useMediaQuery("(max-width: 833px)");
+  const mobile = useMediaQuery("(max-width: 956px)");
   const [isMobile, setIsMobile] = useState(-1);
   const [scrolled, setScrolled] = useState(false);
   const wallet = useSelector((state: RootState) => state.wallet);
@@ -258,7 +258,7 @@ const Header = () => {
   let lastKnownScrollPosition = useRef(0);
   let ticking = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Fix hydration issue
     setIsMobile(mobile);
   }, [mobile]);

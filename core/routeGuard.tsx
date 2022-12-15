@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 import useWallet, { web3Modal } from "hooks/useWallet";
 
-export { RouteGuard };
+export default RouteGuard;
 
 const isDevBypassRoute = false;
 
