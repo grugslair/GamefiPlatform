@@ -47,6 +47,13 @@ const Staking: NextPage = () => {
     setUnStakeAmount(value);
   }
 
+  async function onClickAddRocksToken() {
+    const result = await dispatch(addRocksTokenToWallet());
+    if (result?.payload?.message === "noProvider") {
+      window.open("https://metamask.io/");
+    }
+  }
+
   async function unStake() {
     await dispatch(getGasPrice());
     const weiAmount = ethToWei(unStakeAmount?.toString() || "0");
@@ -89,9 +96,7 @@ const Staking: NextPage = () => {
         <Button
           className="ml-1 gap-2 border border-solid border-primary500 bg-grugCardBackground tablet:px-[14px]"
           size="small"
-          onClick={() => {
-            dispatch(addRocksTokenToWallet());
-          }}
+          onClick={onClickAddRocksToken}
         >
           <Image src={"/metamask.svg"} alt="metamask" width={18} height={18} />
           Add $ROCKS
