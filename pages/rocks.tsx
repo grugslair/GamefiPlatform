@@ -76,11 +76,10 @@ const Staking: NextPage = () => {
   }
 
   useEffect(() => {
-    // const { balance, tokenId } = wallet
     dispatch(getRocksFromNFT()).then(() => {
       dispatch(isNFTClaimed());
     });
-  }, [wallet.walletAddress]);
+  }, [wallet.balance]);
 
   return (
     <div className="mx-auto mt-40 box-content max-w-screen-maxContent px-6">
