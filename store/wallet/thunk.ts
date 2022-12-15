@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import { error } from "console"
 import { ethers } from 'ethers'
 import supportedChains from "../../helper/chainList"
-import { grugContractABI, grugContractAddress } from "../../helper/contract"
+import { grugContractABI, grugContractAddress, rocksContractAddress } from "../../helper/contract"
 import { validNetworkId } from "../../helper/environment"
 import { IwalletConnect, walletState } from "./walletType"
 
@@ -112,6 +112,29 @@ export const switchNetwork = createAsyncThunk(
         await addNetwork();
       }
       console.log(switchError)
+    }
+  }
+)
+
+export const addRocksTokenToWallet = createAsyncThunk(
+  'wallet/addRocksTokenToWallet',
+  async (arg, { getState }) => {
+    const { wallet }: any = getState()
+    try {
+      await wallet.provider.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', 
+          options: {
+            address: rocksContractAddress, 
+            symbol: 'ROCKS', 
+            decimals: 18, 
+            image: 'https://grugslair.fra1.digitaloceanspaces.com/rocks.png', 
+          },
+        },
+      });
+    } catch (addError) {
+       console.log(addError);
     }
   }
 )

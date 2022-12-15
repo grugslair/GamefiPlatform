@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { twJoin } from "tailwind-merge";
 import type { NextPage } from "next";
 import { InputNumber } from "antd";
+import Image from "next/image";
 
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { walletState } from "store/wallet/walletType";
-import { getRocksFromNFT } from "store/wallet/thunk";
+import { addRocksTokenToWallet, getRocksFromNFT } from "store/wallet/thunk";
 import { isNFTClaimed } from "store/contractClaim/thunk";
 import { IContractRocks } from "store/contractRocks/contractRocks";
 import { IContractStake } from "store/contractStake/contractStake";
@@ -83,8 +84,18 @@ const Staking: NextPage = () => {
 
   return (
     <div className="mx-auto mt-40 box-content max-w-screen-maxContent px-6">
-      <div className="font-avara text-5xl font-extrabold text-white">
+      <div className="flex justify-between font-avara text-5xl font-extrabold text-white">
         Claim & Stake
+        <Button
+          className="ml-1 gap-2 border border-solid border-primary500 bg-grugCardBackground tablet:px-[14px]"
+          size="small"
+          onClick={() => {
+            dispatch(addRocksTokenToWallet());
+          }}
+        >
+          <Image src={"/metamask.svg"} alt="metamask" width={18} height={18} />
+          Add $ROCKS
+        </Button>
       </div>
       <div className="mt-10 flex gap-4">
         <div className="flex flex-1 flex-col border border-solid border-grugBorder bg-grugCardBackground p-6">
