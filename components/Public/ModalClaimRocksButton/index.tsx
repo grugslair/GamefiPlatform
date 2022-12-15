@@ -128,8 +128,8 @@ const ModalClaimRocksButton = ({
           </div>
           <div className="text-sora mt-2 text-sm font-light text-white">
             <span className="text-warning500">
-              {formatNumber(wallet.balance || 0)}/
-              {formatNumber(contractClaim.unClaimNft.length)} Grug&apos;s
+              {formatNumber(contractClaim.unClaimNft.length)} / 
+              {formatNumber(wallet.balance || 0)} Grug&apos;s
               claimed
             </span>
             .&nbsp;Each Grug contain 3,000 $ROCKS
