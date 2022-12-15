@@ -35,7 +35,7 @@ const Banner = () => {
       </div>
       <div className="mt-6 font-sora text-2xl font-light text-grayCool300">
         Top tier quality project from the Blockchain. <br />
-        Exclusively hand picked for Grug&apos;s NFT Owner
+        Exclusively hand picked for Grug NFT Owner
       </div>
     </div>
   );

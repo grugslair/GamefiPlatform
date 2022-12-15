@@ -135,7 +135,7 @@ const ModalClaimRocksButton = ({
           </div>
           <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4 pt-6">
             <div className="text-sora text-xs font-light text-gray300">
-              Amount of Grug&apos;s
+              Amount of Grug(s)
             </div>
             <div className="mt-1 flex items-center gap-6">
               <InputNumber

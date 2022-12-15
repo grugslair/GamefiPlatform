@@ -85,7 +85,7 @@ const Requirement = ({
         </div>
         <div className="mb-3 text-sm font-['sora'] flex items-center">
           <Checkbox checked={haveNft} />
-          Own Grug&apos;s NFT
+          Own Grug(s) NFT
         </div>
         {showRocks && (
           <div className="text-sm font-['sora'] flex items-center">
