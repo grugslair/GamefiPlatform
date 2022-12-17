@@ -5,14 +5,19 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 
 import RouteGuard from "core/routeGuard";
-import MobileGuard from "core/mobileGuard";
+// import MobileGuard from "core/mobileGuard";
 import Notification from "core/notification";
 
 import store from "store/index";
 
 import Layout from "components/Layout";
 
+const MobileGuard = dynamic(() => import('core/mobileGuard'), {
+  ssr: false
+})
+
 import "styles/globals.css";
+import dynamic from "next/dynamic";
 
 config.autoAddCss = false;
 
