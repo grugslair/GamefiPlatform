@@ -128,10 +128,10 @@ const ModalClaimRocksButton = ({
           </div>
           <div className="text-sora mt-2 text-sm font-light text-white">
             <span className="text-warning500">
-              {formatNumber(contractClaim.unClaimNft.length)} / {formatNumber(wallet.balance || 0)} &nbsp; 
-              Grug(s) available to claim
+              {formatNumber(contractClaim.unClaimNft.length)}/{formatNumber(wallet.balance || 0)} 
+              &nbsp;Grug(s) available to claim
             </span>
-            .&nbsp;Each Grug contain 3,000 $ROCKS
+            .&nbsp;You can claim 3,000 $ROCKS per Grug owned
           </div>
           <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4 pt-6">
             <div className="text-sora text-xs font-light text-gray300">
