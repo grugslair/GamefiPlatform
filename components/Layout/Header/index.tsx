@@ -326,7 +326,7 @@ const Header = () => {
               ellipseAddress(wallet.walletAddress, 5)
             ) : (
               <>
-                Connect Wallet
+                Connect MetaMask
                 {/* <FontAwesomeIcon
                       icon={faChevronDown}
                       className="ml-2 -mt-1 w-[16px] text-white"

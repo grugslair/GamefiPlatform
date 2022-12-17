@@ -72,7 +72,7 @@ const ModalClaimRocksButton = ({
     setLoadingClaim(true);
     await dispatch(getGasPrice());
     dispatch(claimNFT(stakeAmount)).then((resp) => {
-      if (resp.payload?.receipt.transactionHash) {
+      if (resp.payload?.receipt?.transactionHash) {
         pushMessage(
           {
             status: "success",
