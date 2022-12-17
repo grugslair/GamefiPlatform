@@ -45,8 +45,10 @@ export const isNFTClaimed = createAsyncThunk(
       }
     }
 
-    const unClaimNft = result.filter(data => data.isClaim === false).sort()
+    const unClaimNft = result.filter(data => data.isClaim === false).sort((current, next) => current.tokenId - next.tokenId)
     const claimedNft = result.filter(data => data.isClaim === true)
+
+    console.log(unClaimNft)
 
     return {
       unClaimNft,
