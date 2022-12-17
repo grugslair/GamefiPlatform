@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,7 +17,7 @@ function MobileGuard({ children }: any) {
   const mobileSafePath = ["/reports"];
   const isCurrentPathMobileSafe = mobileSafePath.includes(path);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setIsMobile(mobile);
   }, [mobile]);
 

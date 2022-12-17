@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import Web3Modal from "web3modal";
@@ -258,7 +258,7 @@ const Header = () => {
   let lastKnownScrollPosition = useRef(0);
   let ticking = useRef(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Fix hydration issue
     setIsMobile(mobile);
   }, [mobile]);
