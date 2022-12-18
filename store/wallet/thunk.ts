@@ -121,7 +121,7 @@ export const switchNetwork = createAsyncThunk(
     try {
       await wallet.provider.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: ethers.utils.hexValue(validNetworkId) }],
+        params: [{ chainId: ethers.utils.hexValue(parseInt(validNetworkId || '1', 10)) }],
       });
     } catch (switchError: any) {
       if (switchError.code == 4902) {
