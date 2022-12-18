@@ -24,9 +24,11 @@ const contractClaim = createSlice({
     })
 
     builder.addCase(claimNFT.fulfilled, (state: IContractClaim, action: any) => {
-      if(action.payload.transactionHash) {
-        state.claimedNft.push(state.unClaimNft[0])
-        state.unClaimNft.shift()
+      if(action.payload.receipt.transactionHash) {
+        for(let token = 0; token < action.payload.amount; token++) {
+          state.claimedNft.push(state.unClaimNft[token])
+          state.unClaimNft.shift()
+        }
       }
     })
   }

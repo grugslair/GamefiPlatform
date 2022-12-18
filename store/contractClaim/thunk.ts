@@ -45,8 +45,10 @@ export const isNFTClaimed = createAsyncThunk(
       }
     }
 
-    const unClaimNft = result.filter(data => data.isClaim === false)
+    const unClaimNft = result.filter(data => data.isClaim === false).sort((current, next) => current.tokenId - next.tokenId)
     const claimedNft = result.filter(data => data.isClaim === true)
+
+    console.log(unClaimNft)
 
     return {
       unClaimNft,
@@ -95,7 +97,10 @@ export const claimNFT = createAsyncThunk(
 
       const receipt = await wallet.etherProvider.waitForTransaction(tx.hash, 1, 150000)
 
-      return receipt
+      return {
+        amount,
+        receipt
+      }
 
     } catch(err) {
       return rejectWithValue(err)

@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import Web3Modal from "web3modal";
@@ -258,7 +258,7 @@ const Header = () => {
   let lastKnownScrollPosition = useRef(0);
   let ticking = useRef(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // Fix hydration issue
     setIsMobile(mobile);
   }, [mobile]);
@@ -326,7 +326,7 @@ const Header = () => {
               ellipseAddress(wallet.walletAddress, 5)
             ) : (
               <>
-                Connect Wallet
+                Connect MetaMask
                 {/* <FontAwesomeIcon
                       icon={faChevronDown}
                       className="ml-2 -mt-1 w-[16px] text-white"
