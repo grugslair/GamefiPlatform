@@ -1,1 +1,1 @@
-export const validNetworkId = 5;
+export const validNetworkId = process.env.NEXT_PUBLIC_RELEASE_STAGE === "development" ? 5 : 1;
