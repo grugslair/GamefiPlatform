@@ -1,36 +1,36 @@
 interface IContractEnv {
   development: string,
-  prod: string
+  production: string
 }
 
 const grugContractAddressENV: IContractEnv = {
   development: "0xFB1Df877a99008cd006dFa653Ff2BAD77841f2C9",
-  prod: ''
+  production: ''
 } 
 
 const rocksContractAddressENV: IContractEnv = {
   development: "0xB36Dd853f10EdEc6A029A06AC3641cCe78537c0D",
-  prod: ''
+  production: ''
 } 
 
 const stakeContractAddressENV: IContractEnv = {
   development: "0x2d3b501831F7875A12a2dd603653039846BE102F",
-  prod: ''
+  production: ''
 } 
 
 const usdcContractAddressENV: IContractEnv = {
   development: "0x29Ae1568b11B268a2095f39290a9038489A62aA7",
-  prod: ''
+  production: ''
 } 
 
 const crowdFundingContractAddressENV: IContractEnv = {
   development: "0x8F617f24476334EF73dC2aD8De1F07cC00c9dE46",
-  prod: ''
+  production: ''
 } 
 
 const claimRocksContractAddressENV: IContractEnv = {
   development: "0x61890AedBcE32701CE9A1068D29ae1d1BB92C448",
-  prod: ''
+  production: ''
 } 
 
 export const grugContractAddress = grugContractAddressENV[process.env.NEXT_PUBLIC_RELEASE_STAGE as keyof IContractEnv || 'prod']
