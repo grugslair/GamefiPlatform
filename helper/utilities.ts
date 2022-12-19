@@ -20,7 +20,7 @@ export function getChainData(chainId?: number): IChainData | null {
     throw new Error('ChainId missing or not supported')
   }
 
-  const API_KEY = process.env.APIKEY_IF
+  const API_KEY = process.env.NEXT_PUBLIC_APIKEY_IF
 
   if (
     chainData.rpc_url.includes('infura.io') &&

@@ -1,1 +1,1 @@
-export const validNetworkId = process.env.CHAIN_ID
+export const validNetworkId = process.env.NEXT_PUBLIC_CHAIN_ID
