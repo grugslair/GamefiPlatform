@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,8 +20,6 @@ function MobileGuard({ children }: any) {
   useEffect(() => {
     setIsMobile(mobile);
   }, [mobile]);
-
-  console.log(isMobile);
 
   if (isMobile === -1) {
     return (
