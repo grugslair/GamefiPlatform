@@ -30,7 +30,7 @@ const crowdFundingContractAddressENV: IContractEnv = {
 
 const claimRocksContractAddressENV: IContractEnv = {
   development: "0x61890AedBcE32701CE9A1068D29ae1d1BB92C448",
-  production: ''
+  production: '0xfdede2f597D8da703b6cDAED660400664A7B235a'
 } 
 
 export const grugContractAddress = grugContractAddressENV[process.env.NEXT_PUBLIC_RELEASE_STAGE as keyof IContractEnv || 'prod']
