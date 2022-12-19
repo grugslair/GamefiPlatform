@@ -1,9 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { ILaunchPadState } from './launchpad'
-import { getProjectList, getReportList } from './thunk'
+import { getProjectList, getProjectListById, getReportList, registerProject } from './thunk'
 
 const initialState = {
-  projectList: [],
+  projects: {
+    loading: false,
+    list: [],
+  },
+  projectDetail: null,
+  loadingRegisterProject: false,
   reports: {
     loading: false,
     list: [],
@@ -14,11 +19,31 @@ const initialState = {
 const launchpad = createSlice({
   name: 'launchpad',
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getProjectList.pending, (state, action: any) => {
+      state.projects.loading = true;
+    })
     builder.addCase(getProjectList.fulfilled, (state, action: any) => {
-      state.projectList = action.payload
+      state.projects.loading = false;
+      state.projects.list = action.payload;
+    })
+    builder.addCase(getProjectList.rejected, (state, action) => {
+      state.projects.loading = false;
+      state.projects.list = [];
+    })
+
+    builder.addCase(getProjectListById.fulfilled, (state, action: any) => {
+      state.projectDetail = action.payload
+    })
+
+    builder.addCase(registerProject.pending, (state, action: any) => {
+      console.log('call register project')
+      state.loadingRegisterProject = true
+    })
+
+    builder.addCase(registerProject.fulfilled, (state, action: any) => {
+      state.loadingRegisterProject = false
     })
 
     builder.addCase(getReportList.pending, (state, action: any) => {

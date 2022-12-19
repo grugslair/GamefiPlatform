@@ -4,6 +4,7 @@ import { IContractRocks } from "../contractRocks/contractRocks";
 import { stakeContractABI, stakeContractAddress } from "../../helper/contract";
 import { IContractStake } from "./contractStake";
 import { weiToEth } from "helper/utilities";
+import { waitForDebugger } from "inspector";
 
 export const initiateStakingContract = createAsyncThunk(
   'contract/initiateStakeContract',
@@ -105,11 +106,11 @@ export const contractStaking = createAsyncThunk(
         from: wallet.walletAddress, // must match user's active address.
         value: '0x00', // Only required to send ether to the recipient from the initiating external account.
         data: dataIStake, // Optional, but used for defining smart contract creation and interaction.
-        chainId: '0x4', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
-      }
+        chainId: '0x5', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+    }
 
       const ts = await wallet.etherProvider.getSigner().sendTransaction(transactionParametersStake)
-
+      ts.wait()
       return ts
     } catch(err) {
       return rejectWithValue(err)
@@ -139,7 +140,7 @@ export const contractUnstaking = createAsyncThunk(
         from: wallet.walletAddress, // must match user's active address.
         value: '0x00', // Only required to send ether to the recipient from the initiating external account.
         data: dataIStake, // Optional, but used for defining smart contract creation and interaction.
-        chainId: '0x4', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+        chainId: '0x5', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
       }
 
       const ts = await wallet.etherProvider.getSigner().sendTransaction(transactionParametersStake)

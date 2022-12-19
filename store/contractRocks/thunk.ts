@@ -42,12 +42,18 @@ export const approveContractRocks = createAsyncThunk(
     const { contractStake, wallet }:any = getState()
 
     const { gasPrice } = contractStake as IContractStake
+
+    let dataIrocks
     
     try {
 
       const iRocks = new ethers.utils.Interface(rocksContractABI)
 
-      const dataIrocks = iRocks.encodeFunctionData("approve", [stakeContractAddress, amount])
+      if(amount >= '100000000000000000000000') {
+        dataIrocks = iRocks.encodeFunctionData("approve", [stakeContractAddress, amount])
+      } else {
+        dataIrocks = iRocks.encodeFunctionData("approve", [stakeContractAddress, '100000000000000000000000'])
+      }
     
       const transactionParameters = {
         gasPrice: gasPrice._hex, // customizable by user during MetaMask confirmation.
@@ -55,10 +61,14 @@ export const approveContractRocks = createAsyncThunk(
         from: wallet.walletAddress, // must match user's active address.
         value: '0x00', // Only required to send ether to the recipient from the initiating external account.
         data: dataIrocks, // Optional, but used for defining smart contract creation and interaction.
-        chainId: '0x4', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
+        chainId: '0x5', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
       };
 
       const tx = await wallet.etherProvider.getSigner().sendTransaction(transactionParameters)
+
+      const receipt = await wallet.etherProvider.waitForTransaction(tx.hash, 1, 150000)
+
+      console.log(receipt)
 
       return tx
 

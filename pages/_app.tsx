@@ -1,28 +1,45 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-import store from '../store/index'
-import { Provider } from 'react-redux'
-import Layout from '../components/Layout'
-import { config } from '@fortawesome/fontawesome-svg-core'
-import '@fortawesome/fontawesome-svg-core/styles.css'
-import { notification } from 'antd'
+import { notification } from "antd";
+import { Provider } from "react-redux";
+import type { AppProps } from "next/app";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
 
-config.autoAddCss = false
+import RouteGuard from "core/routeGuard";
+// import MobileGuard from "core/mobileGuard";
+import Notification from "core/notification";
+
+import store from "store/index";
+
+import Layout from "components/Layout";
+
+const MobileGuard = dynamic(() => import('core/mobileGuard'), {
+  ssr: false
+})
+
+import "styles/globals.css";
+import dynamic from "next/dynamic";
+
+config.autoAddCss = false;
 
 notification.config({
   maxCount: 5,
-  duration: 1000000,
-})
+  duration: 3,
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
-
   return (
     <Provider store={store}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Notification>
+        <Layout>
+          <RouteGuard>
+            <MobileGuard>
+              <Component {...pageProps} />
+            </MobileGuard>
+          </RouteGuard>
+        </Layout>
+      </Notification>
     </Provider>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

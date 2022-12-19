@@ -1,74 +1,131 @@
-import type { NextPage } from 'next'
-import { useSelector } from 'react-redux'
-import Banner from '../components/Public/Banner'
-import Project from '../components/Landing/Project'
-import { RootState } from '../store'
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { getProjectList } from '../store/launchpad/thunk'
-import { useAppDispatch } from '../hooks/useStoreHooks'
+import { Tabs } from "antd";
+import { useEffect } from "react";
+import type { NextPage } from "next";
 
+// Redux
+import { useSelector } from "react-redux";
+import { RootState } from "store/index";
+import { getProjectList } from "store/launchpad/thunk";
+import type { IProjectList } from "store/launchpad/launchpad";
 
+// Fontawesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
+// Hooks
+import { useAppDispatch } from "hooks/useStoreHooks";
+
+// Components
+import Banner from "components/Public/Banner";
+import Project from "components/Landing/Project";
+
+import styles from "styles/Projects.module.css";
+
+interface IGridWrapper {
+  projects: IProjectList[];
+  loading: boolean;
+}
+
+const GridWrapper = ({ projects, loading }: IGridWrapper) => {
+  if (!projects.length) {
+    return (
+      <div className="flex h-96 flex-col items-center justify-center">
+        {loading ? (
+          <FontAwesomeIcon
+            icon={faSpinner}
+            className="text-6xl text-primary600"
+            spin
+          />
+        ) : (
+          <>
+            <div className="font-avara text-3xl font-extrabold text-white">
+              No available projects
+            </div>
+            <div className="mt-2 text-center font-sora text-xl font-light text-grayCool300">
+              Projects will be shown here when it&quot;s available.
+              <br />
+              Join our Discord to be the first to know
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
+  return (
+    <div className="grid grid-cols-2 gap-x-4 gap-y-14">
+      {projects.map((project, i) => (
+        <Project key={i} dataproject={project} />
+      ))}
+    </div>
+  );
+};
 
 const Landing: NextPage = () => {
-  const wallet  = useSelector((state: RootState) => state.wallet)
-  const launchpad = useSelector((state: RootState) => state.launchpad)
-  const dispatch = useAppDispatch()
-  const router = useRouter()
-
-
-  useEffect(() => {
-    if(wallet.balance === 0 || wallet.balance === null) {
-      router.push('/verify')
-    }
-  }, [wallet])
+  const { loading, list } = useSelector(
+    (state: RootState) => state.launchpad.projects
+  );
+  const wallet = useSelector((state: RootState) => state.wallet);
+  const dispatch = useAppDispatch();
+  const isLoading = loading || !wallet.walletAddress;
 
   useEffect(() => {
-    dispatch(getProjectList())
-  }, [])
+    wallet.walletAddress &&
+      dispatch(getProjectList({ walletAddress: wallet.walletAddress }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wallet.walletAddress]);
+
+  const items = [
+    {
+      label: "All",
+      key: "all",
+      children: <GridWrapper projects={list} loading={isLoading} />,
+    },
+    {
+      label: "Ongoing",
+      key: "ongoing",
+      children: (
+        <GridWrapper
+          projects={list.filter((e) => e.status === "on_going")}
+          loading={isLoading}
+        />
+      ),
+    },
+    {
+      label: "Upcoming",
+      key: "upcoming",
+      children: (
+        <GridWrapper
+          projects={list.filter((e) => e.status === "upcoming")}
+          loading={isLoading}
+        />
+      ),
+    },
+    {
+      label: "Participated",
+      key: "participated",
+      children: (
+        <GridWrapper
+          projects={list.filter((e) => e.status === "participate")}
+          loading={isLoading}
+        />
+      ),
+    },
+  ];
 
   return (
     <div>
-
       <div>
         <Banner />
-        <>
-          <div className="my-4 mx-[148px]">
-            <ul className="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-                <li className="mr-2" role="presentation">
-                    <button className="inline-block p-4 rounded-t-lg border-b-2 font-['avara']" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">
-                      Ongoing
-                    </button>
-                </li>
-                <li className="mr-2" role="presentation">
-                    <button className="font-['avara'] inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
-                      Upcoming
-                    </button>
-                </li>
-                <li className="mr-2" role="presentation">
-                    <button className="font-['avara'] inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="settings-tab" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">
-                      Ended
-                    </button>
-                </li>
-                <li role="presentation">
-                    <button className="font-['avara'] inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="contacts-tab" data-tabs-target="#contacts" type="button" role="tab" aria-controls="contacts" aria-selected="false">
-                      Participate
-                    </button>
-                </li>
-            </ul>
-          </div>
-          <div className="relative">
-            <div className='mx-[148px] grid gap-4 grid-cols-2 pb-5'>
-              {launchpad.projectList.map((project, index) => (
-                <Project key={index} dataproject={project} />
-              ))}
-            </div>
-          </div>
-        </>
-        
+        <div className="mx-auto -mt-24 box-content max-w-screen-maxContent px-6">
+          <Tabs
+            items={items}
+            className={styles.ProjectsTab}
+            tabBarGutter={48}
+          />
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Landing
+export default Landing;

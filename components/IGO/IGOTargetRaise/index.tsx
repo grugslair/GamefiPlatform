@@ -2,8 +2,18 @@ import { faChevronRight, faListCheck } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { Progress } from "antd"
+import useWallet from "hooks/useWallet";
+import { useMemo } from "react";
 
-const IGOTargetRaise = ({data}: any) => {
+const IGOTargetRaise = ({data, handleOpenRequirement}: any) => {
+  const {haveWallet, haveNft, haveStakeRocks} = useWallet()
+
+  const countRequirement = useMemo(() => {
+    const requirement = [haveWallet, haveNft, haveStakeRocks]
+
+    return requirement.filter((value) => value === true).length
+  }, [haveWallet, haveNft, haveStakeRocks])
+
   return (
     <>
       <div className="border border-[#B546394D] p-6 bg-[#151011]">
@@ -25,10 +35,10 @@ const IGOTargetRaise = ({data}: any) => {
               {data.publicSaleTokenSold} / {data.targetAmount} ${data.tokenSymbol}
             </div>
           </div>
-          <button className="p-3 w-full border border-[#CA5D504D] bg-[#68121E1A]">
+          <button onClick={handleOpenRequirement} className="p-3 w-full border border-[#CA5D504D] bg-[#68121E1A]">
             <FontAwesomeIcon icon={faListCheck} />
             <span className="ml-2 font-['avara'] text-xs">
-              (2/3) Requirement Meet
+              ({countRequirement}/3) Requirement Meet
             </span>
             <FontAwesomeIcon className="ml-2" icon={faChevronRight} />
           </button>

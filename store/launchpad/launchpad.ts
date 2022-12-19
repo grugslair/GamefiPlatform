@@ -45,7 +45,12 @@ export interface IProjectChain {
   updatedAt: string
 }
 
-export interface IProject {
+export interface IProjectDetail {
+  isRegistered: boolean
+  project: IProjectList
+} 
+
+export interface IProjectList {
   id: number
   chainId: number // ini di polygon
   vestingRuleId: number // ada tambahan object label
@@ -70,6 +75,7 @@ export interface IProject {
   discordUrl: string | null
   twitterUrl: string | null
   mediumUrl: string | null
+  telegramUrl: string | null
   officialUrl: string | null
   createdAt: string
   updatedAt: string 
@@ -78,15 +84,21 @@ export interface IProject {
   Chain: IProjectChain
 }
 
+export interface IProject {
+  loading: boolean
+  list: IProjectList[]
+}
+
 export interface IReportList {
   createdAt: string
   deletedAt: string
   updatedAt: string 
   id: number
   imageUrl: string
-  pdfUrl: string
+  pdfUrl?: string
   subtitle: string
   title: string
+  type: string
 }
 
 export interface IReport {
@@ -95,6 +107,26 @@ export interface IReport {
 }
 
 export interface ILaunchPadState {
-  projectList: IProject[]
+  projects: IProject
+  projectDetail: IProjectDetail | null
+  loadingRegisterProject: boolean
   reports: IReport
+}
+
+export interface IRegisterProjectPayload {
+  projectId: string | string[],
+  walletAddress: string
+}
+
+export interface IGetReportList {
+  haveNft?: boolean
+}
+
+export interface IProjectListPayload {
+  walletAddress: string
+}
+
+export interface IProjectListByIdPayload {
+  id: string
+  walletAddress: string
 }

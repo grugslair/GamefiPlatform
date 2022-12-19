@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import { getReturnValues } from "helper/utilities";
+import { useEffect, useState } from "react";
 
 const useCountDown = () => {
-  const [countDown, setCountDown] = useState()
+  const [countDown, setCountDown] = useState<number[]>();
 
-  const [endDate, setEndDate] = useState()
+  const [endDate, setEndDate] = useState(0);
 
-  useEffect(() => {
-    
-
-  }, [countDown])
-
-  function initialEndDate(date: any) {
-    
-
+  function handleSetEndDate(endDate: number) {
+    setEndDate(endDate);
+    setCountDown(getCountDownValues(endDate));
   }
 
-  const calculateTheTime = (countDown:number) => {
-    // calculate time left
-    console.log(countDown)
-    const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (countDown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
-  
-    return [days, hours, minutes, seconds];
+  function getCountDownValues(date: number) {
+    return getReturnValues(date - new Date().getTime());
+  }
+
+  useEffect(() => {
+    if (new Date().getTime() < endDate) {
+      setTimeout(() => {
+        setCountDown(getCountDownValues(endDate));
+      }, 1000);
+    } else {
+      setCountDown(undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countDown]);
+
+  return {
+    countDown,
+    handleSetEndDate,
   };
+};
 
-  return
-}
-
-export default useCountDown
+export default useCountDown;

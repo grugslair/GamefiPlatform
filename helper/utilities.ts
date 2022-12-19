@@ -1,4 +1,10 @@
-import { BigNumber, ethers } from "ethers"
+import { ethers } from "ethers"
+
+import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
+import { faGlobe } from "@fortawesome/free-solid-svg-icons"
+
+import { IProjectList } from "store/launchpad/launchpad"
+
 import { IChainData } from "../types/chainList"
 import supportedChains from "./chainList"
 
@@ -32,11 +38,12 @@ export function getChainData(chainId?: number): IChainData | null {
   return chainData
 }
 
-export function ellipseAddress(address = '', width = 10): string {
+export function ellipseAddress(address = '', width = 5): string {
+  const normalizedWidth = width >= 2 ? width : 2;
   if (!address) {
     return ''
   }
-  return `${address.slice(0, width)}...${address.slice(-width)}`
+  return `${address.slice(0, normalizedWidth)}...${address.slice(-(normalizedWidth - 1))}`
 }
 
 export function ethToWei(eth: string) {
@@ -50,16 +57,24 @@ export function weiToEth(wei: string) {
 }
 
 export function numberWithCommas(x: any) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export function changeToOneDecimal (x: any) {
-  return Math.round(x * 10) / 10
-}
+export const formatNumber = (amount: any, decimals = 4) => {
+  const numberedAmount = Number(amount);
+  if (!amount || !numberedAmount) {
+    return 0;
+  }
+  const decimalSplit = numberedAmount.toString().split('.');
+  return [
+    decimalSplit[0]?.replace?.(/\B(?=(\d{3})+(?!\d))/g, ","),
+    decimalSplit[1]?.slice(0, decimals),
+  ].filter(Boolean).join('.');
+};
 
 export function grugDateFormat(unFomatDate:string) {
   const date = new Date(unFomatDate)
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   const formatTime = (time: number) => {
     if (time < 10) {
@@ -68,13 +83,12 @@ export function grugDateFormat(unFomatDate:string) {
     return time
   }
 
-  const formatedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} - ${formatTime(date.getHours())} : ${formatTime(date.getMinutes())}`
+  const formatedDate = `${date.getDate()} ${months[date.getMonth()]}'${date.getFullYear()} - ${formatTime(date.getHours())} : ${formatTime(date.getMinutes())}`
   return formatedDate
 }
 
 export const getReturnValues = (countDown:number) => {
   // calculate time left
-  console.log(countDown)
   const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
   const hours = Math.floor(
     (countDown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
@@ -84,3 +98,37 @@ export const getReturnValues = (countDown:number) => {
 
   return [days, hours, minutes, seconds];
 };
+
+export const encodeUrl = (pdfUrl: string) => {
+  const encode = (data: string) => {
+    return Buffer.from(data).toString("base64");
+  };
+  return encode(
+    "141r6ru6" + encode("541ty6ru6" + pdfUrl + "541ty141r") + "6ru6541ty"
+  )
+}
+
+export const getSocialMedias = (data: IProjectList) => {
+  return [
+    {
+      url: data?.twitterUrl || "",
+      icon: faTwitter,
+    },
+    {
+      url: data?.mediumUrl || "",
+      icon: faMedium,
+    },
+    {
+      url: data?.discordUrl || "",
+      icon: faDiscord,
+    },
+    {
+      url: data?.telegramUrl || "",
+      icon: faTelegram,
+    },
+    {
+      url: data?.officialUrl || "",
+      icon: faGlobe,
+    },
+  ].filter(e => !!e.url)
+}

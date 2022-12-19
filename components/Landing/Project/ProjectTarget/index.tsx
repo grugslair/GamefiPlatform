@@ -1,67 +1,86 @@
-import { Progress } from "antd"
-import { getReturnValues, grugDateFormat, numberWithCommas } from "helper/utilities"
-import { useEffect, useMemo } from "react"
-import { IProjectTarget } from "../type"
-import * as moment from 'moment'
+import { Progress } from "antd";
+import { memo, useMemo } from "react";
+import isEqual from "lodash/isEqual";
 
-const ProjectTarget = ({projectTarget}: any) => {
+import { grugDateFormat, numberWithCommas } from "helper/utilities";
+import { theme } from "tailwind.config";
 
+import styles from "./ProjectTarget.module.css";
+
+const ProjectTarget = ({ projectTarget }: any) => {
   const startDate = useMemo(() => {
-    
-    return grugDateFormat(projectTarget.startDate)
-  }, [projectTarget.startDate])
-
-  useEffect(() => {
-    const date = new Date(projectTarget.startDate)
-    console.log(date)
-    console.log(new Date())
-    console.log(date.getTime())
-    const countDown = new Date().getTime() - date.getTime()
-
-    console.log(getReturnValues(countDown))
-
-  }, [])
+    return grugDateFormat(projectTarget.startDate);
+  }, [projectTarget.startDate]);
 
   return (
-    <div>
-      <div className="text-xs mb-1">
+    <>
+      <div className="mt-10 font-sora text-xs font-light text-white">
         Target Raise
       </div>
-      <div className="font-['avara'] text-2xl">
+      <div className="font-extraBold mt-1 font-avara text-2xl font-extrabold text-white">
         ${numberWithCommas(projectTarget.targetRaise)}
       </div>
-      <div className="mb-4">
-        <Progress strokeColor="#1E9E3E" percent={(projectTarget.publicSaleTokenSold / projectTarget.targetRaise) * 100} showInfo={false} />
-        <div className="relative h-5">
-          <div className="absolute left-0 text-[#98A2B3] text-xs">
-           Progress: {(projectTarget.publicSaleTokenSold / projectTarget.targetRaise) * 100} %
-          </div>
-          <div className="absolute right-0 text-[#98A2B3] text-xs">
-            {numberWithCommas(projectTarget.publicSaleTokenSold)}/{numberWithCommas(projectTarget.targetRaise)} ${projectTarget.tokenSymbol}
-          </div>
-
+      <Progress
+        strokeColor={theme.extend.colors.success600}
+        trailColor={`${theme.extend.colors.gray400}33`} // 20% opacity
+        percent={
+          (projectTarget.publicSaleTokenSold / projectTarget.targetRaise) * 100
+        }
+        className={styles.ProgressBar}
+        showInfo={false}
+      />
+      <div className="-mt-0.5 flex">
+        <div className="flex-1 font-sora text-xs font-light text-gray400">
+          Progress:{" "}
+          {(projectTarget.publicSaleTokenSold / projectTarget.targetRaise) *
+            100}{" "}
+          %
+        </div>
+        <div className="font-sora text-xs font-light text-gray400">
+          {numberWithCommas(projectTarget.publicSaleTokenSold)}/
+          {numberWithCommas(projectTarget.targetRaise)} $
+          {projectTarget.tokenSymbol}
         </div>
       </div>
-      <div>
-        <div className="grid grid-cols-2 text-xs py-3 border-b">
-          <div className="text-left text-[#D0D5DD]">Rate</div>
-          <div className="text-right font-[300] font-['avara']">1 {projectTarget.currency.symbol} = {1 / projectTarget.rate} ${projectTarget.tokenSymbol}</div>
+      <div className="mt-8 flex flex-col gap-6">
+        <div className="flex">
+          <div className="w-44 font-sora text-base font-light text-gray300">
+            Rate
+          </div>
+          <div className="flex-1 text-right font-avara text-base font-bold text-white">
+            1 ${projectTarget.currency.symbol} = {1 / projectTarget.rate} $
+            {projectTarget.tokenSymbol}
+          </div>
         </div>
-        <div className="grid grid-cols-2 text-xs py-3 border-b">
-          <div className="text-left text-[#D0D5DD]">Min. Staked ROCKS</div>
-          <div className="text-right font-[300] font-['avara']">{projectTarget.minRocks} $ROCKS</div>
+        <div className="flex">
+          <div className="w-44 font-sora text-base font-light text-gray300">
+            Min. Staked ROCKS
+          </div>
+          <div className="flex-1 text-right font-avara text-base font-bold text-white">
+            {projectTarget.minRocks} $ROCKS
+          </div>
         </div>
-        <div className="grid grid-cols-2 text-xs py-3 border-b">
-          <div className="text-left text-[#D0D5DD]">Start Date (GMT+7)</div>
-          <div className="text-right font-[300] font-['avara']">{startDate}</div>
+        <div className="flex">
+          <div className="w-44 font-sora text-base font-light text-gray300">
+            Start Date (GMT+7)
+          </div>
+          <div className="flex-1 text-right font-avara text-base font-bold text-white">
+            {startDate}
+          </div>
         </div>
-        <div className="grid grid-cols-2 text-xs pb-12 pt-3">
-          <div className="text-left text-[#D0D5DD]">Vesting</div>
-          <div className="text-right font-[300] font-['avara']">{projectTarget.vesting}</div>
+        <div className="flex">
+          <div className="w-44 font-sora text-base font-light text-gray300">
+            Vesting
+          </div>
+          <div className="flex-1 text-right font-avara text-base font-bold text-white">
+            {projectTarget.vesting}
+          </div>
         </div>
       </div>
-    </div>
-  )
-}
+    </>
+  );
+};
 
-export default ProjectTarget
+export default memo(ProjectTarget, (prevProps, nextProps) =>
+  isEqual(prevProps, nextProps)
+);

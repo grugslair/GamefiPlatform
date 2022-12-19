@@ -31,6 +31,7 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
           <title>Grugs Lair</title>
+
           <meta
             name="description"
             content="Grug is a contrarian by nature, the first prisoner emerging from the cave and venturing into the unknown"
