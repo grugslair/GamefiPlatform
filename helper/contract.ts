@@ -5,7 +5,7 @@ interface IContractEnv {
 
 const grugContractAddressENV: IContractEnv = {
   development: "0xFB1Df877a99008cd006dFa653Ff2BAD77841f2C9",
-  production: ''
+  production: '0xFA9Ed22ca5D329eCaee9347F72E18C1fC291471b'
 } 
 
 const rocksContractAddressENV: IContractEnv = {
