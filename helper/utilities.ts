@@ -22,6 +22,8 @@ export function getChainData(chainId?: number): IChainData | null {
 
   const API_KEY = process.env.NEXT_PUBLIC_APIKEY_IF
 
+  console.log(API_KEY)
+
   if (
     chainData.rpc_url.includes('infura.io') &&
     chainData.rpc_url.includes('%API_KEY%') &&
