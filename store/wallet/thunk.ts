@@ -89,7 +89,7 @@ export const addNetwork = createAsyncThunk(
   async (arg, { getState }) => {
     const { wallet }: any = getState();
     const requiredNetwork = supportedChains.find(
-      (e) => e.chain_id === validNetworkId
+      (e) => e.chain_id === parseInt(validNetworkId || '1', 10)
     );
     try {
       if (!requiredNetwork) throw new Error("No required network found");
@@ -121,7 +121,7 @@ export const switchNetwork = createAsyncThunk(
     try {
       await wallet.provider.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: ethers.utils.hexValue(validNetworkId) }],
+        params: [{ chainId: ethers.utils.hexValue(parseInt(validNetworkId || '1', 10)) }],
       });
     } catch (switchError: any) {
       if (switchError.code == 4902) {
