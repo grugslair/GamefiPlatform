@@ -10,6 +10,7 @@ import { RootState } from "store";
 import { resetWalletAction, setLoadingAction } from "store/wallet/actions";
 import { getUSDCBalance, initiateUSDCContract } from "store/contractUSDC/thunk";
 import { initiateContractClaim } from "store/contractClaim/thunk";
+import { AccessControlTranslationFilterSensitiveLog } from "@aws-sdk/client-s3";
 
 const providerOptions = {};
 
@@ -57,11 +58,12 @@ const useWallet = () => {
   const connectWallet = useCallback(
     async function () {
       dispatch(setLoadingAction(true))
-      await dispatch(walletConnect(web3Modal));
-
-      if (chainId != validNetworkId) {
-        await dispatch(switchNetwork());
-      }
+      await dispatch(walletConnect(web3Modal)).then(async(resp: any) => {
+        console.log({validNetworkId, resp})
+        if (resp.payload?.chainId != validNetworkId) {
+          await dispatch(switchNetwork());
+        }
+      });
 
       await dispatch(getGrugBalance());
 

@@ -38,7 +38,6 @@ const launchpad = createSlice({
     })
 
     builder.addCase(registerProject.pending, (state, action: any) => {
-      console.log('call register project')
       state.loadingRegisterProject = true
     })
 

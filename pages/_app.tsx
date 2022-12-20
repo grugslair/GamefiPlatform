@@ -13,6 +13,7 @@ import store from "store/index";
 import Layout from "components/Layout";
 
 import "styles/globals.css";
+import { useEffect } from "react";
 
 config.autoAddCss = false;
 
@@ -22,6 +23,11 @@ notification.config({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_RELEASE_STAGE)
+    console.log(process.env.NEXT_PUBLIC_APIKEY_IF)
+  }, [])
+
   return (
     <Provider store={store}>
       <Notification>
