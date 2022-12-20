@@ -59,8 +59,7 @@ const useWallet = () => {
     async function () {
       dispatch(setLoadingAction(true))
       await dispatch(walletConnect(web3Modal)).then(async(resp: any) => {
-        console.log({validNetworkId, resp})
-        if (resp.payload?.chainId != validNetworkId) {
+        if (resp.payload?.chainId != parseInt(validNetworkId || '1', 10)) {
           await dispatch(switchNetwork());
         }
       });

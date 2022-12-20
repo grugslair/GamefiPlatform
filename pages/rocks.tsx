@@ -89,11 +89,6 @@ const Staking: NextPage = () => {
     });
   }, [wallet.balance]);
 
-  useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_RELEASE_STAGE)
-    console.log(process.env.NEXT_PUBLIC_APIKEY_IF)
-  }, [])
-
   return (
     <div className="mx-auto mt-40 box-content max-w-screen-maxContent px-6">
       <div className="flex justify-between font-avara text-5xl font-extrabold text-white">
