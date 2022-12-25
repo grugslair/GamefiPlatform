@@ -241,7 +241,7 @@ const ModalStakeAmountButton = ({
               checked={disclaimer}
               onChange={checkDisclaimer}
             >
-              By checking this box, you’ll agree to lock the token until 7 days
+              By checking this box, you’ll agree to lock the token until 30 days
               after IGO ended
             </Checkbox>
           </div>
