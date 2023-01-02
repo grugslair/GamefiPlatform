@@ -143,7 +143,7 @@ const ModalClaimRocksButton = ({
                 className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-xl font-extrabold text-white"
                 value={stakeAmount}
                 size="large"
-                onChange={changeStakeAmount}
+                onChange={() => changeStakeAmount}
                 placeholder="Type Here"
                 controls={false}
               />
