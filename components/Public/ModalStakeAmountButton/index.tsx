@@ -216,7 +216,7 @@ const ModalStakeAmountButton = ({
                 className="border border-[#CA5D504D] bg-[#68121E1A] text-white"
                 value={stakeAmount}
                 size="large"
-                onChange={changeStakeAmount}
+                onChange={() => changeStakeAmount}
                 controls={false}
               />
               <Button
