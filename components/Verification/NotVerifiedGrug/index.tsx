@@ -14,6 +14,7 @@ import useWallet from "hooks/useWallet";
 
 // Components
 import Button from "components/Button";
+import { useWeb3Modal, Web3Button } from '@web3modal/react'
 
 export interface IVerifyStep {
   key: number;
@@ -71,6 +72,8 @@ const NotVerifiedGrug = () => {
   const wallet = useSelector((state: RootState) => state.wallet);
   const { connectWallet } = useWallet();
 
+  const { open } = useWeb3Modal();
+
   const steps = [
     {
       title: "Own a Grug NFT",
@@ -98,7 +101,8 @@ const NotVerifiedGrug = () => {
         ? "You've successfully connected to your wallet"
         : "Connect your wallet",
       buttonLabel: "Connect MetaMask",
-      onClick: connectWallet,
+      // onClick: connectWallet,
+      onClick: () => open()
     },
   ];
 

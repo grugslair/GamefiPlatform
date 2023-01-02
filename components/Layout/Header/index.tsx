@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
-import Web3Modal from "web3modal";
+import { useWeb3Modal, Web3Button } from '@web3modal/react'
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -33,17 +33,6 @@ import { INavLink } from "./type";
 import Button from "components/Button";
 import useWallet from "hooks/useWallet";
 import { ellipseAddress } from "helper/utilities";
-
-const providerOptions = {};
-
-let web3Modal: Web3Modal;
-if (typeof window !== "undefined") {
-  web3Modal = new Web3Modal({
-    network: "mainnet", // optional
-    cacheProvider: true,
-    providerOptions, // required
-  });
-}
 
 const SOCIAL_MEDIAS = [
   {
@@ -253,6 +242,8 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const wallet = useSelector((state: RootState) => state.wallet);
 
+  const { open } = useWeb3Modal();
+
   const { connectWallet, disconnect } = useWallet();
 
   let lastKnownScrollPosition = useRef(0);
@@ -320,7 +311,8 @@ const Header = () => {
               "tablet:h-10 tablet:text-sm",
               isMobile && "shadow-lg"
             )}
-            onClick={wallet.walletAddress ? disconnect : connectWallet}
+            onClick={() => open()}
+            // onClick={wallet.walletAddress ? disconnect : connectWallet}
           >
             {wallet.walletAddress ? (
               ellipseAddress(wallet.walletAddress, 5)
