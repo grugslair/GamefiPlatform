@@ -158,7 +158,7 @@ const Staking: NextPage = () => {
                   className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-2xl font-extrabold text-white"
                   value={unStakeAmount}
                   size="large"
-                  onChange={changeUnStakeAmount}
+                  onChange={() => changeUnStakeAmount}
                   placeholder="0"
                   controls={false}
                 />
