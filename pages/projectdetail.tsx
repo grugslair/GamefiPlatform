@@ -143,7 +143,13 @@ const ProjectDetail = () => {
         <div>
           <div className="absolute top-0 h-[708px] w-full overflow-hidden">
             <img src={dataIGO.banner || ""} alt="banner" />
-            <div className="projectDetailsGradient absolute bottom-0 h-full w-full" />
+            <div
+              className="absolute bottom-0 h-full w-full"
+              style={{
+                background:
+                  "linear-gradient(360deg, #0b0b0b 57.24%, rgba(11, 11, 11, 0.2) 98.26%)",
+              }}
+            />
           </div>
           <div className="relative mx-auto mt-[280px] box-content max-w-screen-maxContent px-6">
             <div className="grid grid-cols-3 gap-4">

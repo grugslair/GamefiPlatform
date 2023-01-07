@@ -144,7 +144,7 @@ const Reports = () => {
                                   )}
                                 >
                                   <Image
-                                    src="/lock.svg"
+                                    src="/icons/lock.svg"
                                     alt="lock"
                                     layout="fill"
                                   />

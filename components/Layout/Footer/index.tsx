@@ -90,13 +90,13 @@ const Footer = () => {
       >
         <div
           className={twJoin(
-            "mx-auto flex max-w-screen-largeDesktop flex-col flex-wrap justify-between gap-10",
+            "mx-auto flex max-w-[1408px] flex-col flex-wrap justify-between gap-10",
             "tablet:flex-row"
           )}
         >
           <div>
             <Image
-              src={"/grugsLairLong.png"}
+              src={"/images/grugsLairLong.png"}
               alt="grugs-lair"
               width={150}
               height={40}
