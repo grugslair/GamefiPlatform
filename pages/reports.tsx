@@ -11,14 +11,18 @@ import { useAppDispatch } from "hooks/useStoreHooks";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCrown, faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCrown,
+  faSearch,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Components
 import Button from "components/Button";
 import Requirement from "components/Public/Requirement";
 
 // Utils
-import { encodeUrl } from "helper/utilities";
+import { base64ToObject, encodeUrl } from "helper/utilities";
 
 // Hooks
 import useWallet from "hooks/useWallet";
@@ -49,6 +53,34 @@ const Reports = () => {
     win!.location = `https://reports.grugslair.xyz?url=${encodeURIComponent(
       result || ""
     )}`;
+  };
+
+  const discordTest = async () => {
+    // Open the API route in a new window
+    const loginWindow = window.open(
+      "/api/oauth/discord",
+      // "/api/oauth/twitter",
+      "popUpWindow",
+      `width=500, height=800, left=${(screen.width - 500) / 2}, top=${(screen.height - 800) / 2}`
+    )!;
+    // Poll the login window until it's closed or the login is complete
+    const interval = setInterval(() => {
+      let pathName;
+      try {
+        pathName = loginWindow.location.pathname;
+      } catch {}
+      const isResult = pathName === "/api/oauth/discord/result";
+      // const isResult = pathName === "/api/oauth/twitter/result";
+      if (loginWindow.closed || isResult) {
+        loginWindow.close();
+        clearInterval(interval);
+        if (isResult) {
+          const urlParams = new URLSearchParams(loginWindow.location.search);
+          const data = base64ToObject(urlParams.get("data") || "");
+          console.log(data);
+        }
+      }
+    }, 1000);
   };
 
   useEffect(() => {
@@ -176,11 +208,12 @@ const Reports = () => {
                           >
                             <Button
                               className="w-fit"
-                              onClick={() =>
-                                isLocked
-                                  ? setOpenRequirement(true)
-                                  : openPdf(pdfUrl || "")
-                              }
+                              onClick={() => discordTest()}
+                              // onClick={() =>
+                              //   isLocked
+                              //     ? setOpenRequirement(true)
+                              //     : openPdf(pdfUrl || "")
+                              // }
                             >
                               {isLocked ? "Unlock" : "Read"}
                             </Button>

@@ -132,3 +132,14 @@ export const getSocialMedias = (data: IProjectList) => {
     },
   ].filter(e => !!e.url)
 }
+
+export function objectToBase64(o: any){
+  var str = JSON.stringify(o);
+  var mess = Buffer.from(str).toString('base64');
+  return mess.replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,',');
+}
+export function base64ToObject(str: string){
+  var mess  = str.replace(/-/g,'+').replace(/_/g,'/').replace(/,/g,'=');
+  mess = Buffer.from(mess, 'base64').toString('ascii');
+  return JSON.parse(mess);
+}
