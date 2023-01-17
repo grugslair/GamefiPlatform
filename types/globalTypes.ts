@@ -19,6 +19,17 @@ export interface ISocialMediaIcon {
   icon: IconLookup
 }
 
+export interface IEpisodeData {
+  no: number;
+  title: string;
+  subtitle: string;
+  durationInMinutes: number;
+  locked: boolean;
+  embedLink: string;
+  availability?: string;
+  quizLink?: string;
+}
+
 declare global {
   interface Window {
     closeMobileMenu: any; // 👈️ turn off type checking

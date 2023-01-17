@@ -132,3 +132,8 @@ export const getSocialMedias = (data: IProjectList) => {
     },
   ].filter(e => !!e.url)
 }
+
+
+export const isTouchDevice = () => {
+  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+};

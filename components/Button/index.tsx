@@ -24,9 +24,9 @@ const Button = ({
     <button
       className={twMerge(
         "flex h-10 items-center rounded-sm bg-primary600 px-4 font-avara text-sm font-black text-white",
-        "tablet:h-12 tablet:px-5 tablet:text-base",
-        size === "small" && "tablet:h-9 tablet:text-sm",
-        size === "extraLarge" && "tablet:h-[52px] tablet:text-base",
+        "h-12 px-5 text-base",
+        size === "small" && "h-9 px-3 text-sm",
+        size === "extraLarge" && "h-[52px] text-base",
         (disabled || loading) && "cursor-not-allowed opacity-30",
         className
       )}
