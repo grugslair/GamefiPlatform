@@ -90,7 +90,7 @@ const EpisodeCard = ({ data, isMobile, onClickPlay }: IEpisodeCard) => {
           ) : (
             <>
               <Image
-                src="/images/LairsTaleBackground.jpg"
+                src="/images/lairsTaleBackground.jpg"
                 layout="fill"
                 alt={title}
                 objectFit="cover"
