@@ -4,12 +4,12 @@ import { twMerge } from "tailwind-merge";
 // Global components
 import Button from "@/components/Button";
 
-interface IStreamingBanner {
+interface ILairsTaleBanner {
   isMobile: number | boolean;
   onClickPlay: () => void;
 }
 
-const StreamingBanner = ({ isMobile, onClickPlay }: IStreamingBanner) => {
+const LairsTaleBanner = ({ isMobile, onClickPlay }: ILairsTaleBanner) => {
   return (
     // padding top relative to header height, banner height is 720 + header height - 1
     <div
@@ -26,7 +26,7 @@ const StreamingBanner = ({ isMobile, onClickPlay }: IStreamingBanner) => {
           )}
         >
           <Image
-            src="/images/streamingBackground.jpg"
+            src="/images/lairsTaleBackground.jpg"
             alt="background"
             layout="fill"
             objectFit="cover"
@@ -88,7 +88,7 @@ const StreamingBanner = ({ isMobile, onClickPlay }: IStreamingBanner) => {
                   isMobile && "text-sm"
                 )}
               >
-                2022
+                2023
               </p>
               <p
                 className={twMerge(
@@ -145,4 +145,4 @@ const StreamingBanner = ({ isMobile, onClickPlay }: IStreamingBanner) => {
   );
 };
 
-export default StreamingBanner;
+export default LairsTaleBanner;

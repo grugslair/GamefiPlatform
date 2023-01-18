@@ -6,11 +6,11 @@ import { twJoin } from "tailwind-merge";
 import useMediaQuery from "hooks/useMediaQuery";
 
 // Global component
-import StreamingBanner from "@/components/Landing/Streaming/StreamingBanner";
-import StreamingEpisodes from "@/components/Landing/Streaming/StreamingEpisodes";
+import LairsTaleBanner from "@/components/Landing/LairsTale/LairsTaleBanner";
+import LairsTaleEpisodes from "@/components/Landing/LairsTale/LairsTaleEpisodes";
 
 // Global styles
-import styles from "styles/Streaming.module.css";
+import styles from "styles/LairsTale.module.css";
 
 const EPISODES = [
   {
@@ -68,7 +68,7 @@ const EPISODES = [
   },
 ];
 
-const Streaming = () => {
+const LairsTale = () => {
   const mobile = useMediaQuery("(max-width: 956px)");
   const [isMobile, setIsMobile] = useState(-1);
 
@@ -85,7 +85,7 @@ const Streaming = () => {
       label: "Episodes",
       key: "all",
       children: (
-        <StreamingEpisodes
+        <LairsTaleEpisodes
           isMobile={isMobile}
           episodes={EPISODES}
           onClickPlay={(link) => {
@@ -109,7 +109,7 @@ const Streaming = () => {
 
   return (
     <>
-      <StreamingBanner
+      <LairsTaleBanner
         isMobile={isMobile}
         onClickPlay={() => {
           setModalLink(EPISODES[0].embedLink);
@@ -121,8 +121,8 @@ const Streaming = () => {
           items={items}
           centered={!isMobile}
           className={twJoin(
-            styles.StreamingTab,
-            isMobile && styles.StreamingTabMobile
+            styles.LairsTaleTab,
+            isMobile && styles.LairsTaleTabMobile
           )}
           tabBarGutter={isMobile ? 16 : 48}
         />
@@ -134,7 +134,8 @@ const Streaming = () => {
         footer={false}
         closable={false}
         width="80vw"
-        bodyStyle={{ padding: 0, height: "60vw" }}
+        style={{maxWidth: 800}}
+        bodyStyle={{ padding: 0, height: '60vw', maxHeight: 640 }}
         centered
       >
         <iframe
@@ -151,4 +152,4 @@ const Streaming = () => {
   );
 };
 
-export default Streaming;
+export default LairsTale;

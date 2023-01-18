@@ -14,7 +14,7 @@ function MobileGuard({ children }: any) {
   const [isMobile, setIsMobile] = useState(-1);
 
   const path = router.asPath.split("?")[0];
-  const mobileSafePath = ["/reports", "/streaming"];
+  const mobileSafePath = ["/reports", "/lairs-tale"];
   const isCurrentPathMobileSafe = mobileSafePath.includes(path);
 
   useEffect(() => {

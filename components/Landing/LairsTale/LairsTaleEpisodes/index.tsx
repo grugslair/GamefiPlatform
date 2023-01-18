@@ -10,7 +10,7 @@ import Button from "@/components/Button";
 import { isTouchDevice } from "helper/utilities";
 import { IEpisodeData } from "types/globalTypes";
 
-interface IStreamingEpisodes {
+interface ILairsTaleEpisodes {
   isMobile: number | boolean;
   episodes: IEpisodeData[];
   onClickPlay: (link: string) => void;
@@ -90,7 +90,7 @@ const EpisodeCard = ({ data, isMobile, onClickPlay }: IEpisodeCard) => {
           ) : (
             <>
               <Image
-                src="/images/streamingBackground.jpg"
+                src="/images/LairsTaleBackground.jpg"
                 layout="fill"
                 alt={title}
                 objectFit="cover"
@@ -169,11 +169,11 @@ const EpisodeCard = ({ data, isMobile, onClickPlay }: IEpisodeCard) => {
   );
 };
 
-const StreamingEpisodes = ({
+const LairsTaleEpisodes = ({
   isMobile,
   episodes,
   onClickPlay,
-}: IStreamingEpisodes) => {
+}: ILairsTaleEpisodes) => {
   return (
     <div className="flex flex-col gap-4">
       {episodes.map((e) => (
@@ -188,4 +188,4 @@ const StreamingEpisodes = ({
   );
 };
 
-export default StreamingEpisodes;
+export default LairsTaleEpisodes;

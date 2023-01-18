@@ -12,14 +12,14 @@ import useWallet, { web3Modal } from "hooks/useWallet";
 
 export default RouteGuard;
 
-const isDevBypassRoute = false;
+const isDevBypassRoute = true;
 
 function RouteGuard({ children }: any) {
   const prevBalanceRef = useRef();
   const router = useRouter();
 
   const path = router.asPath.split("?")[0];
-  const publicPaths = ["/verify", "/reports", "/rocks", "/streaming"];
+  const publicPaths = ["/verify", "/reports", "/rocks", "/lairs-tale"];
   const isCurrentPathPublic = publicPaths.includes(path);
 
   const { connectWallet, isAuthorize } = useWallet();

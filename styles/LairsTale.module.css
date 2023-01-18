@@ -1,18 +1,18 @@
-.StreamingTab :global(.ant-tabs-nav) {
+.LairsTaleTab :global(.ant-tabs-nav) {
   margin-top: -32px;
   margin-bottom: 64px;
 }
 
-.StreamingTab :global(.ant-tabs-nav::before) {
+.LairsTaleTab :global(.ant-tabs-nav::before) {
   border-bottom: 0 !important;
 }
 
-.StreamingTab :global(.ant-tabs-tab) {
+.LairsTaleTab :global(.ant-tabs-tab) {
   padding: 0;
   padding-bottom: 8px;
 }
 
-.StreamingTab :global(.ant-tabs-tab-btn) {
+.LairsTaleTab :global(.ant-tabs-tab-btn) {
   font-family: Avara;
   font-size: 24px;
   line-height: 32px;
@@ -20,17 +20,17 @@
   color: theme("colors.white") !important;
 }
 
-.StreamingTab :global(.ant-tabs-ink-bar) {
+.LairsTaleTab :global(.ant-tabs-ink-bar) {
   height: 4px !important;
   background-color: theme("colors.primary600");
 }
 
-.StreamingTabMobile :global(.ant-tabs-nav) {
+.LairsTaleTabMobile :global(.ant-tabs-nav) {
   margin-top: 0;
   margin-bottom: 24px;
 }
 
-.StreamingTabMobile :global(.ant-tabs-tab-btn) {
+.LairsTaleTabMobile :global(.ant-tabs-tab-btn) {
   font-family: Avara;
   font-size: 16px;
   line-height: 24px;
