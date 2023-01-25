@@ -21,7 +21,7 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 
-import { join, twMerge } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "tailwind.config";
 
@@ -50,21 +50,21 @@ const SOCIAL_MEDIAS = [
     label: "Twitter",
     url: "https://twitter.com/GrugsLair",
     icon: faTwitter,
-    logo: "/twitter.svg",
+    logo: "/icons/twitter.svg",
     target: "_blank",
   },
   {
     label: "Medium",
     url: "https://medium.com/@grugslair",
     icon: faMedium,
-    logo: "/medium.svg",
+    logo: "/icons/medium.svg",
     target: "_blank",
   },
   {
     label: "Discord",
     url: "https://discord.gg/gDyJBYUNDq",
     icon: faDiscord,
-    logo: "/discord.svg",
+    logo: "/icons/discord.svg",
     target: "_blank",
   },
 ];
@@ -97,17 +97,17 @@ const MobileMenu = ({ renderWalletButtons }: any) => {
         className="relative z-[1] flex h-10 w-10 items-center justify-center"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Image src={"/mobile-menu.svg"} alt="grugs-lair" layout="fill" />
+        <Image src={"/icons/mobile-menu.svg"} alt="grugs-lair" layout="fill" />
         <FontAwesomeIcon
           icon={faBars}
-          className={join(
+          className={twJoin(
             "absolute w-5 text-white transition-opacity duration-300",
             isOpen && "opacity-0"
           )}
         />
         <FontAwesomeIcon
           icon={faClose}
-          className={join(
+          className={twJoin(
             "absolute w-3 text-white transition-opacity duration-300",
             !isOpen && "opacity-0"
           )}
@@ -157,7 +157,7 @@ const NavLink = ({ label, url, target, onClick }: INavLink) => {
     <Link href={url || ""}>
       <a
         target={target}
-        className={join(
+        className={twJoin(
           "font-avara text-xl font-black text-white",
           "tablet:text-base tablet:font-bold tablet:text-shadow-grugSm"
         )}
@@ -196,7 +196,7 @@ const DesktopSocialMedias = () => {
         </p>
         <FontAwesomeIcon
           icon={faChevronDown}
-          className={join(
+          className={twJoin(
             "-mt-1 w-[16px] text-white transition-transform",
             open && "rotate-180"
           )}
@@ -206,7 +206,7 @@ const DesktopSocialMedias = () => {
         />
       </div>
       <div
-        className={join(
+        className={twJoin(
           "absolute right-0 top-10 z-[1] w-64 flex-col rounded-sm border border-solid border-grugBorder bg-grugCardBackground p-4",
           "origin-top-right transition-all group-hover:opacity-100",
           open ? "scale-100 opacity-100" : "scale-0 opacity-0"
@@ -220,7 +220,7 @@ const DesktopSocialMedias = () => {
             {...data}
             label={
               <div
-                className={join(
+                className={twJoin(
                   "flex items-center",
                   i !== 0 && "mt-4 border-t border-solid border-grugBorder pt-4"
                 )}
@@ -292,8 +292,8 @@ const Header = () => {
     >
       <div>
         <Button
-          className={join(
-            "h-10 text-sm bg-white text-primary700 font-black",
+          className={twJoin(
+            "h-10 text-sm bg-white text-primary700",
             "tablet:h-10 tablet:text-sm",
             isMobile && "shadow-lg"
           )}
@@ -303,7 +303,7 @@ const Header = () => {
         >
           <div className="relative w-5 h-5 mr-2 -mt-1">
             <Image
-              src="/openseas.svg"
+              src="/icons/openseas.svg"
               alt="openseas"
               objectFit="contain"
               layout="fill"
@@ -315,8 +315,8 @@ const Header = () => {
       <div>
         {
           <Button
-            className={join(
-              "h-10 text-sm font-black",
+            className={twJoin(
+              "h-10 text-sm",
               "tablet:h-10 tablet:text-sm",
               isMobile && "shadow-lg"
             )}
@@ -342,9 +342,9 @@ const Header = () => {
   return isMobile !== -1 ? (
     <div
       id="NavBar"
-      className={join(
+      className={twJoin(
         "fixed top-0 z-10 w-full py-4 transition duration-500",
-        isMobile ? "pl-4 pr-5 py-4" : "px-8 py-[30px]"
+        isMobile ? "pl-4 pr-5 py-4" : "py-[30px]"
       )}
       style={{
         background: scrolled
@@ -354,9 +354,9 @@ const Header = () => {
       }}
     >
       <div
-        className={join(
+        className={twJoin(
           "mx-auto flex max-w-screen-largeDesktop items-center gap-12",
-          isMobile && "justify-between"
+          isMobile ? "justify-between" : "px-8"
         )}
       >
         <div
@@ -369,7 +369,7 @@ const Header = () => {
           }}
         >
           <Image
-            src={"/grugsLair.png"}
+            src={"/images/grugsLair.png"}
             alt="grugs-lair"
             width={61}
             height={48}

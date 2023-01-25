@@ -98,7 +98,7 @@ const Staking: NextPage = () => {
           size="small"
           onClick={onClickAddRocksToken}
         >
-          <Image src={"/metamask.svg"} alt="metamask" width={18} height={18} />
+          <Image src={"/icons/metamask.svg"} alt="metamask" width={18} height={18} />
           Add $ROCKS
         </Button>
       </div>

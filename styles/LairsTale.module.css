@@ -1,0 +1,37 @@
+.LairsTaleTab :global(.ant-tabs-nav) {
+  margin-top: -32px;
+  margin-bottom: 64px;
+}
+
+.LairsTaleTab :global(.ant-tabs-nav::before) {
+  border-bottom: 0 !important;
+}
+
+.LairsTaleTab :global(.ant-tabs-tab) {
+  padding: 0;
+  padding-bottom: 8px;
+}
+
+.LairsTaleTab :global(.ant-tabs-tab-btn) {
+  font-family: Avara;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 800;
+  color: theme("colors.white") !important;
+}
+
+.LairsTaleTab :global(.ant-tabs-ink-bar) {
+  height: 4px !important;
+  background-color: theme("colors.primary600");
+}
+
+.LairsTaleTabMobile :global(.ant-tabs-nav) {
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.LairsTaleTabMobile :global(.ant-tabs-tab-btn) {
+  font-family: Avara;
+  font-size: 16px;
+  line-height: 24px;
+}
