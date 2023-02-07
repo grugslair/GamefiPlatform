@@ -105,8 +105,9 @@ const LairsTaleBanner = ({ isMobile, onClickPlay }: ILairsTaleBanner) => {
                 isMobile && "mt-2 text-base"
               )}
             >
-              Watch the Grug&apos;s Lair Minting Series as it unveil each
-              character to be minted
+              Experience Grug&apos;s revelation.
+              <br />
+              Watch the Grug&apos;s Lair Minting Series.
             </p>
             <div
               className={twMerge("mt-8 flex gap-4", isMobile && "mt-6 gap-2")}

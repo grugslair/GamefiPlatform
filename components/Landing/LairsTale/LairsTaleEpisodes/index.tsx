@@ -29,6 +29,7 @@ const EpisodeCard = ({ data, isMobile, onClickPlay }: IEpisodeCard) => {
     subtitle,
     durationInMinutes,
     locked,
+    thumbnailImage,
     embedLink,
     availability,
     quizLink,
@@ -90,7 +91,7 @@ const EpisodeCard = ({ data, isMobile, onClickPlay }: IEpisodeCard) => {
           ) : (
             <>
               <Image
-                src="/images/lairsTaleBackground.jpg"
+                src={thumbnailImage}
                 layout="fill"
                 alt={title}
                 objectFit="cover"

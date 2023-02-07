@@ -15,30 +15,35 @@ import styles from "styles/LairsTale.module.css";
 const EPISODES = [
   {
     no: 0,
-    title: "A Lair's Trailer",
+    title: "A Lair's Tale: Trailer",
     subtitle:
       "The first time Grug's wait it's Allegory in a brand new world char counter how much is this line will have. I need to know the char counter for this!!! ",
     durationInMinutes: 15,
     locked: false,
+    thumbnailImage: '/images/lairsTaleBackground.jpg',
     embedLink:
       "https://www.youtube.com/embed/SxZG0OGFTPw?autoplay=1&rel=0&modestbranding=1",
   },
   {
     no: 1,
-    title: "The Allegory of Grug's",
-    subtitle: "The first time Grug's wait it's Allegory in a brand new world",
+    title: "Snakes",
+    subtitle:
+      "Grug wakes up in a dark and cold cave, alone and scared he will have to figure out how to escape",
     durationInMinutes: 30,
     locked: false,
+    thumbnailImage: '/images/lairsTaleBackground.jpg',
     embedLink:
       "https://www.youtube.com/embed/zhI7bQyTmHw?autoplay=1&rel=0&modestbranding=1",
     quizLink: "https://google.com",
   },
   {
     no: 2,
-    title: "The Allegory of Grug's",
-    subtitle: "The first time Grug's wait it's Allegory in a brand new world",
+    title: "Chains",
+    subtitle:
+      "Grug prepares to face another day at work, unaware that it won't be a shift like any other before",
     durationInMinutes: 16,
     locked: true,
+    thumbnailImage: '/images/lairsTaleBackground.jpg',
     embedLink:
       "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0&modestbranding=1",
     availability: "Available Jan 27",
@@ -46,10 +51,12 @@ const EPISODES = [
   },
   {
     no: 3,
-    title: "The Allegory of Grug's",
-    subtitle: "The first time Grug's wait it's Allegory in a brand new world",
+    title: "Candles",
+    subtitle:
+      "Still figuring out how to solve problems at work, Grug faces some thorny family dynamics",
     durationInMinutes: 12,
     locked: true,
+    thumbnailImage: '/images/lairsTaleBackground.jpg',
     embedLink:
       "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0&modestbranding=1",
     availability: "Available Feb 7",
@@ -57,10 +64,12 @@ const EPISODES = [
   },
   {
     no: 4,
-    title: "The Allegory of Grug's",
-    subtitle: "The first time Grug's wait it's Allegory in a brand new world",
+    title: "Boat",
+    subtitle:
+      "Shocked, furious, and with nothing to lose, Grug is determined to face his greatest fear. Unaware that his fate is already sealed",
     durationInMinutes: 13,
     locked: true,
+    thumbnailImage: '/images/lairsTaleBackground.jpg',
     embedLink:
       "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0&modestbranding=1",
     availability: "Available Feb 14",
@@ -134,8 +143,8 @@ const LairsTale = () => {
         footer={false}
         closable={false}
         width="80vw"
-        style={{maxWidth: 800}}
-        bodyStyle={{ padding: 0, height: '60vw', maxHeight: 640 }}
+        style={{ maxWidth: 800 }}
+        bodyStyle={{ padding: 0, height: "60vw", maxHeight: 640 }}
         centered
       >
         <iframe

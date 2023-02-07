@@ -25,6 +25,7 @@ export interface IEpisodeData {
   subtitle: string;
   durationInMinutes: number;
   locked: boolean;
+  thumbnailImage: string;
   embedLink: string;
   availability?: string;
   quizLink?: string;
