@@ -130,3 +130,8 @@ export interface IProjectListByIdPayload {
   id: string
   walletAddress: string
 }
+export interface IGetInvestSignaturePayload {
+  projectId: string | string[]
+  commitAmount: number
+  walletAddress: string
+}

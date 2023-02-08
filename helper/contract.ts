@@ -20,6 +20,7 @@ const stakeContractAddressENV: IContractEnv = {
 
 const usdcContractAddressENV: IContractEnv = {
   development: "0x29Ae1568b11B268a2095f39290a9038489A62aA7",
+  // development: "0x07865c6E87B9F70255377e024ace6630C1Eaa37F",
   production: ''
 } 
 

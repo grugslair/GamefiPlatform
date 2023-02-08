@@ -13,29 +13,14 @@ import { useSelector } from "react-redux";
 import useWallet from "hooks/useWallet";
 import { useMemo } from "react";
 
+// Global component
+import Checkbox from "components/Button/CheckboxButton";
+
 export interface IRequirement {
   openRequirement: boolean;
   handleClose: () => void;
   showRocks?: boolean;
 }
-export interface ICheckbox {
-  checked: boolean;
-}
-
-const Checkbox = ({ checked }: ICheckbox) => {
-  return (
-    <div
-      className={join(
-        "mr-2 w-4 h-4 text-xs rounded-[4px] flex items-center justify-center",
-        checked
-          ? "bg-success600"
-          : "border border-solid border-gray-300 bg-gray100"
-      )}
-    >
-      {checked && <FontAwesomeIcon icon={faCheck} color="white" />}
-    </div>
-  );
-};
 
 const Requirement = ({
   openRequirement,
@@ -54,13 +39,13 @@ const Requirement = ({
   return (
     <div>
       <Modal
-        open={openRequirement}
-        destroyOnClose
-        footer={null}
         centered
+        destroyOnClose
         width={400}
+        open={openRequirement}
         closable={false}
         closeIcon={null}
+        footer={null}
         bodyStyle={{
           backgroundColor: "#151011",
           border: "1px solid #B546394D",

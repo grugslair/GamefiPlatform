@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { twJoin } from "tailwind-merge";
 
 // Fontawesome
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -31,20 +32,29 @@ const IGOProfile = (prop: IIGOProfileProp) => {
   useEffect(() => {
     const endDate = new Date(prop.companyEndDate);
     handleSetEndDate(endDate.getTime());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
       <div className="border border-solid border-grugBorder bg-grugCardBackground p-6">
         <div className="flex items-center justify-between">
-          <button onClick={() => router.push("/projects")}>
+          <button
+            onClick={() => router.push("/projects")}
+            className="flex items-center"
+          >
             <FontAwesomeIcon
               icon={faArrowLeft}
               className="mr-3 h-6 w-6 text-lg text-white"
             />
             <span className="font-sora text-lg text-white">Back</span>
           </button>
-          <div className="w-fit rounded-full border border-solid border-yellow500 px-3 py-1 font-sora text-sm text-yellow500">
+          <div
+            className={twJoin(
+              "w-fit rounded-full border border-solid border-yellow500 px-3 py-1 font-sora text-sm text-yellow500",
+              countDown === -1 && "opacity-0"
+            )}
+          >
             {!!countDown ? (
               <>
                 Ends in {countDown[0]}d : {countDown[1]}h : {countDown[2]}m :{" "}
@@ -65,8 +75,15 @@ const IGOProfile = (prop: IIGOProfileProp) => {
             <div className="font-avara text-3xl font-extrabold text-white">
               {prop.companyName}
             </div>
-            <div className="mt-1 font-avara text-xl font-bold text-white">
-              ${prop.companyToken}
+            <div className="mt-1 flex font-avara text-xl font-bold text-white">
+              <div>
+                ${prop.companyToken} · {prop.networkName}
+              </div>
+              <img
+                src={prop.networkLogo}
+                alt="network-logo"
+                className="ml-1.5 h-6 w-6"
+              />
             </div>
             <div className="mt-4 font-sora text-base text-grayCool300">
               {descMoreThan200 && !readMoreExpanded

@@ -72,21 +72,6 @@ export const formatNumber = (amount: any, decimals = 4) => {
   ].filter(Boolean).join('.');
 };
 
-export function grugDateFormat(unFomatDate:string) {
-  const date = new Date(unFomatDate)
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  const formatTime = (time: number) => {
-    if (time < 10) {
-      return "0" + time
-    }
-    return time
-  }
-
-  const formatedDate = `${date.getDate()} ${months[date.getMonth()]}'${date.getFullYear()} - ${formatTime(date.getHours())} : ${formatTime(date.getMinutes())}`
-  return formatedDate
-}
-
 export const getReturnValues = (countDown:number) => {
   // calculate time left
   const days = Math.floor(countDown / (1000 * 60 * 60 * 24));

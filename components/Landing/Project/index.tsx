@@ -36,8 +36,10 @@ const Project = (props: IProps) => {
   }, [props]);
 
   const projectBanner: IProjectBannerProp = {
-    companyLogo: props.dataproject.logo,
+    networkLogo: props.dataproject.Chain.logo,
     companyProfile: props.dataproject.banner,
+    countDown,
+    endDate: props.dataproject.periodEnd,
   };
 
   const projectDescription: IProjectDescriptionProp = {
@@ -45,6 +47,7 @@ const Project = (props: IProps) => {
     companyName: props.dataproject.name,
     companyToken: props.dataproject.tokenSymbol,
     companySosMedList: getSocialMedias(props.dataproject),
+    networkName: props.dataproject.Chain.name,
   };
 
   const projectTarget: IProjectTarget = {
@@ -56,42 +59,34 @@ const Project = (props: IProps) => {
     tokenSymbol: props.dataproject.tokenSymbol,
     currency: props.dataproject.Currency,
     publicSaleTokenSold: props.dataproject.publicSaleTokenSold,
+    publicSaleTokenAmount: props.dataproject.publicSaleTokenAmount,
   };
 
   return (
     <>
       <div className="relative rounded-sm border border-solid border-grugBorder bg-grugCardBackground">
-        <ProjectBanner
-          companyProfile={projectBanner.companyProfile}
-          companyLogo={projectBanner.companyLogo}
-          countDown={countDown}
-          endDate={props.dataproject.periodEnd}
-        />
+        <ProjectBanner {...projectBanner} />
         <div className="px-10 pt-6 pb-24">
-          <ProjectDescription
-            companyName={projectDescription.companyName}
-            companyToken={projectDescription.companyToken}
-            companyDescription={projectDescription.companyDescription}
-            companySosMedList={projectDescription.companySosMedList}
-          />
+          <ProjectDescription {...projectDescription} />
           <ProjectTarget projectTarget={projectTarget} />
         </div>
-        <div className="absolute -bottom-4 w-full px-10">
-          <Button
-            className="w-full justify-center"
-            onClick={() =>
-              router.push({
-                pathname: "/projectdetail",
-                query: {
-                  id: props.dataproject.id,
-                },
-              })
-            }
-          >
-            {countDown ? "Participate" : "See Project Detail"}
-          </Button>
-        </div>
-        {/* )} */}
+        {countDown !== -1 && (
+          <div className="absolute -bottom-4 w-full px-10">
+            <Button
+              className="w-full justify-center"
+              onClick={() =>
+                router.push({
+                  pathname: "/projectdetail",
+                  query: {
+                    id: props.dataproject.id,
+                  },
+                })
+              }
+            >
+              {countDown ? "Participate" : "See Project Detail"}
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 
 // Global components
-import Button from "@/components/Button";
+import Button from "components/Button";
 
 interface ILairsTaleBanner {
   isMobile: number | boolean;

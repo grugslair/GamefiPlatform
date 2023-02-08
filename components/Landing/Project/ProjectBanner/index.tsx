@@ -28,29 +28,30 @@ const ProjectBanner = (prop: IProjectBannerProp) => {
         )}
 
         <div className="absolute bottom-0 left-10 h-10 w-10 rounded-full">
-          {!!prop.companyLogo && (
+          {!!prop.networkLogo && (
             <img
-              alt="company-logo"
-              src={prop.companyLogo}
+              alt="network-logo"
+              src={prop.networkLogo}
               width={40}
               height={40}
             />
           )}
         </div>
-        {!!prop.countDown ? (
-          <div className="absolute right-6 bottom-1.5 rounded-full bg-yellow500 px-3 py-1 font-sora text-sm text-black">
-            Ends in {prop.countDown[0]}d : {prop.countDown[1]}h :{" "}
-            {prop.countDown[2]}m : {prop.countDown[3]}s
-          </div>
-        ) : (
-          <div className="absolute right-6 bottom-1.5 flex items-center gap-[5px] rounded-full bg-success600 px-3 py-1 font-sora text-sm text-white">
-            <FontAwesomeIcon
-              icon={faCheck}
-              className="text-[10px] text-success300"
-            />
-            Ended {endedDaysAgo ? `${endedDaysAgo}d ago` : "today"}
-          </div>
-        )}
+        {prop.countDown !== -1 &&
+          (!!prop.countDown ? (
+            <div className="absolute right-6 bottom-1.5 rounded-full bg-yellow500 px-3 py-1 font-sora text-sm text-black">
+              Ends in {prop.countDown[0]}d : {prop.countDown[1]}h :{" "}
+              {prop.countDown[2]}m : {prop.countDown[3]}s
+            </div>
+          ) : (
+            <div className="absolute right-6 bottom-1.5 flex items-center gap-[5px] rounded-full bg-success600 px-3 py-1 font-sora text-sm text-white">
+              <FontAwesomeIcon
+                icon={faCheck}
+                className="text-[10px] text-success300"
+              />
+              Ended {endedDaysAgo ? `${endedDaysAgo}d ago` : "today"}
+            </div>
+          ))}
       </div>
     </>
   );

@@ -6,12 +6,13 @@ export interface IProjectDescriptionProp {
   companyToken: string,
   companyDescription: string,
   companySosMedList: ISocialMediaIcon[]
+  networkName: string,
 }
 
 export interface IProjectBannerProp {
   companyProfile: string | null
-  companyLogo: string | null
-  countDown?: number[],
+  networkLogo: string | null
+  countDown: any,
   endDate?: string,
 }
 
@@ -24,4 +25,5 @@ export interface IProjectTarget {
   tokenSymbol: string,
   currency: IPorjectCurrency,
   publicSaleTokenSold: number
+  publicSaleTokenAmount: number
 }

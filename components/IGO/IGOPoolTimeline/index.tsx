@@ -1,26 +1,37 @@
 import { Timeline } from "antd";
 import { twJoin } from "tailwind-merge";
+import moment from "moment";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
 
-import { grugDateFormat, numberWithCommas } from "helper/utilities";
+import { IProjectList } from "store/launchpad/launchpad";
+
+import { numberWithCommas } from "helper/utilities";
+
+interface IIGOTokenDetails {
+  data: IProjectList;
+}
 
 interface IIGOPoolTimeline {
   data: IIGOPoolTimelineData[];
-  currentIndex: number;
 }
 
 interface IIGOPoolTimelineData {
   title: string;
-  date: string;
+  startTime: string;
+  endTime?: string;
 }
 
-const PoolTimeline = ({ data, currentIndex }: IIGOPoolTimeline) => (
+const PoolTimeline = ({ data }: IIGOPoolTimeline) => (
   <Timeline className="ml-2 -mb-8 pt-2">
     {data.map((entry, i) => {
-      const isCurrent = i === currentIndex;
-      const isInactive = i > currentIndex;
+      const now = moment();
+      const isStarted = now.isAfter(moment(entry.startTime));
+      const isEnded = entry.endTime
+        ? now.isAfter(moment(entry.endTime))
+        : isStarted;
+      const isOngoing = isStarted && !isEnded;
       return (
         <Timeline.Item
           key={i}
@@ -28,18 +39,18 @@ const PoolTimeline = ({ data, currentIndex }: IIGOPoolTimeline) => (
             <div
               className={twJoin(
                 "flex h-6 w-6 items-center justify-center rounded-full",
-                isCurrent
+                isOngoing
                   ? "bg-primary600"
-                  : isInactive
+                  : !isEnded
                   ? "bg-gray-500"
                   : "bg-success600"
               )}
             >
               <FontAwesomeIcon
-                icon={!isCurrent && !isInactive ? faCheck : faCircle}
+                icon={isEnded ? faCheck : faCircle}
                 className={twJoin(
-                  isInactive ? "text-gray400" : "text-white",
-                  !isCurrent && !isInactive ? "text-xs" : "text-[8px]"
+                  isStarted ? "text-white" : "text-gray400",
+                  isEnded ? "text-xs" : "text-[8px]"
                 )}
               />
             </div>
@@ -48,7 +59,7 @@ const PoolTimeline = ({ data, currentIndex }: IIGOPoolTimeline) => (
           <div
             className={twJoin(
               "font-avara text-sm font-extrabold",
-              isInactive ? "text-gray500" : "text-white"
+              isStarted ? "text-white" : "text-gray500"
             )}
           >
             {entry.title}
@@ -56,10 +67,12 @@ const PoolTimeline = ({ data, currentIndex }: IIGOPoolTimeline) => (
           <div
             className={twJoin(
               "mb-1 font-sora text-sm font-light",
-              isInactive ? "text-gray600" : "text-gray400"
+              isStarted ? "text-gray400" : "text-gray600"
             )}
           >
-            {entry.date}
+            {moment(entry.startTime).format("DD MMM'YY hh:mm")}
+            {!!entry.endTime &&
+              ` - ${moment(entry.endTime).format("DD MMM'YY hh:mm")}`}
           </div>
         </Timeline.Item>
       );
@@ -67,7 +80,7 @@ const PoolTimeline = ({ data, currentIndex }: IIGOPoolTimeline) => (
   </Timeline>
 );
 
-const IGOPoolTimeline = ({ data }: any) => {
+const IGOTokenDetails = ({ data }: IIGOTokenDetails) => {
   const tokenData = [
     {
       text: "Symbol",
@@ -79,7 +92,7 @@ const IGOPoolTimeline = ({ data }: any) => {
     },
     {
       text: "Token Network",
-      value: "Polygon",
+      value: data.Chain?.name,
     },
     {
       text: "Initial Supply",
@@ -97,7 +110,7 @@ const IGOPoolTimeline = ({ data }: any) => {
     },
     {
       text: "Listing Date",
-      value: `${grugDateFormat(data.periodStart)}`,
+      value: `${moment(data.periodStart).format("DD MMM'YY")}`,
     },
     {
       text: "Contract Address",
@@ -116,18 +129,19 @@ const IGOPoolTimeline = ({ data }: any) => {
           data={[
             {
               title: "Registration Phase",
-              date: "20 May'22 11:00 - 20 May'22 16:00",
+              startTime: data.periodStart,
+              endTime: data.periodEnd,
             },
             {
               title: "Buying Phase",
-              date: "20 May'22 11:00 - 20 May'22 16:00",
+              startTime: data.periodStart,
+              endTime: data.periodEnd,
             },
             {
-              title: "Claim Start (10% TGE)",
-              date: "20 May'22 11:00 - 20 May'22 16:00",
+              title: `Claim Start (${data.VestingRule?.tgePercentage}% TGE)`,
+              startTime: data.periodStart,
             },
           ]}
-          currentIndex={1}
         />
 
         <div className="my-6 h-px bg-grayCool25 opacity-10" />
@@ -155,4 +169,4 @@ const IGOPoolTimeline = ({ data }: any) => {
   );
 };
 
-export default IGOPoolTimeline;
+export default IGOTokenDetails;

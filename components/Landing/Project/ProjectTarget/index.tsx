@@ -1,17 +1,14 @@
 import { Progress } from "antd";
 import { memo, useMemo } from "react";
 import isEqual from "lodash/isEqual";
+import moment from "moment";
 
-import { grugDateFormat, numberWithCommas } from "helper/utilities";
+import { numberWithCommas } from "helper/utilities";
 import { theme } from "tailwind.config";
 
 import styles from "./ProjectTarget.module.css";
 
 const ProjectTarget = ({ projectTarget }: any) => {
-  const startDate = useMemo(() => {
-    return grugDateFormat(projectTarget.startDate);
-  }, [projectTarget.startDate]);
-
   return (
     <>
       <div className="mt-10 font-sora text-xs font-light text-white">
@@ -24,7 +21,9 @@ const ProjectTarget = ({ projectTarget }: any) => {
         strokeColor={theme.extend.colors.success600}
         trailColor={`${theme.extend.colors.gray400}33`} // 20% opacity
         percent={
-          (projectTarget.publicSaleTokenSold / projectTarget.targetRaise) * 100
+          (projectTarget.publicSaleTokenSold /
+            projectTarget.publicSaleTokenAmount) *
+          100
         }
         className={styles.ProgressBar}
         showInfo={false}
@@ -32,13 +31,15 @@ const ProjectTarget = ({ projectTarget }: any) => {
       <div className="-mt-0.5 flex">
         <div className="flex-1 font-sora text-xs font-light text-gray400">
           Progress:{" "}
-          {(projectTarget.publicSaleTokenSold / projectTarget.targetRaise) *
+          {(projectTarget.publicSaleTokenSold /
+            projectTarget.publicSaleTokenAmount) *
             100}{" "}
           %
         </div>
         <div className="font-sora text-xs font-light text-gray400">
           {numberWithCommas(projectTarget.publicSaleTokenSold)}/
-          {numberWithCommas(projectTarget.targetRaise)} $
+          {numberWithCommas(projectTarget.publicSaleTokenAmount)}
+          &nbsp;
           {projectTarget.tokenSymbol}
         </div>
       </div>
@@ -48,7 +49,8 @@ const ProjectTarget = ({ projectTarget }: any) => {
             Rate
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
-            1 ${projectTarget.currency.symbol} = {1 / projectTarget.rate} $
+            1 {projectTarget.currency.symbol} = {1 / projectTarget.rate}
+            &nbsp;
             {projectTarget.tokenSymbol}
           </div>
         </div>
@@ -65,7 +67,7 @@ const ProjectTarget = ({ projectTarget }: any) => {
             Start Date (GMT+7)
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
-            {startDate}
+            {moment(projectTarget.startDate).format("DD MMM'YY - hh:mm")}
           </div>
         </div>
         <div className="flex">
@@ -81,6 +83,4 @@ const ProjectTarget = ({ projectTarget }: any) => {
   );
 };
 
-export default memo(ProjectTarget, (prevProps, nextProps) =>
-  isEqual(prevProps, nextProps)
-);
+export default ProjectTarget;

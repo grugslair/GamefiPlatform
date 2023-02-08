@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { IContractUSDC } from './contractUSDC'
-import { getUSDCBalance, initiateUSDCContract } from './thunk'
+import { getUSDCAllowance, getUSDCBalance, initiateUSDCContract } from './thunk'
 
 
 const initialState = {
   usdcContract: null,
+  allowance: null,
   balanceUSDC: ''
 } as IContractUSDC
 
@@ -16,6 +17,10 @@ const contractUSDC = createSlice({
   extraReducers: (builder) => {
     builder.addCase(initiateUSDCContract.fulfilled, (state: IContractUSDC, action: any) => {
       state.usdcContract = action.payload.contract
+    })
+
+    builder.addCase(getUSDCAllowance.fulfilled, (state: IContractUSDC, action: any) => {
+      state.allowance = action.payload.allowance
     })
 
     builder.addCase(getUSDCBalance.fulfilled, (state: IContractUSDC, action: any) => {
