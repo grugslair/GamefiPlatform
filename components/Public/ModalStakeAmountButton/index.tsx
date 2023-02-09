@@ -215,7 +215,7 @@ const ModalStakeAmountButton = ({
             placeholder="Type Here"
             controls={false}
             min="0"
-            max={contractRocks.balanceOfRocks.toString()}
+            max={contractRocks.balanceOfRocks?.toString()}
           />
           <a
             className="font-avara text-base font-extrabold text-primary500 underline hover:text-primary500"
