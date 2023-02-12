@@ -140,7 +140,7 @@ const ModalClaimRocksButton = ({
             <div className="mt-1 flex items-center gap-6">
               <InputNumber
                 type="number"
-                className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-xl font-extrabold text-white"
+                className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-2xl font-extrabold text-white"
                 value={stakeAmount}
                 size="large"
                 onChange={changeStakeAmount}
