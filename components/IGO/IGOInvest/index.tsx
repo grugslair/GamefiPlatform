@@ -2,6 +2,7 @@
 import { InputNumber } from "antd";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import moment from "moment";
 
 // Redux
 import { useSelector } from "react-redux";
@@ -57,12 +58,16 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
 
   const [amount, setAmount] = useState("");
 
-  // const isRegisterationPhase = moment().isBetween(
-  //   moment(data.periodStart),
-  //   moment(data.periodEnd)
-  // );
-  // const isRegisterationPhase = true;
-  const isRegisterationPhase = false;
+  const isRegistrationPhase = moment().isBetween(
+    moment(data.registrationPeriodStart),
+    moment(data.registrationPeriodEnd)
+  );
+  const isBuyPhase = moment().isBetween(
+    moment(data.buyPeriodStart),
+    moment(data.buyPeriodEnd)
+  );
+  // const isRegistrationPhase = false;
+  // const isBuyPhase = true;
 
   function submitRegistrationProject() {
     const projectId = router.query.id || "0";
@@ -210,7 +215,7 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
         </Button>
       </div>
 
-      {isRegisterationPhase ? (
+      {isRegistrationPhase ? (
         contractStake.balances < 3000 ? (
           <IgoStake />
         ) : (
@@ -220,9 +225,9 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
             loadingRegister={launchpad.loadingRegisterProject}
           />
         )
-      ) : (
+      ) : isBuyPhase ? (
         !isRegistered && <div>You are not able to buy</div>
-      )}
+      ) : <div>Invest ended</div>}
     </div>
   );
 };

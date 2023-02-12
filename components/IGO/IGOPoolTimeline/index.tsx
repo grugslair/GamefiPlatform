@@ -110,7 +110,7 @@ const IGOTokenDetails = ({ data }: IIGOTokenDetails) => {
     },
     {
       text: "Listing Date",
-      value: `${moment(data.periodStart).format("DD MMM'YY")}`,
+      value: `${moment(data.registrationPeriodStart).format("DD MMM'YY")}`,
     },
     {
       text: "Contract Address",
@@ -129,17 +129,17 @@ const IGOTokenDetails = ({ data }: IIGOTokenDetails) => {
           data={[
             {
               title: "Registration Phase",
-              startTime: data.periodStart,
-              endTime: data.periodEnd,
+              startTime: data.registrationPeriodStart,
+              endTime: data.registrationPeriodEnd,
             },
             {
               title: "Buying Phase",
-              startTime: data.periodStart,
-              endTime: data.periodEnd,
+              startTime: data.buyPeriodStart,
+              endTime: data.buyPeriodEnd,
             },
             {
               title: `Claim Start (${data.VestingRule?.tgePercentage}% TGE)`,
-              startTime: data.periodStart,
+              startTime: data.claimPeriodStart,
             },
           ]}
         />

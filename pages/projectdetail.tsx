@@ -74,7 +74,7 @@ const ProjectDetail = () => {
                     width: 80,
                     height: 80,
                   }}
-                  companyEndDate={dataIGO?.periodEnd}
+                  companyEndDate={dataIGO?.registrationPeriodEnd}
                   companyDesc={dataIGO?.description}
                   companyName={dataIGO?.name}
                   companyToken={dataIGO?.tokenSymbol}

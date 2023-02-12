@@ -32,7 +32,7 @@ const IgoRegister = ({
       ) : (
         <>
           <div className="font-avara text-xl font-extrabold text-white">
-            Registeration Open
+            Registration Open
           </div>
           <div className="mt-2 font-sora text-base font-light text-gray300">
             Don&apos;t miss your chances. Tap “Register Now” to put yourself on

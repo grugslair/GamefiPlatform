@@ -70,8 +70,11 @@ export interface IProjectList {
   publicSalePrice: number // rate -> 1usdt = 1000 dota
   publicSaleCurrencyId: number
   minStaking: number //projectTarget -> minRocks
-  periodStart: string 
-  periodEnd: string //projectTarget -> endDate
+  registrationPeriodStart: string 
+  registrationPeriodEnd: string
+  buyPeriodStart: string 
+  buyPeriodEnd: string 
+  claimPeriodStart: string
   discordUrl: string | null
   twitterUrl: string | null
   mediumUrl: string | null

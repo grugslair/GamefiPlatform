@@ -30,7 +30,7 @@ const Project = (props: IProps) => {
   const { handleSetEndDate, countDown } = useCountDown();
 
   useLayoutEffect(() => {
-    const date = new Date(props.dataproject.periodEnd);
+    const date = new Date(props.dataproject.registrationPeriodEnd);
     handleSetEndDate(date.getTime());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
@@ -39,7 +39,7 @@ const Project = (props: IProps) => {
     networkLogo: props.dataproject.Chain.logo,
     companyProfile: props.dataproject.banner,
     countDown,
-    endDate: props.dataproject.periodEnd,
+    endDate: props.dataproject.registrationPeriodEnd,
   };
 
   const projectDescription: IProjectDescriptionProp = {
@@ -53,7 +53,7 @@ const Project = (props: IProps) => {
   const projectTarget: IProjectTarget = {
     targetRaise: props.dataproject.targetAmount,
     rate: props.dataproject.publicSalePrice,
-    startDate: props.dataproject.periodStart,
+    startDate: props.dataproject.registrationPeriodStart,
     minRocks: props.dataproject.minStaking,
     vesting: props.dataproject.VestingRule.label,
     tokenSymbol: props.dataproject.tokenSymbol,
