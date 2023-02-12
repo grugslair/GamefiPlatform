@@ -13,49 +13,60 @@ import { IContractStake } from "store/contractStake/contractStake";
 
 export const initiateProjectChainContract = createAsyncThunk(
   "contract/initiateProjectChainContract",
-  async (payload: IContractProjectMapping, { getState }): Promise<any> => {
-    const { wallet }: any = getState();
-    const address =
-      // @ts-ignore
-      projectChainContractAddress[payload.currencySymbol][payload.chainName];
-    const ABI =
-      // @ts-ignore
-      projectChainContractABI[payload.currencySymbol][payload.chainName];
+  async (
+    payload: IContractProjectMapping,
+    { getState, rejectWithValue }
+  ): Promise<any> => {
+    try {
+      const { wallet }: any = getState();
+      const address =
+        // @ts-ignore
+        projectChainContractAddress[payload.currencySymbol][payload.chainName];
+      const ABI =
+        // @ts-ignore
+        projectChainContractABI[payload.currencySymbol][payload.chainName];
 
-    const contract = new ethers.Contract(address, ABI, wallet.etherProvider);
+      const contract = new ethers.Contract(address, ABI, wallet.etherProvider);
 
-    return {
-      contract,
-      address,
-      ABI,
-    };
+      return {
+        contract,
+        address,
+        ABI,
+      };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 
 export const getProjectChainBalance = createAsyncThunk(
   "contract/getProjectChainBalance",
-  async (args, { getState }): Promise<any> => {
-    const { contractProjectChain }: any = getState();
-    const { wallet }: any = getState();
+  async (args, { getState, rejectWithValue }): Promise<any> => {
+    try {
+      const { contractProjectChain }: any = getState();
+      const { wallet }: any = getState();
 
-    const { projectChainContract } =
-      contractProjectChain as IContractProjectChain;
+      const { projectChainContract } =
+        contractProjectChain as IContractProjectChain;
 
-    const balance = await projectChainContract.balances(wallet.walletAddress);
+      const balance = await projectChainContract.balances(wallet.walletAddress);
 
-    return {
-      balance: weiToEth(balance.toString()),
-    };
+      return {
+        balance: weiToEth(balance.toString()),
+      };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
 );
 
 export const getProjectChainAllowance = createAsyncThunk(
   "contract/getProjectChainAllowance",
-  async (args, { getState }): Promise<any> => {
-    const { wallet, contractProjectChain }: any = getState();
-    const { projectChainContract } =
-      contractProjectChain as IContractProjectChain;
+  async (args, { getState, rejectWithValue }): Promise<any> => {
     try {
+      const { wallet, contractProjectChain }: any = getState();
+      const { projectChainContract } =
+        contractProjectChain as IContractProjectChain;
       const returnAllowance = await projectChainContract.allowance(
         wallet.walletAddress,
         contractProjectChain.address
@@ -65,7 +76,7 @@ export const getProjectChainAllowance = createAsyncThunk(
         allowance,
       };
     } catch (error) {
-      return error;
+      return rejectWithValue(error);
     }
   }
 );

@@ -3,7 +3,7 @@ import { ethers } from "ethers"
 import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { faGlobe } from "@fortawesome/free-solid-svg-icons"
 
-import { IProjectList } from "store/launchpad/launchpad"
+import { IProjectDetailData } from "store/launchpad/launchpad"
 
 import { IChainData } from "../types/chainList"
 import supportedChains from "./chainList"
@@ -93,7 +93,7 @@ export const encodeUrl = (pdfUrl: string) => {
   )
 }
 
-export const getSocialMedias = (data: IProjectList) => {
+export const getSocialMedias = (data: IProjectDetailData) => {
   return [
     {
       url: data?.twitterUrl || "",

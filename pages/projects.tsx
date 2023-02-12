@@ -6,7 +6,7 @@ import type { NextPage } from "next";
 import { useSelector } from "react-redux";
 import { RootState } from "store/index";
 import { getProjectList } from "store/launchpad/thunk";
-import type { IProjectList } from "store/launchpad/launchpad";
+import type { IProjectDetailData } from "store/launchpad/launchpad";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,7 +22,7 @@ import Project from "components/Landing/Project";
 import styles from "styles/Projects.module.css";
 
 interface IGridWrapper {
-  projects: IProjectList[];
+  projects: IProjectDetailData[];
   loading: boolean;
 }
 

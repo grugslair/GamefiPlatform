@@ -4,7 +4,7 @@ import { Progress } from "antd";
 import { faChevronRight, faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { IProjectList } from "store/launchpad/launchpad";
+import { IProjectDetailData } from "store/launchpad/launchpad";
 
 import useWallet from "hooks/useWallet";
 import { numberWithCommas } from "helper/utilities";
@@ -14,7 +14,7 @@ import { theme } from "tailwind.config";
 import styles from "./IGOTargetRaise.module.css";
 
 interface IIGOTargetRaise {
-  data: IProjectList;
+  data: IProjectDetailData;
   handleOpenRequirement: () => void;
 }
 

@@ -1,11 +1,11 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { IGetInvestSignaturePayload, IProjectListByIdPayload, IProjectListPayload, IRegisterProjectPayload } from "./launchpad"
+import { IGetInvestSignaturePayload, IProjectDetailDataByIdPayload, IProjectDetailDataPayload, IRegisterProjectPayload } from "./launchpad"
 import { IGetReportList } from "./launchpad"
 
 export const getProjectList = createAsyncThunk(
   'launchpad/projectList',
-  async (payload: IProjectListPayload, {rejectWithValue}): Promise<any> => {
+  async (payload: IProjectDetailDataPayload, {rejectWithValue}): Promise<any> => {
     const {walletAddress} = payload
     try {
       const resp = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/launchpad/api/projects?walletAddress=${walletAddress}`);
@@ -18,7 +18,7 @@ export const getProjectList = createAsyncThunk(
 
 export const getProjectListById = createAsyncThunk(
   'launchpad/projectListById',
-  async (payload: IProjectListByIdPayload, {rejectWithValue}): Promise<any> => {
+  async (payload: IProjectDetailDataByIdPayload, {rejectWithValue}): Promise<any> => {
     const {id, walletAddress} = payload
     try {
       const resp = await axios.get(`${process.env.NEXT_PUBLIC_API_HOST}/launchpad/api/projects/${id}?walletAddress=${walletAddress}`);

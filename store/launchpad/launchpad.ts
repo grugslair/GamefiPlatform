@@ -31,7 +31,8 @@ export interface IPorjectCurrency {
   decimals: number,
   rate: number,
   createdAt: string,
-  updatedAt: string
+  updatedAt: string,
+  Chains: IProjectChain[],
 }
 
 export interface IProjectChain {
@@ -47,10 +48,12 @@ export interface IProjectChain {
 
 export interface IProjectDetail {
   isRegistered: boolean
-  project: IProjectList
+  investedAmount: number
+  maxAllocation: number
+  project: IProjectDetailData
 } 
 
-export interface IProjectList {
+export interface IProjectDetailData {
   id: number
   chainId: number // ini di polygon
   vestingRuleId: number // ada tambahan object label
@@ -89,7 +92,7 @@ export interface IProjectList {
 
 export interface IProject {
   loading: boolean
-  list: IProjectList[]
+  list: IProjectDetailData[]
 }
 
 export interface IReportList {
@@ -125,11 +128,11 @@ export interface IGetReportList {
   haveNft?: boolean
 }
 
-export interface IProjectListPayload {
+export interface IProjectDetailDataPayload {
   walletAddress: string
 }
 
-export interface IProjectListByIdPayload {
+export interface IProjectDetailDataByIdPayload {
   id: string
   walletAddress: string
 }

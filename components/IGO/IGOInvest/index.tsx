@@ -7,7 +7,7 @@ import moment from "moment";
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { ILaunchPadState, IProjectList } from "store/launchpad/launchpad";
+import { ILaunchPadState, IProjectDetailData } from "store/launchpad/launchpad";
 import {
   approveContractProjectChain,
   getProjectChainAllowance,
@@ -36,12 +36,20 @@ import { ethToWei } from "helper/utilities";
 import IGOMultiChain from "./IGOMultiChain";
 
 interface IIGOInvest {
-  data: IProjectList;
+  data: IProjectDetailData;
   isRegistered: boolean;
+  maxAllocation: number;
+  investedAmount: number;
   refetchData: () => void;
 }
 
-const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
+const IGOInvest = ({
+  data,
+  isRegistered,
+  maxAllocation,
+  investedAmount,
+  refetchData,
+}: IIGOInvest) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -56,18 +64,18 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
     (state: RootState) => state.contractStake
   );
 
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
 
-  const isRegistrationPhase = moment().isBetween(
-    moment(data.registrationPeriodStart),
-    moment(data.registrationPeriodEnd)
-  );
-  const isBuyPhase = moment().isBetween(
-    moment(data.buyPeriodStart),
-    moment(data.buyPeriodEnd)
-  );
-  // const isRegistrationPhase = false;
-  // const isBuyPhase = true;
+  // const isRegistrationPhase = moment().isBetween(
+  //   moment(data.registrationPeriodStart),
+  //   moment(data.registrationPeriodEnd)
+  // );
+  // const isBuyPhase = moment().isBetween(
+  //   moment(data.buyPeriodStart),
+  //   moment(data.buyPeriodEnd)
+  // );
+  const isRegistrationPhase = false;
+  const isBuyPhase = true;
 
   function submitRegistrationProject() {
     const projectId = router.query.id || "0";
@@ -131,7 +139,7 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
           }
         }
 
-        dispatch(investProjectChain(amount));
+        dispatch(investProjectChain(amount.toString()));
       }
     } catch (error) {
       pushMessage(
@@ -163,13 +171,13 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
           Max. Allocation:
         </div>
         <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
-          ??? {data.Currency.symbol}
+          {maxAllocation} {data.Currency.symbol}
         </div>
       </div>
 
       <IGOMultiChain data={data} />
 
-      <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4 pt-6">
+      <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4">
         <div className="text-sora text-xs font-light text-gray300">
           Invest ({data.Currency.symbol})
         </div>
@@ -185,7 +193,11 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
           />
           <a
             className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
-            onClick={() => setAmount(contractProjectChain.balance.toString())}
+            onClick={() =>
+              setAmount(
+                Math.min(Number(contractProjectChain.balance), maxAllocation)
+              )
+            }
           >
             Max
           </a>
@@ -204,7 +216,7 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
           To get ({data.tokenSymbol})
         </div>
         <div className="mt-1 font-avara text-2xl font-extrabold text-white">
-          {parseInt(amount, 10) / data.publicSalePrice || "0"}
+          {Math.round((amount / data.publicSalePrice) * 100) / 100 || 0}
         </div>
         <Button
           onClick={invest}
@@ -214,6 +226,14 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
           Invest {data.Currency.symbol}
         </Button>
       </div>
+      {!!investedAmount && (
+        <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4 text-center font-sora text-base font-light text-gray300">
+          🎉 You&apos;ve invested{" "}
+          <span className="font-bold">
+            {investedAmount} ${data.Currency.symbol}
+          </span>
+        </div>
+      )}
 
       {isRegistrationPhase ? (
         contractStake.balances < 3000 ? (
@@ -227,7 +247,9 @@ const IGOInvest = ({ data, isRegistered, refetchData }: IIGOInvest) => {
         )
       ) : isBuyPhase ? (
         !isRegistered && <div>You are not able to buy</div>
-      ) : <div>Invest ended</div>}
+      ) : (
+        <div>Invest ended</div>
+      )}
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { IProjectList } from "store/launchpad/launchpad";
+import { IProjectDetail, IProjectDetailData } from "store/launchpad/launchpad";
 import { getProjectListById } from "store/launchpad/thunk";
 
 // Global utils
@@ -27,8 +27,7 @@ const ProjectDetail = () => {
 
   const wallet = useSelector((state: RootState) => state.wallet);
 
-  const [dataIGO, setDataIGO] = useState<IProjectList | null>(null);
-  const [isRegistered, setIsRegistered] = useState<boolean>(false);
+  const [dataIGO, setDataIGO] = useState<IProjectDetail | null>(null);
   const [openRequirement, setOpenRequirement] = useState<boolean>(false);
 
   const fetchData = () => {
@@ -38,9 +37,7 @@ const ProjectDetail = () => {
         walletAddress: wallet.walletAddress?.toString() || "",
       })
     ).then((resp) => {
-      console.log(resp.payload);
-      setDataIGO(resp.payload.project);
-      setIsRegistered(resp.payload.isRegistered);
+      setDataIGO(resp.payload);
     });
   };
 
@@ -53,10 +50,10 @@ const ProjectDetail = () => {
 
   return (
     <>
-      {dataIGO && (
+      {dataIGO?.project && (
         <div>
           <div className="absolute top-0 h-[708px] w-full overflow-hidden">
-            <img src={dataIGO.banner || ""} alt="banner" className="w-full" />
+            <img src={dataIGO.project.banner || ""} alt="banner" className="w-full" />
             <div
               className="absolute bottom-0 h-full w-full"
               style={{
@@ -70,29 +67,31 @@ const ProjectDetail = () => {
               <div className="flex-[690]">
                 <IGOProfile
                   companyLogo={{
-                    img: dataIGO?.logo || "",
+                    img: dataIGO.project.logo || "",
                     width: 80,
                     height: 80,
                   }}
-                  companyEndDate={dataIGO?.registrationPeriodEnd}
-                  companyDesc={dataIGO?.description}
-                  companyName={dataIGO?.name}
-                  companyToken={dataIGO?.tokenSymbol}
-                  companySosMedia={getSocialMedias(dataIGO!)}
-                  networkName={dataIGO?.Chain?.name}
-                  networkLogo={dataIGO?.Chain?.logo}
+                  companyEndDate={dataIGO.project.registrationPeriodEnd}
+                  companyDesc={dataIGO.project.description}
+                  companyName={dataIGO.project.name}
+                  companyToken={dataIGO.project.tokenSymbol}
+                  companySosMedia={getSocialMedias(dataIGO.project)}
+                  networkName={dataIGO.project.Chain?.name}
+                  networkLogo={dataIGO.project.Chain?.logo}
                 />
-                <IGOPoolTimeline data={dataIGO} />
+                <IGOPoolTimeline data={dataIGO.project} />
                 {/* <IGOClaimStatus /> */}
               </div>
               <div className="flex-[448]">
                 <IGOTargetRaise
                   handleOpenRequirement={() => setOpenRequirement(true)}
-                  data={dataIGO}
+                  data={dataIGO.project}
                 />
                 <IGOInvest
-                  isRegistered={isRegistered}
-                  data={dataIGO}
+                  isRegistered={dataIGO.isRegistered}
+                  maxAllocation={dataIGO.maxAllocation}
+                  investedAmount={dataIGO.investedAmount}
+                  data={dataIGO.project}
                   refetchData={fetchData}
                 />
               </div>

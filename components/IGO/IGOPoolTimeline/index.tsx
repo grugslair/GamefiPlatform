@@ -5,12 +5,12 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
 
-import { IProjectList } from "store/launchpad/launchpad";
+import { IProjectDetailData } from "store/launchpad/launchpad";
 
 import { numberWithCommas } from "helper/utilities";
 
 interface IIGOTokenDetails {
-  data: IProjectList;
+  data: IProjectDetailData;
 }
 
 interface IIGOPoolTimeline {

@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 //Redux
-import type { IProjectList } from "store/launchpad/launchpad";
+import type { IProjectDetailData } from "store/launchpad/launchpad";
 
 // Hooks
 import useCountDown from "hooks/useCountDown";
@@ -21,7 +21,7 @@ import {
 import { getSocialMedias } from "helper/utilities";
 
 interface IProps {
-  dataproject: IProjectList;
+  dataproject: IProjectDetailData;
 }
 
 const Project = (props: IProps) => {

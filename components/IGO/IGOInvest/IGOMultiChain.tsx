@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { twJoin } from "tailwind-merge";
 
 // Redux
-import { IProjectList } from "store/launchpad/launchpad";
+import { IProjectDetailData } from "store/launchpad/launchpad";
 import {
   getProjectChainBalance,
   initiateProjectChainContract,
@@ -20,23 +20,8 @@ import {
 import { useAppDispatch } from "hooks/useStoreHooks";
 
 interface IIGOMultiChain {
-  data: IProjectList;
+  data: IProjectDetailData;
 }
-
-const MOCK_CHAINS = [
-  {
-    name: "Ethereum",
-    logo: "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Ethereum-ETH-icon.png",
-  },
-  {
-    name: "Ethereum",
-    logo: "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Ethereum-ETH-icon.png",
-  },
-  {
-    name: "Ethereum",
-    logo: "https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Ethereum-ETH-icon.png",
-  },
-];
 
 const IGOMultiChain = ({ data }: IIGOMultiChain) => {
   const dispatch = useAppDispatch();
@@ -46,10 +31,13 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedChain, setSelectedChain] = useState(0);
 
+  const availableChains = data.Currency.Chains;
+
   const onEnter = () => {
     clearTimeout(closeTimeout.current);
     setDropdownOpen(true);
   };
+
   const onLeave = (skipTimeout = false) => {
     clearTimeout(closeTimeout.current);
     closeTimeout.current = setTimeout(
@@ -62,13 +50,16 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
 
   useEffect(() => {
     const run = async () => {
-      await dispatch(
+      dispatch(
         initiateProjectChainContract({
           currencySymbol: data.Currency.symbol,
-          chainName: "Ethereum",
+          chainName: availableChains[selectedChain].name,
         })
-      );
-      await dispatch(getProjectChainBalance());
+      ).then((e) => {
+        if (e.meta.requestStatus === "fulfilled") {
+          dispatch(getProjectChainBalance());
+        }
+      });
     };
     run();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,12 +75,12 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
         onTouchEnd={() => onLeave()}
       >
         <img
-          src="https://icons.iconarchive.com/icons/cjdowner/cryptocurrency-flat/256/Ethereum-ETH-icon.png"
+          src={availableChains[selectedChain].logo}
           alt="chain-img"
           className="mr-2 h-6 w-6"
         />
         <div className="mt-1 flex-1 text-left font-avara text-sm font-extrabold">
-          Via {MOCK_CHAINS[selectedChain].name}
+          Via {availableChains[selectedChain].name}
         </div>
         <FontAwesomeIcon
           className="h-4 w-4 p-[1px]"
@@ -107,7 +98,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
         onMouseEnter={() => onEnter()}
         onMouseLeave={() => onLeave()}
       >
-        {MOCK_CHAINS.map((chain, i) => (
+        {availableChains.map((chain, i) => (
           <div
             key={i}
             className={twJoin(
