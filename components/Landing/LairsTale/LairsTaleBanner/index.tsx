@@ -63,7 +63,7 @@ const LairsTaleBanner = ({ isMobile, onClickPlay }: ILairsTaleBanner) => {
                 isMobile && "mt-3 text-3xl"
               )}
             >
-              The Grug:
+              Grug&apos;s Lair:
             </h1>
             <h1
               className={twMerge(
@@ -71,7 +71,7 @@ const LairsTaleBanner = ({ isMobile, onClickPlay }: ILairsTaleBanner) => {
                 isMobile && "mt-1 text-3xl"
               )}
             >
-              A Lair&apos;s Tale
+              Age of Rocks!
             </h1>
             <div className={twMerge("mt-4 flex gap-6", isMobile && "mt-2")}>
               <p

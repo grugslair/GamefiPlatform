@@ -15,9 +15,9 @@ import styles from "styles/LairsTale.module.css";
 const EPISODES = [
   {
     no: 0,
-    title: "A Lair's Tale: Trailer",
+    title: "Grug's Lair: Age of Rocks! The Trailer",
     subtitle:
-      "The first time Grug's wait it's Allegory in a brand new world char counter how much is this line will have. I need to know the char counter for this!!! ",
+      "Grug is a regular man. He loves his wife, he loves his kids and he hates his job. One night all of his certainties are put to the test by a harmless dream that changes everything",
     durationInMinutes: 15,
     locked: false,
     thumbnailImage: '/images/lairsTaleBackground.jpg',
