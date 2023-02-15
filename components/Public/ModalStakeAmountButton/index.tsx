@@ -24,7 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { theme } from "tailwind.config";
 
 import { pushMessage } from "core/notification";
-import { ethToWei, numberWithCommas } from "helper/utilities";
+import { ethToWei, formatNumber } from "helper/utilities";
 import { useAppDispatch } from "hooks/useStoreHooks";
 
 // Global components
@@ -202,7 +202,7 @@ const ModalStakeAmountButton = ({
         <div className="text-sora mt-4 text-sm text-gray400">
           Curr. Balance:{" "}
           <span className="text-warning500">
-            {numberWithCommas(Number(contractRocks.balanceOfRocks))} $ROCKS
+            {formatNumber(Number(contractRocks.balanceOfRocks))} $ROCKS
           </span>
         </div>
         <div className="mt-2 flex items-center gap-6 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 px-[14px] py-[10px]">

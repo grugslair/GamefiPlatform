@@ -7,7 +7,7 @@ import { faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
 
 import { IProjectDetailData } from "store/launchpad/launchpad";
 
-import { numberWithCommas } from "helper/utilities";
+import { formatNumber } from "helper/utilities";
 
 interface IIGOTokenDetails {
   data: IProjectDetailData;
@@ -96,17 +96,17 @@ const IGOTokenDetails = ({ data }: IIGOTokenDetails) => {
     },
     {
       text: "Initial Supply",
-      value: `${numberWithCommas(data.tokenInitialSupply)} $${
+      value: `${formatNumber(data.tokenInitialSupply)} $${
         data.tokenSymbol
       }`,
     },
     {
       text: "Total Supply",
-      value: `${numberWithCommas(data.tokenTotalSupply)} $${data.tokenSymbol}`,
+      value: `${formatNumber(data.tokenTotalSupply)} $${data.tokenSymbol}`,
     },
     {
       text: "Initial Market Cap",
-      value: `$${numberWithCommas(data.targetAmount)}`,
+      value: `$${formatNumber(data.targetAmount)}`,
     },
     {
       text: "Listing Date",

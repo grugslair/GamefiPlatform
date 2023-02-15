@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IProjectDetailData } from "store/launchpad/launchpad";
 
 import useWallet from "hooks/useWallet";
-import { numberWithCommas } from "helper/utilities";
+import { formatNumber } from "helper/utilities";
 
 import { theme } from "tailwind.config";
 
@@ -34,7 +34,7 @@ const IGOTargetRaise = ({ data, handleOpenRequirement }: IIGOTargetRaise) => {
           Target Raise
         </div>
         <div className="mt-1 font-avara text-2xl font-extrabold text-white">
-          {data.targetAmount} {data.Currency.symbol}
+          {formatNumber(data.targetAmount)} {data.Currency.symbol}
         </div>
         <Progress
           strokeColor={theme.extend.colors.success600}
@@ -51,8 +51,8 @@ const IGOTargetRaise = ({ data, handleOpenRequirement }: IIGOTargetRaise) => {
             {(data.publicSaleTokenSold / data.publicSaleTokenAmount) * 100} %
           </div>
           <div className="font-sora text-xs font-light text-gray400">
-            {numberWithCommas(data.publicSaleTokenSold)}/
-            {numberWithCommas(data.publicSaleTokenAmount)}
+            {formatNumber(data.publicSaleTokenSold)}/
+            {formatNumber(data.publicSaleTokenAmount)}
             &nbsp;
             {data.tokenSymbol}
           </div>

@@ -1,9 +1,7 @@
 import { Progress } from "antd";
-import { memo, useMemo } from "react";
-import isEqual from "lodash/isEqual";
 import moment from "moment";
 
-import { numberWithCommas } from "helper/utilities";
+import { formatNumber } from "helper/utilities";
 import { theme } from "tailwind.config";
 
 import styles from "./ProjectTarget.module.css";
@@ -15,7 +13,7 @@ const ProjectTarget = ({ projectTarget }: any) => {
         Target Raise
       </div>
       <div className="font-extraBold mt-1 font-avara text-2xl font-extrabold text-white">
-        ${numberWithCommas(projectTarget.targetRaise)}
+        ${formatNumber(projectTarget.targetRaise)}
       </div>
       <Progress
         strokeColor={theme.extend.colors.success600}
@@ -37,8 +35,8 @@ const ProjectTarget = ({ projectTarget }: any) => {
           %
         </div>
         <div className="font-sora text-xs font-light text-gray400">
-          {numberWithCommas(projectTarget.publicSaleTokenSold)}/
-          {numberWithCommas(projectTarget.publicSaleTokenAmount)}
+          {formatNumber(projectTarget.publicSaleTokenSold)}/
+          {formatNumber(projectTarget.publicSaleTokenAmount)}
           &nbsp;
           {projectTarget.tokenSymbol}
         </div>
