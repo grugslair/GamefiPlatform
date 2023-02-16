@@ -15,7 +15,6 @@ import {
   getAllowance,
   getGasPrice,
 } from "store/contractStake/thunk";
-import { IwalletConnect } from "store/wallet/walletType";
 
 // Fontawesome
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -45,14 +44,12 @@ const ModalStakeAmountButton = ({
   const [method, setMethod] = useState(1);
   const [stakeAmount, setStakeAmount] = useState("");
   const [disclaimer, setDisclaimer] = useState(false);
+  const [loading, setLoading] = useState(false);
   const contractRocks: IContractRocks = useSelector(
     (state: RootState) => state.contractRocks
   );
   const contractStake: IContractStake = useSelector(
     (state: RootState) => state.contractStake
-  );
-  const wallet: IwalletConnect = useSelector(
-    (state: RootState) => state.wallet
   );
 
   const dispatch = useAppDispatch();
@@ -68,78 +65,87 @@ const ModalStakeAmountButton = ({
     }
     return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stakeAmount]);
+  }, [stakeAmount, loading]);
 
   async function staking() {
-    if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
-      await dispatch(getGasPrice());
+    try {
+      setLoading(true);
+      if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
+        await dispatch(getGasPrice());
 
-      const weiAmount = ethToWei(stakeAmount?.toString() || "0");
+        const weiAmount = ethToWei(stakeAmount?.toString() || "0");
 
-      if (contractStake.allowance) {
-        const result = await dispatch(contractStaking(weiAmount));
+        if (contractStake.allowance) {
+          const result = await dispatch(contractStaking(weiAmount));
 
-        if (result?.payload?.hash) {
-          pushMessage(
-            {
-              status: "success",
-              title: "Successfully stake token",
-              description: "You've stake ROCKS",
-            },
-            dispatch
-          );
+          if (result?.payload?.hash) {
+            pushMessage(
+              {
+                status: "success",
+                title: "Successfully stake token",
+                description: "You've stake ROCKS",
+              },
+              dispatch
+            );
+          }
+
+          //@ts-ignore
+          if (result?.error?.message === "Rejected") {
+            pushMessage(
+              {
+                status: "error",
+                title: "",
+                description: result.payload.reason,
+              },
+              dispatch
+            );
+          }
+
+          setModalOpen(false);
         }
-
-        //@ts-ignore
-        if (result?.error?.message === "Rejected") {
-          pushMessage(
-            {
-              status: "error",
-              title: "",
-              description: result.payload.reason,
-            },
-            dispatch
-          );
-        }
-
-        setModalOpen(false);
       }
+    } finally {
+      setLoading(false);
     }
   }
 
   async function approve() {
-    if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
-      await dispatch(getGasPrice());
+    try {
+      setLoading(true);
+      if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
+        await dispatch(getGasPrice());
 
-      const weiAmount = ethToWei(stakeAmount?.toString() || "0");
-      if (contractStake.allowance) {
-        const approveResult = await dispatch(approveContractRocks(weiAmount));
+        const weiAmount = ethToWei(stakeAmount?.toString() || "0");
+        if (contractStake.allowance) {
+          const approveResult = await dispatch(approveContractRocks(weiAmount));
 
-        if (approveResult?.payload?.hash) {
-          pushMessage(
-            {
-              status: "success",
-              title: "",
-              description: "Successfully approve token",
-            },
-            dispatch
-          );
+          if (approveResult?.payload?.hash) {
+            pushMessage(
+              {
+                status: "success",
+                title: "",
+                description: "Successfully approve token",
+              },
+              dispatch
+            );
+          }
+
+          //@ts-ignore
+          if (approveResult?.error?.message === "Rejected") {
+            pushMessage(
+              {
+                status: "error",
+                title: "",
+                description: approveResult.payload.reason,
+              },
+              dispatch
+            );
+          }
         }
-
-        //@ts-ignore
-        if (approveResult?.error?.message === "Rejected") {
-          pushMessage(
-            {
-              status: "error",
-              title: "",
-              description: approveResult.payload.reason,
-            },
-            dispatch
-          );
-        }
-
-        setModalOpen(false);
+        await callAllowance();
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -150,6 +156,8 @@ const ModalStakeAmountButton = ({
 
   useEffect(() => {
     callAllowance();
+    setStakeAmount("");
+    setDisclaimer(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
 
@@ -240,23 +248,14 @@ const ModalStakeAmountButton = ({
           </div>
         </div>
 
-        {isAllowed ? (
-          <Button
-            className="mb-6 w-full bg-[#B54639] py-2 font-['avara'] text-base"
-            disabled={!disclaimer}
-            onClick={() => staking()}
-          >
-            Stake
-          </Button>
-        ) : (
-          <Button
-            className="mb-6 w-full bg-[#B54639] py-2 font-['avara'] text-base"
-            disabled={!disclaimer}
-            onClick={() => approve()}
-          >
-            Approve
-          </Button>
-        )}
+        <Button
+          className="mb-6 w-full bg-[#B54639] py-2 font-['avara'] text-base"
+          disabled={!disclaimer}
+          onClick={isAllowed ? staking : approve}
+          loading={loading}
+        >
+          {isAllowed ? "Stake" : "Approve"}
+        </Button>
 
         <div className="font-sora text-sm font-light text-white">
           Dont have ROCKS? &nbsp;

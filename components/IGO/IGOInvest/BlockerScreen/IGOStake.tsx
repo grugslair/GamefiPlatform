@@ -1,11 +1,11 @@
 import dynamic from "next/dynamic";
 
 const ModalStakeAmountButton = dynamic(
-  () => import("../../Public/ModalStakeAmountButton"),
+  () => import("../../../Public/ModalStakeAmountButton"),
   { ssr: false }
 );
 
-const IgoStake = () => {
+const IGOStake = () => {
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 flex flex-col justify-center bg-[#0b0b0be6] px-20 text-center">
       <div className="font-avara text-xl font-extrabold text-white">
@@ -26,4 +26,4 @@ const IgoStake = () => {
   );
 };
 
-export default IgoStake;
+export default IGOStake;
