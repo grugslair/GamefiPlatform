@@ -191,128 +191,122 @@ const IGOInvest = ({
     }
   }
 
-  return (
-    !isInvestHidden && (
-      <>
-        <div className="relative mt-4 bg-grugCardBackground p-6">
-          <div className="font-avara text-xl font-extrabold text-primary500">
-            Invest
+  return !isInvestHidden ? (
+    <>
+      <div className="relative mt-4 bg-grugCardBackground p-6">
+        <div className="font-avara text-xl font-extrabold text-primary500">
+          Invest
+        </div>
+        <div className="mt-4 flex items-center">
+          <div className="mb-0.5 font-sora text-base font-light text-gray300">
+            My {data.Currency.symbol} Balance:
           </div>
-          <div className="mt-4 flex items-center">
-            <div className="mb-0.5 font-sora text-base font-light text-gray300">
-              My {data.Currency.symbol} Balance:
-            </div>
-            <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
-              {formatNumber(contractProjectChain.balance)}{" "}
-              {data.Currency.symbol}
-            </div>
+          <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
+            {formatNumber(contractProjectChain.balance)} {data.Currency.symbol}
           </div>
-          <div className="mt-2 flex items-center">
-            <div className="mb-0.5 font-sora text-base font-light text-gray300">
-              Max. Allocation:
-            </div>
-            <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
-              {formatNumber(maxAllocation)} {data.Currency.symbol}
-            </div>
+        </div>
+        <div className="mt-2 flex items-center">
+          <div className="mb-0.5 font-sora text-base font-light text-gray300">
+            Max. Allocation:
           </div>
-
-          <IGOMultiChain data={data} />
-
-          <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4">
-            <div className="text-sora text-xs font-light text-gray300">
-              Invest ({data.Currency.symbol})
-            </div>
-            <div className="mt-1 flex items-center gap-6">
-              <InputNumber
-                type="number"
-                className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-2xl font-extrabold text-white"
-                value={amount}
-                size="large"
-                onChange={setAmount}
-                placeholder="Type Here"
-                controls={false}
-                max={Math.min(
-                  Number(contractProjectChain.balance),
-                  maxAllocation
-                )}
-              />
-              <a
-                className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
-                onClick={() =>
-                  setAmount(
-                    Math.min(
-                      Number(contractProjectChain.balance),
-                      maxAllocation
-                    )
-                  )
-                }
-              >
-                Max
-              </a>
-            </div>
-            <div className="my-2 flex items-center gap-2">
-              <div className="flex-1 border-b border-dashed border-b-grayCool25 opacity-10" />
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary600">
-                <FontAwesomeIcon
-                  icon={faArrowDown}
-                  className="text-base text-white"
-                />
-              </div>
-              <div className="flex-1 border-b border-dashed border-b-grayCool25 opacity-10" />
-            </div>
-            <div className="font-sora text-xs font-light text-gray300">
-              To get ({data.tokenSymbol})
-            </div>
-            <div className="mt-1 font-avara text-2xl font-extrabold text-white">
-              {formatNumber(
-                Math.round((amount / data.publicSalePrice) * 100) / 100 || 0
-              )}
-            </div>
-            <Button
-              onClick={invest}
-              disabled={!amount}
-              loading={investLoading}
-              className="mt-4 h-11 w-full"
-            >
-              Invest {data.Currency.symbol}
-            </Button>
+          <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
+            {formatNumber(maxAllocation)} {data.Currency.symbol}
           </div>
-          {!!investedAmount && (
-            <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4 text-center font-sora text-base font-light text-gray300">
-              🎉 You&apos;ve invested{" "}
-              <span className="font-bold">
-                {formatNumber(investedAmount)} ${data.Currency.symbol}
-              </span>
-            </div>
-          )}
-
-          {isRegistrationPhase ? (
-            contractStake.balances < 3000 ? (
-              <IGOStake />
-            ) : (
-              <IgoRegister
-                isRegistered={isRegistered}
-                submitRegistrationProject={submitRegistrationProject}
-                loadingRegister={launchpad.loadingRegisterProject}
-              />
-            )
-          ) : isCalculatingPhase ? (
-            <IGOCalculating />
-          ) : null}
         </div>
 
-        {commitLoading && (
-          <div className="fixed top-0 left-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-[#0b0b0be6]">
-            <FontAwesomeIcon icon={faSpinner} className="text-5xl" spin />
-            <div className="mt-6 max-w-lg text-center font-sora text-xl font-light text-grayCool300">
-              Please wait while we process your investment. Make sure to keep
-              this page open
+        <IGOMultiChain data={data} />
+
+        <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4">
+          <div className="text-sora text-xs font-light text-gray300">
+            Invest ({data.Currency.symbol})
+          </div>
+          <div className="mt-1 flex items-center gap-6">
+            <InputNumber
+              type="number"
+              className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-2xl font-extrabold text-white"
+              value={amount}
+              size="large"
+              onChange={setAmount}
+              placeholder="Type Here"
+              controls={false}
+              max={Math.min(
+                Number(contractProjectChain.balance),
+                maxAllocation
+              )}
+            />
+            <a
+              className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
+              onClick={() =>
+                setAmount(
+                  Math.min(Number(contractProjectChain.balance), maxAllocation)
+                )
+              }
+            >
+              Max
+            </a>
+          </div>
+          <div className="my-2 flex items-center gap-2">
+            <div className="flex-1 border-b border-dashed border-b-grayCool25 opacity-10" />
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary600">
+              <FontAwesomeIcon
+                icon={faArrowDown}
+                className="text-base text-white"
+              />
             </div>
+            <div className="flex-1 border-b border-dashed border-b-grayCool25 opacity-10" />
+          </div>
+          <div className="font-sora text-xs font-light text-gray300">
+            To get ({data.tokenSymbol})
+          </div>
+          <div className="mt-1 font-avara text-2xl font-extrabold text-white">
+            {formatNumber(
+              Math.round((amount / data.publicSalePrice) * 100) / 100 || 0
+            )}
+          </div>
+          <Button
+            onClick={invest}
+            disabled={!amount}
+            loading={investLoading}
+            className="mt-4 h-11 w-full"
+          >
+            Invest {data.Currency.symbol}
+          </Button>
+        </div>
+        {!!investedAmount && (
+          <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4 text-center font-sora text-base font-light text-gray300">
+            🎉 You&apos;ve invested{" "}
+            <span className="font-bold">
+              {formatNumber(investedAmount)} ${data.Currency.symbol}
+            </span>
           </div>
         )}
-      </>
-    )
-  );
+
+        {isRegistrationPhase ? (
+          contractStake.balances < 3000 ? (
+            <IGOStake />
+          ) : (
+            <IgoRegister
+              isRegistered={isRegistered}
+              submitRegistrationProject={submitRegistrationProject}
+              loadingRegister={launchpad.loadingRegisterProject}
+            />
+          )
+        ) : isCalculatingPhase ? (
+          <IGOCalculating />
+        ) : null}
+      </div>
+
+      {commitLoading && (
+        <div className="fixed top-0 left-0 z-10 flex h-screen w-screen flex-col items-center justify-center bg-[#0b0b0be6]">
+          <FontAwesomeIcon icon={faSpinner} className="text-5xl" spin />
+          <div className="mt-6 max-w-lg text-center font-sora text-xl font-light text-grayCool300">
+            Please wait while we process your investment. Make sure to keep this
+            page open
+          </div>
+        </div>
+      )}
+    </>
+  ) : null;
 };
 
 export default IGOInvest;
