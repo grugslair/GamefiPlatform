@@ -31,7 +31,7 @@ import { useAppDispatch } from "hooks/useStoreHooks";
 import { formatNumber } from "helper/utilities";
 
 // Local components
-import IGOStake from "./BlockerScreen/IgoStake";
+import IGOStakeFirst from "./BlockerScreen/IGOStakeFirst";
 import IgoRegister from "./BlockerScreen/IGORegister";
 import IGOCalculating from "./BlockerScreen/IGOCalculating";
 import IGOMultiChain from "./IGOMultiChain";
@@ -118,61 +118,58 @@ const IGOInvest = ({
       setInvestLoading(true);
       await dispatch(getGasPrice());
 
-      if (true) {
-        // if (getSignatureResult?.payload?.message) {
-        const getAllowanceResult = await dispatch(getProjectChainAllowance());
+      const getAllowanceResult = await dispatch(getProjectChainAllowance());
 
-        // If allowance is less than amount, trigger approveContractProjectChain
-        if (getAllowanceResult?.payload?.allowance < amount) {
-          const approveResult = await dispatch(
-            approveContractProjectChain(amount.toString())
+      // If allowance is less than amount, trigger approveContractProjectChain
+      if (getAllowanceResult?.payload?.allowance < amount) {
+        const approveResult = await dispatch(
+          approveContractProjectChain(amount.toString())
+        );
+        //@ts-ignore
+        if (approveResult?.error?.message === "Rejected") {
+          pushMessage(
+            {
+              status: "error",
+              title: "",
+              description: approveResult.payload.reason,
+            },
+            dispatch
           );
-          //@ts-ignore
-          if (approveResult?.error?.message === "Rejected") {
+          return;
+        }
+      } else {
+        const getSignatureResult = await dispatch(
+          getInvestSignature({
+            projectId,
+            commitAmount: amount,
+            walletAddress,
+          })
+        );
+        if (getSignatureResult?.payload?.message) {
+          // dispatch(investProjectChain(amount.toString(), getSignatureResult?.payload?.message));
+          const commitResult = await dispatch(
+            investProjectChain(amount.toString())
+          );
+          if (commitResult.payload?.receipt?.transactionHash) {
             pushMessage(
               {
-                status: "error",
-                title: "",
-                description: approveResult.payload.reason,
+                status: "success",
+                title: `${data.Currency.symbol} succesfully invested`,
+                description: `You've invested ${formatNumber(amount)} ${
+                  data.Currency.symbol
+                }`,
               },
               dispatch
             );
-            return;
-          }
-        } else {
-          const getSignatureResult = await dispatch(
-            getInvestSignature({
-              projectId,
-              commitAmount: amount,
-              walletAddress,
-            })
-          );
-          if (getSignatureResult?.payload?.message) {
-            // dispatch(investProjectChain(amount.toString(), getSignatureResult?.payload?.message));
-            const commitResult = await dispatch(
-              investProjectChain(amount.toString())
+          } else {
+            pushMessage(
+              {
+                status: "error",
+                title: `Failed to invest ${data.Currency.symbol}`,
+                description: "Please wait a little bit then try again",
+              },
+              dispatch
             );
-            if (commitResult.payload?.receipt?.transactionHash) {
-              pushMessage(
-                {
-                  status: "success",
-                  title: `${data.Currency.symbol} succesfully invested`,
-                  description: `You've invested ${formatNumber(amount)} ${
-                    data.Currency.symbol
-                  }`,
-                },
-                dispatch
-              );
-            } else {
-              pushMessage(
-                {
-                  status: "error",
-                  title: `Failed to invest ${data.Currency.symbol}`,
-                  description: "Please wait a little bit then try again",
-                },
-                dispatch
-              );
-            }
           }
         }
       }
@@ -283,7 +280,7 @@ const IGOInvest = ({
 
         {isRegistrationPhase ? (
           contractStake.balances < 3000 ? (
-            <IGOStake />
+            <IGOStakeFirst />
           ) : (
             <IgoRegister
               isRegistered={isRegistered}
