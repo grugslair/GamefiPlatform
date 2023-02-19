@@ -131,7 +131,7 @@ const Reports = () => {
                             isLocked && "opacity-50"
                           )}
                         >
-                          <Image src={imageUrl} alt="logo" layout="fill" />
+                          {!!imageUrl && <Image src={imageUrl} alt="logo" layout="fill" />}
                         </div>
                         <div className="flex flex-1 flex-col items-start">
                           <div className={twJoin(isLocked && "opacity-50")}>
