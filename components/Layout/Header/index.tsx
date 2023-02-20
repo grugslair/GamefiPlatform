@@ -64,10 +64,10 @@ const LINKS = [
   //   label: "Launchpad",
   //   url: "/",
   // },
-  // {
-  //   label: "Claim & Stake",
-  //   url: "/rocks",
-  // },
+  {
+    label: "Claim & Stake",
+    url: "/rocks",
+  },
   {
     label: "Reports",
     url: "/reports",
