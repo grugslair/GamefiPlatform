@@ -7,12 +7,14 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 import { RootState } from "store";
 import { useSelector } from "react-redux";
+import { useAccount } from "wagmi";
+import useWallet from "hooks/useWallet";
 
 // import useWallet, { web3Modal } from "hooks/useWallet";
 
 export default RouteGuard;
 
-const isDevBypassRoute = true;
+const isDevBypassRoute = false;
 
 function RouteGuard({ children }: any) {
   const prevBalanceRef = useRef();
@@ -22,45 +24,49 @@ function RouteGuard({ children }: any) {
   const publicPaths = ["/verify", "/reports", "/rocks"];
   const isCurrentPathPublic = publicPaths.includes(path);
 
-  // const { connectWallet, isAuthorize } = useWallet();
+  const { connectWallet, isAuthorize, disconnect } = useWallet();
 
   const wallet = useSelector((state: RootState) => state.wallet);
 
   const [canShow, setCanShow] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   if (web3Modal.cachedProvider) {
-  //     connectWallet();
-  //   }
-  // }, []);
+  const {isConnected} = useAccount()
+
+  useEffect(() => {
+    if(isConnected) {
+      connectWallet()
+    } else {
+      disconnect()
+    }
+  }, [isConnected])
 
   useEffect(() => {
     if (isDevBypassRoute) return;
-    // if (
-    //   wallet.balance !== null ||
-    //   isNumber(prevBalanceRef.current) ||
-    //   !web3Modal.cachedProvider
-    // ) {
-    //   if (isAuthorize) {
-    //     setCanShow(true);
-    //     if (path.includes("verify")) {
-    //       router.push({
-    //         pathname: "/projects",
-    //       });
-    //     }
-    //   } else {
-    //     setCanShow(false);
-    //     if (!isCurrentPathPublic) {
-    //       router.push({
-    //         pathname: "/verify",
-    //       });
-    //     }
-    //   }
-    // }
+    if (
+      wallet.balance !== null ||
+      isNumber(prevBalanceRef.current) ||
+      isConnected
+    ) {
+      if (isAuthorize) {
+        setCanShow(true);
+        if (path.includes("verify")) {
+          router.push({
+            pathname: "/projects",
+          });
+        }
+      } else {
+        setCanShow(false);
+        if (!isCurrentPathPublic) {
+          router.push({
+            pathname: "/verify",
+          });
+        }
+      }
+    }
     //@ts-ignore
     prevBalanceRef.current = wallet.balance;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wallet.balance]);
+  }, [wallet.balance, isConnected]);
 
   if (canShow || isCurrentPathPublic || isDevBypassRoute) {
     return children;

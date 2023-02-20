@@ -12,11 +12,11 @@ const contractUSDC = createSlice({
   name: 'contractUSDC',
   initialState,
   reducers: {
+    initiateUSDCContract(state, action) {
+      state.usdcContract = action.payload
+    }
   },
   extraReducers: (builder) => {
-    builder.addCase(initiateUSDCContract.fulfilled, (state: IContractUSDC, action: any) => {
-      state.usdcContract = action.payload.contract
-    })
 
     builder.addCase(getUSDCBalance.fulfilled, (state: IContractUSDC, action: any) => {
       state.balanceUSDC = action.payload.balanceUSDC

@@ -20,6 +20,7 @@ import Banner from "components/Public/Banner";
 import Project from "components/Landing/Project";
 
 import styles from "styles/Projects.module.css";
+import { useAccount } from "wagmi";
 
 interface IGridWrapper {
   projects: IProjectList[];
@@ -64,15 +65,15 @@ const Landing: NextPage = () => {
   const { loading, list } = useSelector(
     (state: RootState) => state.launchpad.projects
   );
-  const wallet = useSelector((state: RootState) => state.wallet);
+  const { address } = useAccount()
   const dispatch = useAppDispatch();
-  const isLoading = loading || !wallet.walletAddress;
+  const isLoading = loading || !address;
 
   useEffect(() => {
-    wallet.walletAddress &&
-      dispatch(getProjectList({ walletAddress: wallet.walletAddress }));
+    address &&
+      dispatch(getProjectList({ walletAddress: address }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wallet.walletAddress]);
+  }, [address]);
 
   const items = [
     {

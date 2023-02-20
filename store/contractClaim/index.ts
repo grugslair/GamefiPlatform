@@ -12,12 +12,11 @@ const contractClaim = createSlice({
   name: 'contractClaim',
   initialState,
   reducers: {
+    initiateClaimContract(state, action) {
+      state.contract = action.payload
+    }
   },
   extraReducers: (builder) => {
-    builder.addCase(initiateContractClaim.fulfilled, (state: IContractClaim, action: any) => {
-      state.contract = action.payload.contract
-    })
-    
     builder.addCase(isNFTClaimed.fulfilled, (state: IContractClaim, action: any) => {
       state.claimedNft = action.payload.claimedNft
       state.unClaimNft = action.payload.unClaimNft

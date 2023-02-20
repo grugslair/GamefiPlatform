@@ -15,11 +15,11 @@ const contractStake = createSlice({
   name: 'contractStake',
   initialState,
   reducers: {
+    initiateStakeContract(state, action) {
+      state.stakeContract = action.payload
+    }
   },
   extraReducers: (builder) => {
-    builder.addCase(initiateStakingContract.fulfilled, (state: IContractStake, action: any) => {
-      state.stakeContract = action.payload.contract
-    })
 
     builder.addCase(getAllowance.fulfilled, (state: IContractStake, action: any) => {
       state.allowance = action.payload.allowance

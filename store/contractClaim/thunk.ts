@@ -1,18 +1,23 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { ethers } from "ethers"
 import { IContractStake } from "store/contractStake/contractStake";
+import { useContract, useProvider } from "wagmi";
 import { claimRocksContractAddress, claimRocksContractABI } from "../../helper/contract";
 
 export const initiateContractClaim = createAsyncThunk(
   'contract/initiateFundingContract',
   async (args, { getState }): Promise<any> => {
-    const { wallet }:any = getState();
-    const contractClaim = new ethers.Contract(claimRocksContractAddress, claimRocksContractABI, wallet.etherProvider);
+    const provider = useProvider();
+    const contractClaimRocks = useContract({
+      address: claimRocksContractAddress,
+      abi: claimRocksContractABI,
+      signerOrProvider: provider
+    })
 
     return {
-      contract: contractClaim
+      contract: contractClaimRocks
     }
-  }
+  } 
 )
 
 export const isNFTClaimed = createAsyncThunk(

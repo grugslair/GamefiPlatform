@@ -1,31 +1,71 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { getGrugBalance, switchNetwork, walletConnect } from "store/wallet/thunk";
+import { getGrugBalance } from "store/wallet/thunk";
 import { useAppDispatch } from "./useStoreHooks";
 // import Web3Modal from "web3modal";
-import { validNetworkId } from "helper/environment";
-import { getAvailableWithdrawAmount, getStakeBalance, initiateStakingContract } from "store/contractStake/thunk";
-import { contractGetBalance, initiateRocksContract } from "store/contractRocks/thunk";
+// import { validNetworkId } from "helper/environment";
+import { getAvailableWithdrawAmount, getStakeBalance } from "store/contractStake/thunk";
+import { contractGetBalance } from "store/contractRocks/thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { resetWalletAction, setLoadingAction } from "store/wallet/actions";
-import { getUSDCBalance, initiateUSDCContract } from "store/contractUSDC/thunk";
-import { initiateContractClaim } from "store/contractClaim/thunk";
-
-const providerOptions = {};
-
-// export let web3Modal: Web3Modal;
-// if (typeof window !== "undefined") {
-//   web3Modal = new Web3Modal({
-//     network: "mainnet", // optional
-//     cacheProvider: true,
-//     providerOptions, // required
-//   });
-// }
+import { contractGrugAction, resetWalletAction } from "store/wallet/actions";
+import { getUSDCBalance } from "store/contractUSDC/thunk";
+import {
+  grugContractABI,
+  grugContractAddress,
+  rocksContractAddress,
+  rocksContractABI,
+  stakeContractAddress,
+  stakeContractABI,
+  usdcContractAddress,
+  usdcContractABI,
+  claimRocksContractAddress,
+  claimRocksContractABI
+} from "@/helper/contract"
+import { useAccount, useContract, useNetwork, useProvider } from "wagmi";
+import { initiateContractRocks } from "store/contractRocks/actions";
+import { initiateContractClaim } from "store/contractClaim/actions";
+import { initiateContractStake } from "store/contractStake/actions";
+import { initiateContractUSDC } from "store/contractUSDC/actions";
 
 const useWallet = () => {
   const dispatch = useAppDispatch();
-  const { provider, chainId, walletAddress, balance } = useSelector((state: RootState) => state.wallet);
+  const { walletAddress, balance } = useSelector((state: RootState) => state.wallet);
   const { lockRocks } = useSelector((state: RootState) => state.contractStake);
+  const provider = useProvider();
+
+  const { address, isConnected } = useAccount();
+
+  const { chain } = useNetwork()
+
+  const contractGrug = useContract({
+    address: grugContractAddress,
+    abi: grugContractABI,
+    signerOrProvider: provider
+  })
+
+  const contractClaimRocks = useContract({
+    address: claimRocksContractAddress,
+    abi: claimRocksContractABI,
+    signerOrProvider: provider
+  })
+
+  const contractRocks = useContract({
+    address: rocksContractAddress,
+    abi: rocksContractABI,
+    signerOrProvider: provider
+  })
+  
+  const contractStake = useContract({
+    address: stakeContractAddress,
+    abi: stakeContractABI,
+    signerOrProvider: provider
+  })
+
+  const contractUSDC = useContract({
+    address: usdcContractAddress,
+    abi: usdcContractABI,
+    signerOrProvider: provider
+  })
 
   const haveWallet = useMemo(() => {
     return !!walletAddress;
@@ -56,41 +96,35 @@ const useWallet = () => {
 
   const connectWallet = useCallback(
     async function () {
-      // dispatch(setLoadingAction(true))
-      // await dispatch(walletConnect(web3Modal)).then(async(resp: any) => {
-      //   if (resp.payload?.chainId != parseInt(validNetworkId || '1', 10)) {
-      //     await dispatch(switchNetwork());
-      //   }
-      // });
+      if(isConnected) {
+        await dispatch(contractGrugAction({
+          contract: contractGrug,
+          chain: chain?.id,
+          address
+        }))
 
-      // await dispatch(getGrugBalance());
+        await dispatch(initiateContractClaim(contractClaimRocks))
 
-      // await dispatch(initiateStakingContract());
-      // await dispatch(initiateRocksContract());
-      // await dispatch(initiateUSDCContract());
-      // await dispatch(initiateContractClaim());
-      // await dispatch(contractGetBalance());
+        await dispatch(getGrugBalance());
 
-      // await dispatch(getStakeBalance());
-      // await dispatch(getAvailableWithdrawAmount());
-      // await dispatch(getUSDCBalance());
-      // dispatch(setLoadingAction(false))
+        await dispatch(initiateContractStake(contractStake));
+        await dispatch(initiateContractRocks(contractRocks));
+        await dispatch(initiateContractUSDC(contractUSDC));
+        await dispatch(contractGetBalance());
+
+        await dispatch(getStakeBalance());
+        await dispatch(getAvailableWithdrawAmount());
+        await dispatch(getUSDCBalance());
+      }
     },
-    [walletAddress]
+    [dispatch, isConnected]
   );
 
   const disconnect = useCallback(
     async function () {
-      // await web3Modal.clearCachedProvider();
-      // if (
-      //   provider?.disconnect &&
-      //   typeof provider.disconnect === "function"
-      // ) {
-      //   const test = await provider.disconnect();
-      // }
-      // dispatch(resetWalletAction());
+      dispatch(resetWalletAction());
     },
-    [provider]
+    [dispatch]
   );
 
   useEffect(() => {

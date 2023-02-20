@@ -1,16 +1,22 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { BigNumber, ethers } from "ethers"
+import { useContract, useProvider } from "wagmi";
 import { rocksContractABI, rocksContractAddress, stakeContractAddress } from "../../helper/contract";
 import { IContractStake } from "../contractStake/contractStake";
 
 export const initiateRocksContract = createAsyncThunk(
   'contract/initiateRocksContract',
   async (args, { getState }): Promise<any> => {
-    const { wallet }:any = getState();
-    const rocksContract = new ethers.Contract(rocksContractAddress, rocksContractABI, wallet.etherProvider);
+    const provider = useProvider();
+
+    const contractRocks = useContract({
+      address: rocksContractAddress,
+      abi: rocksContractABI,
+      signerOrProvider: provider
+    })
 
     return {
-      contract: rocksContract
+      contract: contractRocks
     }
   }
 )

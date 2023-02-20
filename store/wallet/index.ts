@@ -1,6 +1,6 @@
 import { createAction, createAsyncThunk, createReducer, createSlice } from '@reduxjs/toolkit'
 import { IwalletConnect, setState, setWalletAddress, setWalletBalance, walletState } from './walletType'
-import { addNetwork, getGrugBalance, getRocksFromNFT, switchNetwork, walletConnect } from './thunk'
+import { addNetwork, getGrugBalance, getRocksFromNFT, switchNetwork } from './thunk'
 
 const initialState = {
   walletAddress: null,
@@ -20,6 +20,15 @@ const wallet = createSlice({
     setAddress(state, action) {
       state.walletAddress = action.payload.walletAddress
     },
+    setContractGrug(state, action) {
+      console.log(action.payload.address)
+      state.contract = action.payload.contract
+      state.chainId = action.payload.chain
+      state.walletAddress = action.payload.address
+    },
+    setChainId(state, action) {
+      state.chainId = action.payload.chain
+    },
     resetWallet(state, action) {
       state.walletAddress = null,
       state.chainId = null,
@@ -36,14 +45,6 @@ const wallet = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(walletConnect.fulfilled, (state, action: any) => {
-      state.walletAddress = action.payload.walletAddress
-      state.provider = action.payload.provider
-      state.chainId = action.payload.chainId
-      state.etherProvider = action.payload.etherProvider
-      state.contract = action.payload.contract
-
-    })
     builder.addCase(getGrugBalance.fulfilled, (state, action: any) => {
       state.balance = parseInt(action.payload.balance)
 

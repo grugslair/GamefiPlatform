@@ -4,16 +4,21 @@ import { IContractRocks } from "../contractRocks/contractRocks";
 import { stakeContractABI, stakeContractAddress } from "../../helper/contract";
 import { IContractStake } from "./contractStake";
 import { weiToEth } from "helper/utilities";
-import { waitForDebugger } from "inspector";
+import { useContract, useProvider } from "wagmi";
 
 export const initiateStakingContract = createAsyncThunk(
   'contract/initiateStakeContract',
   async (args, { getState }): Promise<any> => {
-    const { wallet }:any = getState();
-    const stakeContract = new ethers.Contract(stakeContractAddress, stakeContractABI, wallet.etherProvider);
+    const provider = useProvider();
+
+    const contractStake = useContract({
+      address: stakeContractAddress,
+      abi: stakeContractABI,
+      signerOrProvider: provider
+    })
 
     return {
-      contract: stakeContract
+      contract: contractStake
     }
   }
 )

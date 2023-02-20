@@ -16,9 +16,7 @@ import "styles/globals.css";
 
 import { EthereumClient, modalConnectors, walletConnectProvider } from "@web3modal/ethereum"
 import { Web3Modal} from "@web3modal/react"
-// import { mainnet, goerli } from 'wagmi/chains'
-import { mainnet, goerli, configureChains, WagmiConfig, createClient } from "wagmi"
-import { useEffect, useState } from "react";
+import { goerli, configureChains, createClient,} from "wagmi"
 
 config.autoAddCss = false;
 
@@ -35,6 +33,7 @@ const chains = [goerli]
 const { provider } = configureChains(chains, [walletConnectProvider({ projectId })])
 
 const wagmiClient = createClient({
+  autoConnect: true,
   connectors: modalConnectors({ appName: 'web3Modal', chains }),
   provider,
 })
@@ -42,12 +41,6 @@ const wagmiClient = createClient({
 export const ethereumClient = new EthereumClient(wagmiClient, chains)
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [ready, setReady] = useState(false)
-
-  useEffect(() => {
-    console.log(ethereumClient)
-    setReady(true)
-  }, [])
 
   return (
     <Provider store={store}>

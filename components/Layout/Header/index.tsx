@@ -33,6 +33,7 @@ import { INavLink } from "./type";
 import Button from "components/Button";
 import useWallet from "hooks/useWallet";
 import { ellipseAddress } from "helper/utilities";
+import { useAccount } from "wagmi";
 
 const SOCIAL_MEDIAS = [
   {
@@ -244,6 +245,8 @@ const Header = () => {
 
   const { open } = useWeb3Modal();
 
+  const { isConnected, address} = useAccount();
+
   const { connectWallet, disconnect } = useWallet();
 
   let lastKnownScrollPosition = useRef(0);
@@ -314,8 +317,8 @@ const Header = () => {
             onClick={() => open()}
             // onClick={wallet.walletAddress ? disconnect : connectWallet}
           >
-            {wallet.walletAddress ? (
-              ellipseAddress(wallet.walletAddress, 5)
+            {isConnected ? (
+              ellipseAddress(address, 5)
             ) : (
               <>
                 Connect MetaMask

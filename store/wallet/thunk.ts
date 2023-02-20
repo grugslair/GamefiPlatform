@@ -1,48 +1,30 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { error } from "console";
 import { ethers } from "ethers";
 import supportedChains from "../../helper/chainList";
 import {
   grugContractABI,
   grugContractAddress,
   rocksContractAddress,
+  rocksContractABI,
+  stakeContractAddress,
+  stakeContractABI,
+  usdcContractAddress,
+  usdcContractABI,
+  crowdFundingContractAddress,
+  crowdFundingContractABI,
+  claimRocksContractAddress,
+  claimRocksContractABI
 } from "../../helper/contract";
 import { validNetworkId } from "../../helper/environment";
 import { IwalletConnect, walletState } from "./walletType";
 import { pushMessage } from "core/notification";
-
-export const walletConnect = createAsyncThunk<IwalletConnect, any>(
-  "wallet/connectWallet",
-  async (web3Modal: any): Promise<any> => {
-    try {
-      const provider = await web3Modal.connect();
-      const etherProvider = new ethers.providers.Web3Provider(provider, "any");
-      const signer = etherProvider.getSigner();
-      const walletAddress = await signer.getAddress();
-      const network = await etherProvider.getNetwork();
-      const contract = await new ethers.Contract(
-        grugContractAddress,
-        grugContractABI,
-        etherProvider
-      );
-
-      return {
-        walletAddress,
-        etherProvider,
-        provider,
-        chainId: network.chainId,
-        contract,
-      } as IwalletConnect;
-    } catch (error) {
-      return error;
-    }
-  }
-);
+import { useContract, useNetwork, useProvider } from "wagmi";
 
 export const getGrugBalance = createAsyncThunk(
   "wallet/grugBalance",
   async (arg, { getState }) => {
     const { wallet }: any = getState();
+    console.log(wallet)
     const balance: number = await wallet.contract.balanceOf(
       wallet.walletAddress
     );

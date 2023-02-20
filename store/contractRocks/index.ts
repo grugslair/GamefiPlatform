@@ -11,12 +11,11 @@ const contractRocks = createSlice({
   name: 'contractRocks',
   initialState,
   reducers: {
+    initiateRocksContract(state, action) {
+      state.rocksContract = action.payload
+    }
   },
   extraReducers: (builder) => {
-    builder.addCase(initiateRocksContract.fulfilled, (state: IContractRocks, action: any) => {
-      state.rocksContract = action.payload.contract
-    })
-    
     builder.addCase(contractGetBalance.fulfilled, (state: IContractRocks, action: any) => {
       if(action.payload) {
         state.balanceOfRocks = action.payload.balanceOfRocks
