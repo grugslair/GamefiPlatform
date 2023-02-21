@@ -9,14 +9,18 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { ILaunchPadState, IProjectDetailData } from "store/launchpad/launchpad";
 import {
-  approveContractProjectChain,
-  getProjectChainAllowance,
-  investProjectChain,
-} from "store/contractProjectChain/thunk";
+  approveContractCommitInvest,
+  getCommitInvestAllowance,
+  investCommit,
+} from "store/contractCommitInvest/thunk";
 import { getGasPrice } from "store/contractStake/thunk";
-import { getInvestSignature, registerProject } from "store/launchpad/thunk";
+import {
+  getInvestSignature,
+  registerProject,
+  uploadInvestHash,
+} from "store/launchpad/thunk";
 import { IContractStake } from "store/contractStake/contractStake";
-import { IContractProjectChain } from "store/contractProjectChain/contractProjectChain";
+import { IContractCommitInvest } from "store/contractCommitInvest/contractCommitInvest";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -58,9 +62,9 @@ const IGOInvest = ({
   const launchpad = useSelector(
     (state: RootState) => state.launchpad
   ) as ILaunchPadState;
-  const contractProjectChain = useSelector(
-    (state: RootState) => state.contractProjectChain
-  ) as IContractProjectChain;
+  const contractCommitInvest = useSelector(
+    (state: RootState) => state.contractCommitInvest
+  ) as IContractCommitInvest;
   const contractStake: IContractStake = useSelector(
     (state: RootState) => state.contractStake
   );
@@ -69,14 +73,16 @@ const IGOInvest = ({
   const [investLoading, setInvestLoading] = useState(false);
   const [commitLoading, setCommitLoading] = useState(false);
 
-  const isRegistrationPhase = moment().isBetween(
-    moment(data.registrationPeriodStart),
-    moment(data.registrationPeriodEnd)
-  );
-  const isBuyPhase = moment().isBetween(
-    moment(data.buyPeriodStart),
-    moment(data.buyPeriodEnd)
-  );
+  // const isRegistrationPhase = moment().isBetween(
+  //   moment(data.registrationPeriodStart),
+  //   moment(data.registrationPeriodEnd)
+  // );
+  // const isBuyPhase = moment().isBetween(
+  //   moment(data.buyPeriodStart),
+  //   moment(data.buyPeriodEnd)
+  // );
+  const isRegistrationPhase = false;
+  const isBuyPhase = true;
   const isBuyPhaseOver = moment().isAfter(moment(data.buyPeriodEnd));
   const isCalculatingPhase = !isRegistrationPhase && !isBuyPhase;
 
@@ -87,7 +93,7 @@ const IGOInvest = ({
     ((isBuyPhase || isCalculatingPhase) && !isRegistered) || !!isBuyPhaseOver;
 
   function submitRegistrationProject() {
-    const projectId = router.query.id || "0";
+    const projectId = router.query.id!;
     const walletAddress = wallet.walletAddress || "";
 
     dispatch(
@@ -118,12 +124,12 @@ const IGOInvest = ({
       setInvestLoading(true);
       await dispatch(getGasPrice());
 
-      const getAllowanceResult = await dispatch(getProjectChainAllowance());
+      const getAllowanceResult = await dispatch(getCommitInvestAllowance());
 
-      // If allowance is less than amount, trigger approveContractProjectChain
+      // If allowance is less than amount, trigger approveContractCommitInvest
       if (getAllowanceResult?.payload?.allowance < amount) {
         const approveResult = await dispatch(
-          approveContractProjectChain(amount.toString())
+          approveContractCommitInvest(amount.toString())
         );
         //@ts-ignore
         if (approveResult?.error?.message === "Rejected") {
@@ -146,11 +152,20 @@ const IGOInvest = ({
           })
         );
         if (getSignatureResult?.payload?.message) {
-          // dispatch(investProjectChain(amount.toString(), getSignatureResult?.payload?.message));
-          const commitResult = await dispatch(
-            investProjectChain(amount.toString())
-          );
+          // dispatch(investCommit(amount.toString(), getSignatureResult?.payload?.message));
+          const commitResult = await dispatch(investCommit(amount.toString()));
           if (commitResult.payload?.receipt?.transactionHash) {
+            console.log(commitResult.payload?.receipt);
+            const uploadInvestHashResult = await dispatch(
+              uploadInvestHash({
+                hash: commitResult.payload?.receipt?.transactionHash,
+                projectId: router.query.id!,
+                timestamp: new Date(),
+                walletAddress: wallet.walletAddress || "",
+                amount,
+              })
+            );
+            console.log(uploadInvestHashResult);
             pushMessage(
               {
                 status: "success",
@@ -199,7 +214,7 @@ const IGOInvest = ({
             My {data.Currency.symbol} Balance:
           </div>
           <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
-            {formatNumber(contractProjectChain.balance)} {data.Currency.symbol}
+            {formatNumber(contractCommitInvest.balance)} {data.Currency.symbol}
           </div>
         </div>
         <div className="mt-2 flex items-center">
@@ -227,7 +242,7 @@ const IGOInvest = ({
               placeholder="Type Here"
               controls={false}
               max={Math.min(
-                Number(contractProjectChain.balance),
+                Number(contractCommitInvest.balance),
                 maxAllocation
               )}
             />
@@ -235,7 +250,7 @@ const IGOInvest = ({
               className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
               onClick={() =>
                 setAmount(
-                  Math.min(Number(contractProjectChain.balance), maxAllocation)
+                  Math.min(Number(contractCommitInvest.balance), maxAllocation)
                 )
               }
             >

@@ -5,9 +5,9 @@ import { twJoin } from "tailwind-merge";
 // Redux
 import { IProjectDetailData } from "store/launchpad/launchpad";
 import {
-  getProjectChainBalance,
-  initiateProjectChainContract,
-} from "store/contractProjectChain/thunk";
+  getCommitInvestBalance,
+  initiateCommitInvestContract,
+} from "store/contractCommitInvest/thunk";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -51,13 +51,14 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
   useEffect(() => {
     const run = async () => {
       dispatch(
-        initiateProjectChainContract({
+        initiateCommitInvestContract({
           currencySymbol: data.Currency.symbol,
-          chainName: availableChains[selectedChain].name,
+          // chainNetwork: availableChains[selectedChain].networkId,
+          chainNetwork: '0x5',
         })
       ).then((e) => {
         if (e.meta.requestStatus === "fulfilled") {
-          dispatch(getProjectChainBalance());
+          dispatch(getCommitInvestBalance());
         }
       });
     };

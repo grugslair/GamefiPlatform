@@ -32,10 +32,10 @@ export interface IPorjectCurrency {
   rate: number,
   createdAt: string,
   updatedAt: string,
-  Chains: IProjectChain[],
+  Chains: ICommitInvest[],
 }
 
-export interface IProjectChain {
+export interface ICommitInvest {
   id: number,
   networkId: string,
   rpcUrl: string,
@@ -87,7 +87,7 @@ export interface IProjectDetailData {
   updatedAt: string 
   VestingRule: IProjectVestingRule
   Currency: IPorjectCurrency
-  Chain: IProjectChain
+  Chain: ICommitInvest
 }
 
 export interface IProject {
@@ -140,4 +140,12 @@ export interface IGetInvestSignaturePayload {
   projectId: string | string[]
   commitAmount: number
   walletAddress: string
+}
+
+export interface IUpdateInvestHashPayload {
+  projectId: string | string[]
+  amount: number
+  walletAddress: string
+  timestamp: Date
+  hash: any
 }

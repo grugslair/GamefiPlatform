@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import contractClaim from './contractClaim'
 import contractRocks from './contractRocks'
 import contractStake from './contractStake'
-import contractProjectChain from './contractProjectChain'
+import contractCommitInvest from './contractCommitInvest'
 import launchpad from './launchpad'
 import message from './message'
 import walletReducer from './wallet/index'
@@ -12,7 +12,7 @@ const reducer = {
   launchpad,
   contractRocks,
   contractStake,
-  contractProjectChain,
+  contractCommitInvest,
   contractClaim,
   message,
 }
