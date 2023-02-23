@@ -5,6 +5,7 @@ import { twJoin } from "tailwind-merge";
 // Redux
 import { IProjectDetailData } from "store/launchpad/launchpad";
 import {
+  getCommitInvestAllowance,
   getCommitInvestBalance,
   initiateCommitInvestContract,
 } from "store/contractCommitInvest/thunk";
@@ -58,6 +59,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
         })
       ).then((e) => {
         if (e.meta.requestStatus === "fulfilled") {
+          dispatch(getCommitInvestAllowance());
           dispatch(getCommitInvestBalance());
         }
       });

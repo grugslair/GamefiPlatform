@@ -8,7 +8,7 @@ import {
 
 const initialState = {
   currencyContract: null,
-  allowance: null,
+  allowance: 0,
   balance: "",
   currencyContractAddress: null,
   currencyContractABI: null,

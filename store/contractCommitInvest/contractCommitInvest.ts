@@ -1,6 +1,6 @@
 export interface IContractCommitInvest {
   currencyContract: any,
-  allowance: number | null,
+  allowance: number,
   balance: string,
   currencyContractAddress: string | null,
   currencyContractABI: any | null,

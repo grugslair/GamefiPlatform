@@ -70,7 +70,7 @@ const IGOInvest = ({
   );
 
   const [amount, setAmount] = useState(0);
-  const [investLoading, setInvestLoading] = useState(false);
+  const [approveLoading, setApproveLoading] = useState(false);
   const [commitLoading, setCommitLoading] = useState(false);
 
   // const isRegistrationPhase = moment().isBetween(
@@ -116,76 +116,109 @@ const IGOInvest = ({
     });
   }
 
+  async function askAllowance() {
+    try {
+      setApproveLoading(true);
+      await dispatch(getGasPrice());
+      const approveResult = await dispatch(
+        approveContractCommitInvest(amount.toString())
+      );
+      if (approveResult?.payload?.hash) {
+        pushMessage(
+          {
+            status: "success",
+            title: "",
+            description: `Successfully approve ${data.Currency.symbol}`,
+          },
+          dispatch
+        );
+      }
+      //@ts-ignore
+      if (approveResult?.error?.message === "Rejected") {
+        pushMessage(
+          {
+            status: "error",
+            title: "",
+            description: approveResult.payload.reason,
+          },
+          dispatch
+        );
+      }
+    } catch (error) {
+      pushMessage(
+        {
+          status: "error",
+          title: "",
+          description: "Unknown error occured",
+        },
+        dispatch
+      );
+    } finally {
+      setApproveLoading(false);
+    }
+  }
+
   async function invest() {
     const projectId = router.query.id || "0";
     const walletAddress = wallet.walletAddress || "";
 
     try {
-      setInvestLoading(true);
+      setCommitLoading(true);
       await dispatch(getGasPrice());
-
-      const getAllowanceResult = await dispatch(getCommitInvestAllowance());
-
-      // If allowance is less than amount, trigger approveContractCommitInvest
-      if (getAllowanceResult?.payload?.allowance < amount) {
-        const approveResult = await dispatch(
-          approveContractCommitInvest(amount.toString())
-        );
-        //@ts-ignore
-        if (approveResult?.error?.message === "Rejected") {
+      const getSignatureResult = await dispatch(
+        getInvestSignature({
+          projectId,
+          commitAmount: amount,
+          walletAddress,
+        })
+      );
+      if (getSignatureResult?.payload?.message) {
+        // dispatch(investCommit(amount.toString(), getSignatureResult?.payload?.message));
+        const commitResult = await dispatch(investCommit(amount.toString()));
+        if (commitResult.payload?.receipt?.transactionHash) {
           pushMessage(
             {
-              status: "error",
-              title: "",
-              description: approveResult.payload.reason,
+              status: "success",
+              title: `${data.Currency.symbol} succesfully invested`,
+              description: `You've invested ${formatNumber(amount)} ${
+                data.Currency.symbol
+              }`,
             },
             dispatch
           );
-          return;
+          const uploadInvestHashResult = await dispatch(
+            uploadInvestHash({
+              hash: commitResult.payload?.receipt?.transactionHash,
+              projectId: router.query.id!,
+              timestamp: new Date(),
+              walletAddress: wallet.walletAddress || "",
+              amount,
+            })
+          );
+          console.log(uploadInvestHashResult);
+          // TODO: what if send to BE fail?
+        } else {
+          pushMessage(
+            {
+              status: "error",
+              title: "Failed to do investment",
+              description: "Please wait a little bit then try again",
+            },
+            dispatch
+          );
         }
       } else {
-        const getSignatureResult = await dispatch(
-          getInvestSignature({
-            projectId,
-            commitAmount: amount,
-            walletAddress,
-          })
-        );
-        if (getSignatureResult?.payload?.message) {
-          // dispatch(investCommit(amount.toString(), getSignatureResult?.payload?.message));
-          const commitResult = await dispatch(investCommit(amount.toString()));
-          if (commitResult.payload?.receipt?.transactionHash) {
-            console.log(commitResult.payload?.receipt);
-            const uploadInvestHashResult = await dispatch(
-              uploadInvestHash({
-                hash: commitResult.payload?.receipt?.transactionHash,
-                projectId: router.query.id!,
-                timestamp: new Date(),
-                walletAddress: wallet.walletAddress || "",
-                amount,
-              })
-            );
-            console.log(uploadInvestHashResult);
-            pushMessage(
-              {
-                status: "success",
-                title: `${data.Currency.symbol} succesfully invested`,
-                description: `You've invested ${formatNumber(amount)} ${
-                  data.Currency.symbol
-                }`,
-              },
-              dispatch
-            );
-          } else {
-            pushMessage(
-              {
-                status: "error",
-                title: `Failed to invest ${data.Currency.symbol}`,
-                description: "Please wait a little bit then try again",
-              },
-              dispatch
-            );
-          }
+        if (getSignatureResult?.payload?.error?.message) {
+          pushMessage(
+            {
+              status: "error",
+              title: "Failed to do investment",
+              // TODO: add timer
+              description:
+                "You can only submit one request at a time. Please try again in 3 minutes",
+            },
+            dispatch
+          );
         }
       }
     } catch (error) {
@@ -198,7 +231,6 @@ const IGOInvest = ({
         dispatch
       );
     } finally {
-      setInvestLoading(false);
       setCommitLoading(false);
     }
   }
@@ -241,10 +273,10 @@ const IGOInvest = ({
               onChange={setAmount}
               placeholder="Type Here"
               controls={false}
-              max={Math.min(
-                Number(contractCommitInvest.balance),
-                maxAllocation
-              )}
+              // max={Math.min(
+              //   Number(contractCommitInvest.balance),
+              //   maxAllocation
+              // )}
             />
             <a
               className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
@@ -276,12 +308,15 @@ const IGOInvest = ({
             )}
           </div>
           <Button
-            onClick={invest}
+            onClick={
+              contractCommitInvest.allowance < amount ? askAllowance : invest
+            }
             disabled={!amount}
-            loading={investLoading}
+            loading={approveLoading}
             className="mt-4 h-11 w-full"
           >
-            Invest {data.Currency.symbol}
+            {contractCommitInvest.allowance < amount ? "Approve " : "Invest "}
+            {data.Currency.symbol}
           </Button>
         </div>
         {!!investedAmount && (
