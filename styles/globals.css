@@ -73,7 +73,7 @@ a:hover {
 }
 
 .rock-background {
-  background-image: url("../public/images/rockBackground.png");
+  background: url("../public/images/rockBackground.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
