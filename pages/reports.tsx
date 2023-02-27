@@ -11,7 +11,11 @@ import { useAppDispatch } from "hooks/useStoreHooks";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCrown, faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCrown,
+  faSearch,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Components
 import Button from "components/Button";
@@ -58,12 +62,15 @@ const Reports = () => {
 
   return (
     <>
-      <div className="bg-grugBlack">
+      <div className="rock-background">
         <div
           className={twJoin(
             "mx-auto w-full max-w-screen-largeDesktop px-4 pt-32",
             "tablet:px-[148px] tablet:pt-[220px]"
           )}
+          style={{
+            background: "linear-gradient(0deg,#0b0b0b 1%,transparent)",
+          }}
         >
           <h1
             className={twJoin(
@@ -131,7 +138,9 @@ const Reports = () => {
                             isLocked && "opacity-50"
                           )}
                         >
-                          {!!imageUrl && <Image src={imageUrl} alt="logo" layout="fill" />}
+                          {!!imageUrl && (
+                            <Image src={imageUrl} alt="logo" layout="fill" />
+                          )}
                         </div>
                         <div className="flex flex-1 flex-col items-start">
                           <div className={twJoin(isLocked && "opacity-50")}>

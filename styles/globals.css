@@ -72,6 +72,13 @@ a:hover {
   color: rgba(255, 255, 255, 0.2);
 }
 
+.rock-background {
+  background-image: url("../public/images/rockBackground.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
