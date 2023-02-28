@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ethers } from "ethers";
 import { commitInvestContractData } from "../../helper/contract";
+import { IContractStake } from "store/contractStake/contractStake";
 import {
   IContractCommitInvest,
   IContractCommitInvestMapping,
 } from "./contractCommitInvest";
-import { IContractStake } from "store/contractStake/contractStake";
 
 export const initiateCommitInvestContract = createAsyncThunk(
   "contract/initiateCommitInvestContract",
@@ -38,12 +38,15 @@ export const initiateCommitInvestContract = createAsyncThunk(
         wallet.etherProvider
       );
 
+      const currencyDecimals = Number(await currencyContract.decimals());
+
       return {
         currencyContract,
         currencyContractAddress,
         currencyContractABI,
         commitContractAddress,
         commitContractABI,
+        currencyDecimals,
       };
     } catch (error) {
       return rejectWithValue(error);
@@ -58,14 +61,13 @@ export const getCommitInvestBalance = createAsyncThunk(
       const { contractCommitInvest }: any = getState();
       const { wallet }: any = getState();
 
-      const { currencyContract } =
+      const { currencyContract, currencyDecimals } =
         contractCommitInvest as IContractCommitInvest;
 
       const balance = await currencyContract.balances(wallet.walletAddress);
-      const decimals = await currencyContract.decimals();
 
       return {
-        balance: balance.toString() / Math.pow(10, decimals.toString()),
+        balance: balance.toString() / Math.pow(10, currencyDecimals),
       };
     } catch (error) {
       return rejectWithValue(error);
@@ -78,16 +80,15 @@ export const getCommitInvestAllowance = createAsyncThunk(
   async (args, { getState, rejectWithValue }): Promise<any> => {
     try {
       const { wallet, contractCommitInvest }: any = getState();
-      const { currencyContract, commitContractAddress } =
+      const { currencyContract, commitContractAddress, currencyDecimals } =
         contractCommitInvest as IContractCommitInvest;
       const returnAllowance = await currencyContract.allowance(
         wallet.walletAddress,
         commitContractAddress
       );
       const allowance = returnAllowance.toString();
-      const decimals = await currencyContract.decimals();
       return {
-        allowance: allowance / Math.pow(10, decimals.toString()),
+        allowance: allowance / Math.pow(10, currencyDecimals),
       };
     } catch (error) {
       return rejectWithValue(error);
@@ -100,7 +101,7 @@ export const approveContractCommitInvest = createAsyncThunk(
   async (amount: string, { getState, rejectWithValue }): Promise<any> => {
     const { contractStake, contractCommitInvest, wallet }: any = getState();
     const {
-      currencyContract,
+      currencyDecimals,
       currencyContractAddress,
       currencyContractABI,
       commitContractAddress,
@@ -112,16 +113,15 @@ export const approveContractCommitInvest = createAsyncThunk(
 
     try {
       const iCommitInvest = new ethers.utils.Interface(currencyContractABI);
-      const decimals = await currencyContract.decimals();
       if (amount >= "1000") {
         dataICommitInvest = iCommitInvest.encodeFunctionData("approve", [
           commitContractAddress,
-          (amount as any) * Math.pow(10, decimals.toString()),
+          (amount as any) * Math.pow(10, currencyDecimals),
         ]);
       } else {
         dataICommitInvest = iCommitInvest.encodeFunctionData("approve", [
           commitContractAddress,
-          1000 * Math.pow(10, decimals.toString()),
+          1000 * Math.pow(10, currencyDecimals),
         ]);
       }
       const transactionParameters = {
@@ -152,17 +152,16 @@ export const investCommit = createAsyncThunk(
   async (args: any, { getState, rejectWithValue }): Promise<any> => {
     const { wallet, contractStake, contractCommitInvest }: any = getState();
     const { gasPrice } = contractStake as IContractStake;
-    const { currencyContract, commitContractAddress, commitContractABI } =
+    const { commitContractAddress, commitContractABI, currencyDecimals } =
       contractCommitInvest as IContractCommitInvest;
 
     try {
       //threshold value lebih dari amount input set too threshold value otherwise set to amount value
       const iInvest = new ethers.utils.Interface(commitContractABI);
-      const decimals = await currencyContract.decimals();
       const dataIInvest = iInvest.encodeFunctionData("commit", [
-        0,
-        (args.amount as any) * Math.pow(10, decimals.toString()),
-        // args.signature,
+        (args.amount as any) * Math.pow(10, currencyDecimals),
+        args.salt,
+        args.signature,
       ]);
       const transactionParametersStake = {
         gasPrice: gasPrice, // customizable by user during MetaMask confirmation.

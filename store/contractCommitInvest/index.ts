@@ -10,6 +10,7 @@ const initialState = {
   currencyContract: null,
   allowance: 0,
   balance: "",
+  currencyDecimals: 0,
   currencyContractAddress: null,
   currencyContractABI: null,
   commitContractAddress: null,
@@ -27,6 +28,7 @@ const contractCommitInvest = createSlice({
         state.currencyContract = action.payload.currencyContract;
         state.currencyContractAddress = action.payload.currencyContractAddress;
         state.currencyContractABI = action.payload.currencyContractABI;
+        state.currencyDecimals = action.payload.currencyDecimals;
         state.commitContractAddress = action.payload.commitContractAddress;
         state.commitContractABI = action.payload.commitContractABI;
       }

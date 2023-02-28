@@ -58,6 +58,7 @@ export const getInvestSignature = createAsyncThunk(
   'launchpad/getInvestSignature',
   async (payload: IGetInvestSignaturePayload, {rejectWithValue}): Promise<any> => {
     try {
+      // paylod.commitAmount must be in wei
       const resp = await axios.post(`${process.env.NEXT_PUBLIC_API_HOST}/launchpad/api/projects/signature`, payload);
       return resp.data;
     } catch (error) {

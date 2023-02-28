@@ -55,7 +55,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
         initiateCommitInvestContract({
           currencySymbol: data.Currency.symbol,
           // chainNetwork: availableChains[selectedChain].networkId,
-          chainNetwork: '0x5',
+          chainNetwork: "0x5",
         })
       ).then((e) => {
         if (e.meta.requestStatus === "fulfilled") {
@@ -72,9 +72,8 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
     <div className="relative">
       <button
         className="mt-6 flex h-14 w-full items-center border border-[#CA5D504D] bg-grugAltCardBackground10 px-4"
-        onMouseEnter={() => onEnter()}
+        onClick={() => (dropdownOpen ? onLeave(true) : onEnter())}
         onMouseLeave={() => onLeave()}
-        onTouchStart={() => onEnter()}
         onTouchEnd={() => onLeave()}
       >
         <img

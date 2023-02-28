@@ -11,6 +11,7 @@ import { ILaunchPadState, IProjectDetailData } from "store/launchpad/launchpad";
 import {
   approveContractCommitInvest,
   getCommitInvestAllowance,
+  getCommitInvestBalance,
   investCommit,
 } from "store/contractCommitInvest/thunk";
 import { getGasPrice } from "store/contractStake/thunk";
@@ -168,14 +169,22 @@ const IGOInvest = ({
       const getSignatureResult = await dispatch(
         getInvestSignature({
           projectId,
-          commitAmount: amount,
+          commitAmount:
+            amount * Math.pow(10, contractCommitInvest.currencyDecimals),
           walletAddress,
         })
       );
-      if (getSignatureResult?.payload?.message) {
-        // dispatch(investCommit(amount.toString(), getSignatureResult?.payload?.message));
-        const commitResult = await dispatch(investCommit(amount.toString()));
+      if (getSignatureResult?.payload?.signature) {
+        const commitResult = await dispatch(
+          investCommit({
+            amount,
+            signature: getSignatureResult?.payload?.signature,
+            salt: getSignatureResult?.payload?.salt,
+          })
+        );
         if (commitResult.payload?.receipt?.transactionHash) {
+          dispatch(getCommitInvestAllowance());
+          dispatch(getCommitInvestBalance());
           pushMessage(
             {
               status: "success",
@@ -190,19 +199,19 @@ const IGOInvest = ({
             uploadInvestHash({
               hash: commitResult.payload?.receipt?.transactionHash,
               projectId: router.query.id!,
-              timestamp: new Date(),
+              timestamp: new Date(), // Todo: delete
               walletAddress: wallet.walletAddress || "",
               amount,
             })
           );
-          console.log(uploadInvestHashResult);
-          // TODO: what if send to BE fail?
-        } else {
+        }
+        //@ts-ignore
+        if (commitResult?.error?.message === "Rejected") {
           pushMessage(
             {
               status: "error",
-              title: "Failed to do investment",
-              description: "Please wait a little bit then try again",
+              title: "",
+              description: commitResult.payload.reason,
             },
             dispatch
           );
@@ -232,6 +241,7 @@ const IGOInvest = ({
       );
     } finally {
       setCommitLoading(false);
+      refetchData();
     }
   }
 
