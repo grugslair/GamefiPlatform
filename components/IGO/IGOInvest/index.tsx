@@ -74,16 +74,14 @@ const IGOInvest = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const [commitLoading, setCommitLoading] = useState(false);
 
-  // const isRegistrationPhase = moment().isBetween(
-  //   moment(data.registrationPeriodStart),
-  //   moment(data.registrationPeriodEnd)
-  // );
-  // const isBuyPhase = moment().isBetween(
-  //   moment(data.buyPeriodStart),
-  //   moment(data.buyPeriodEnd)
-  // );
-  const isRegistrationPhase = false;
-  const isBuyPhase = true;
+  const isRegistrationPhase = moment().isBetween(
+    moment(data.registrationPeriodStart),
+    moment(data.registrationPeriodEnd)
+  );
+  const isBuyPhase = moment().isBetween(
+    moment(data.buyPeriodStart),
+    moment(data.buyPeriodEnd)
+  );
   const isBuyPhaseOver = moment().isAfter(moment(data.buyPeriodEnd));
   const isCalculatingPhase = !isRegistrationPhase && !isBuyPhase;
 
@@ -204,6 +202,7 @@ const IGOInvest = ({
               amount,
             })
           );
+          setAmount(0);
         }
         //@ts-ignore
         if (commitResult?.error?.message === "Rejected") {
