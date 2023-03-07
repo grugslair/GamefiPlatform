@@ -20,7 +20,6 @@ import {
   registerProject,
   uploadInvestHash,
 } from "store/launchpad/thunk";
-import { IContractStake } from "store/contractStake/contractStake";
 import { IContractCommitInvest } from "store/contractCommitInvest/contractCommitInvest";
 
 // Fontawesome
@@ -34,6 +33,7 @@ import Button from "components/Button";
 import { pushMessage } from "core/notification";
 import { useAppDispatch } from "hooks/useStoreHooks";
 import { formatNumber } from "helper/utilities";
+import useWallet from "hooks/useWallet";
 
 // Local components
 import IGOStakeFirst from "./BlockerScreen/IGOStakeFirst";
@@ -59,6 +59,7 @@ const IGOInvest = ({
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  const { commitRequirementMeet } = useWallet();
   const wallet = useSelector((state: RootState) => state.wallet);
   const launchpad = useSelector(
     (state: RootState) => state.launchpad
@@ -66,9 +67,6 @@ const IGOInvest = ({
   const contractCommitInvest = useSelector(
     (state: RootState) => state.contractCommitInvest
   ) as IContractCommitInvest;
-  const contractStake: IContractStake = useSelector(
-    (state: RootState) => state.contractStake
-  );
 
   const [amount, setAmount] = useState(0);
   const [approveLoading, setApproveLoading] = useState(false);
@@ -89,7 +87,9 @@ const IGOInvest = ({
   // 1. Registration Phase has ended and user is unregistered (registeration phase will be over when buying or calculating phase takes over)
   // 2. Buying Phase has ended
   const isInvestHidden =
-    ((isBuyPhase || isCalculatingPhase) && !isRegistered) || !!isBuyPhaseOver;
+    ((isBuyPhase || isCalculatingPhase) &&
+      (!isRegistered || !commitRequirementMeet)) ||
+    !!isBuyPhaseOver;
 
   function submitRegistrationProject() {
     const projectId = router.query.id!;
@@ -337,7 +337,7 @@ const IGOInvest = ({
         )}
 
         {isRegistrationPhase ? (
-          contractStake.balances < 3000 ? (
+          !commitRequirementMeet ? (
             <IGOStakeFirst />
           ) : (
             <IgoRegister

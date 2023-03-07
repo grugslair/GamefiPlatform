@@ -1,8 +1,7 @@
-import { join } from "tailwind-merge";
 import { Modal } from "antd";
 
 // Fontawesome
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Redux
@@ -11,7 +10,7 @@ import { useSelector } from "react-redux";
 
 // Hooks
 import useWallet from "hooks/useWallet";
-import { useMemo } from "react";
+import { formatNumber } from "helper/utilities";
 
 // Global component
 import Checkbox from "components/Button/CheckboxButton";
@@ -28,13 +27,7 @@ const Requirement = ({
   showRocks = true,
 }: IRequirement) => {
   const { haveWallet, haveNft, haveStakeRocks } = useWallet();
-  const { lockRocks } = useSelector((state: RootState) => state.contractStake);
-
-  const countRequirement = useMemo(() => {
-    const requirement = [haveWallet, haveNft, haveStakeRocks]
-
-    return requirement.filter((value) => value === true).length
-  }, [haveWallet, haveNft, haveStakeRocks])
+  const { balances } = useSelector((state: RootState) => state.contractStake);
 
   return (
     <div>
@@ -75,7 +68,7 @@ const Requirement = ({
         {showRocks && (
           <div className="text-sm font-['sora'] flex items-center">
             <Checkbox checked={haveStakeRocks} />
-            Stake {lockRocks}/3000 $ROCKS
+            Stake {formatNumber(balances)}/3.000 $ROCKS
           </div>
         )}
       </Modal>
