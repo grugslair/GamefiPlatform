@@ -84,12 +84,10 @@ const IGOInvest = ({
   const isCalculatingPhase = !isRegistrationPhase && !isBuyPhase;
 
   // Invest element will be hidden if:
-  // 1. Registration Phase has ended and user is unregistered (registeration phase will be over when buying or calculating phase takes over)
+  // 1. Registration Phase has ended and user is unregistered (registration phase will be over when buying or calculating phase takes over)
   // 2. Buying Phase has ended
   const isInvestHidden =
-    ((isBuyPhase || isCalculatingPhase) &&
-      (!isRegistered || !commitRequirementMeet)) ||
-    !!isBuyPhaseOver;
+    ((isBuyPhase || isCalculatingPhase) && !isRegistered) || !!isBuyPhaseOver;
 
   function submitRegistrationProject() {
     const projectId = router.query.id!;
@@ -336,8 +334,8 @@ const IGOInvest = ({
           </div>
         )}
 
-        {isRegistrationPhase ? (
-          !commitRequirementMeet ? (
+        {isRegistrationPhase &&
+          (!commitRequirementMeet ? (
             <IGOStakeFirst />
           ) : (
             <IgoRegister
@@ -345,10 +343,9 @@ const IGOInvest = ({
               submitRegistrationProject={submitRegistrationProject}
               loadingRegister={launchpad.loadingRegisterProject}
             />
-          )
-        ) : isCalculatingPhase ? (
-          <IGOCalculating />
-        ) : null}
+          ))}
+        {isBuyPhase && !commitRequirementMeet && <IGOStakeFirst isBuyPhase />}
+        {isCalculatingPhase && <IGOCalculating />}
       </div>
 
       {commitLoading && (
