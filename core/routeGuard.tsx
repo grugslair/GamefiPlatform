@@ -12,7 +12,7 @@ import useWallet, { web3Modal } from "hooks/useWallet";
 
 export default RouteGuard;
 
-const isDevBypassRoute = true;
+const isDevBypassRoute = false;
 
 function RouteGuard({ children }: any) {
   const prevBalanceRef = useRef();

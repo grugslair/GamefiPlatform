@@ -54,8 +54,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
       dispatch(
         initiateCommitInvestContract({
           currencySymbol: data.Currency.symbol,
-          // chainNetwork: availableChains[selectedChain].networkId,
-          chainNetwork: "0x5",
+          chainNetwork: availableChains[selectedChain].networkId,
         })
       ).then((e) => {
         if (e.meta.requestStatus === "fulfilled") {

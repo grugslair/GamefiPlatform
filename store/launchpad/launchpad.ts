@@ -146,6 +146,5 @@ export interface IUpdateInvestHashPayload {
   projectId: string | string[]
   amount: number
   walletAddress: string
-  timestamp: Date
   hash: any
 }

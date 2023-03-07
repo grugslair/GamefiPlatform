@@ -197,7 +197,6 @@ const IGOInvest = ({
             uploadInvestHash({
               hash: commitResult.payload?.receipt?.transactionHash,
               projectId: router.query.id!,
-              timestamp: new Date(), // Todo: delete
               walletAddress: wallet.walletAddress || "",
               amount,
             })
