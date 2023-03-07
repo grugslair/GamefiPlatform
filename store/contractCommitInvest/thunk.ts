@@ -177,7 +177,7 @@ export const investCommit = createAsyncThunk(
       const receipt = await wallet.etherProvider.waitForTransaction(
         tx.hash,
         1,
-        150000
+        10 * 60 * 1000
       );
       return { tx, receipt };
     } catch (err) {
