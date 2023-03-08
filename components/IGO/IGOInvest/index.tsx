@@ -40,6 +40,7 @@ import IGOStakeFirst from "./BlockerScreen/IGOStakeFirst";
 import IgoRegister from "./BlockerScreen/IGORegister";
 import IGOCalculating from "./BlockerScreen/IGOCalculating";
 import IGOMultiChain from "./IGOMultiChain";
+import IGOComingSoon from "./BlockerScreen/IGOComingSoon";
 
 interface IIGOInvest {
   data: IProjectDetailData;
@@ -72,22 +73,27 @@ const IGOInvest = ({
   const [approveLoading, setApproveLoading] = useState(false);
   const [commitLoading, setCommitLoading] = useState(false);
 
+  const isUpcoming = moment().isBefore(moment(data.registrationPeriodStart));
   const isRegistrationPhase = moment().isBetween(
     moment(data.registrationPeriodStart),
     moment(data.registrationPeriodEnd)
+  );
+  const isBeforeBuyPhase = moment().isBetween(
+    moment(data.registrationPeriodEnd),
+    moment(data.buyPeriodStart)
   );
   const isBuyPhase = moment().isBetween(
     moment(data.buyPeriodStart),
     moment(data.buyPeriodEnd)
   );
+  const isRegistrationPhaseOver = isBuyPhase || isBeforeBuyPhase;
   const isBuyPhaseOver = moment().isAfter(moment(data.buyPeriodEnd));
-  const isCalculatingPhase = !isRegistrationPhase && !isBuyPhase;
 
   // Invest element will be hidden if:
   // 1. Registration Phase has ended and user is unregistered (registration phase will be over when buying or calculating phase takes over)
   // 2. Buying Phase has ended
   const isInvestHidden =
-    ((isBuyPhase || isCalculatingPhase) && !isRegistered) || !!isBuyPhaseOver;
+    (isRegistrationPhaseOver && !isRegistered) || !!isBuyPhaseOver;
 
   function submitRegistrationProject() {
     const projectId = router.query.id!;
@@ -222,8 +228,7 @@ const IGOInvest = ({
             {
               status: "error",
               title: "Failed to do investment",
-              description:
-                `You can only submit one request at a time. Please try again in ${getSignatureResult?.payload?.duration} minutes`,
+              description: `You can only submit one request at a time. Please try again in ${getSignatureResult?.payload?.duration} minutes`,
             },
             dispatch
           );
@@ -348,7 +353,10 @@ const IGOInvest = ({
             />
           ))}
         {isBuyPhase && !commitRequirementMeet && <IGOStakeFirst isBuyPhase />}
-        {isCalculatingPhase && <IGOCalculating />}
+        {isBeforeBuyPhase && <IGOCalculating />}
+        {isUpcoming && (
+          <IGOComingSoon startTime={data.registrationPeriodStart} />
+        )}
       </div>
 
       {commitLoading && (

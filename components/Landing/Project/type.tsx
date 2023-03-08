@@ -12,8 +12,8 @@ export interface IProjectDescriptionProp {
 export interface IProjectBannerProp {
   companyProfile: string | null
   networkLogo: string | null
-  countDown: any,
-  endDate?: string,
+  data: any
+  onPhaseChange: () => void
 }
 
 export interface IProjectTarget {

@@ -1,14 +1,11 @@
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
+import moment from "moment";
 
 //Redux
 import type { IProjectDetailData } from "store/launchpad/launchpad";
 
-// Hooks
-import useCountDown from "hooks/useCountDown";
-
 // Components
-import Button from "components/Button";
 import ProjectBanner from "./ProjectBanner";
 import ProjectDescription from "./ProjectDescription.tsx";
 import ProjectTarget from "./ProjectTarget";
@@ -20,26 +17,21 @@ import {
 } from "./type";
 import { getSocialMedias } from "helper/utilities";
 
+import Button from "@/components/Button";
+
 interface IProps {
   dataproject: IProjectDetailData;
 }
 
 const Project = (props: IProps) => {
   const router = useRouter();
-
-  const { handleSetEndDate, countDown } = useCountDown();
-
-  useLayoutEffect(() => {
-    const date = new Date(props.dataproject.registrationPeriodEnd);
-    handleSetEndDate(date.getTime());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props]);
+  const [, setRerenderer] = useState(0);
 
   const projectBanner: IProjectBannerProp = {
     networkLogo: props.dataproject.Chain.logo,
     companyProfile: props.dataproject.banner,
-    countDown,
-    endDate: props.dataproject.registrationPeriodEnd,
+    data: props.dataproject,
+    onPhaseChange: () => setRerenderer((prev) => prev + 1),
   };
 
   const projectDescription: IProjectDescriptionProp = {
@@ -62,6 +54,25 @@ const Project = (props: IProps) => {
     publicSaleTokenAmount: props.dataproject.publicSaleTokenAmount,
   };
 
+  const getButtonWording = () => {
+    let wording = "See Project Detail";
+    const isRegistrationPhase = moment().isBetween(
+      moment(props.dataproject.registrationPeriodStart),
+      moment(props.dataproject.registrationPeriodEnd)
+    );
+    const isBuyPhase = moment().isBetween(
+      moment(props.dataproject.buyPeriodStart),
+      moment(props.dataproject.buyPeriodEnd)
+    );
+    const isClaimPhase = moment().isAfter(
+      moment(props.dataproject.claimPeriodStart)
+    );
+    if (isRegistrationPhase && false) wording = "Participate"; // Unregistered
+    if (isBuyPhase && false) wording = "Buy Token"; // Registered
+    if (isClaimPhase && false) wording = "Claim Your Token"; // Commited
+    return wording;
+  };
+
   return (
     <>
       <div className="relative rounded-sm border border-solid border-grugBorder bg-grugCardBackground">
@@ -70,7 +81,6 @@ const Project = (props: IProps) => {
           <ProjectDescription {...projectDescription} />
           <ProjectTarget projectTarget={projectTarget} />
         </div>
-        {countDown !== -1 && (
           <div className="absolute -bottom-4 w-full px-10">
             <Button
               className="w-full justify-center"
@@ -83,10 +93,9 @@ const Project = (props: IProps) => {
                 })
               }
             >
-              {countDown ? "Participate" : "See Project Detail"}
+              {getButtonWording()}
             </Button>
           </div>
-        )}
       </div>
     </>
   );

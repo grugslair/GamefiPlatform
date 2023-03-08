@@ -5,12 +5,11 @@ import { useRouter } from "next/router";
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { IProjectDetail, IProjectDetailData } from "store/launchpad/launchpad";
+import { IProjectDetail } from "store/launchpad/launchpad";
 import { getProjectListById } from "store/launchpad/thunk";
 
 // Global utils
 import { useAppDispatch } from "hooks/useStoreHooks";
-import { getSocialMedias } from "helper/utilities";
 
 // Global components
 import Requirement from "components/Public/Requirement";
@@ -66,18 +65,7 @@ const ProjectDetail = () => {
             <div className="flex gap-4">
               <div className="flex-[690]">
                 <IGOProfile
-                  companyLogo={{
-                    img: dataIGO.project.logo || "",
-                    width: 80,
-                    height: 80,
-                  }}
-                  companyEndDate={dataIGO.project.registrationPeriodEnd}
-                  companyDesc={dataIGO.project.description}
-                  companyName={dataIGO.project.name}
-                  companyToken={dataIGO.project.tokenSymbol}
-                  companySosMedia={getSocialMedias(dataIGO.project)}
-                  networkName={dataIGO.project.Chain?.name}
-                  networkLogo={dataIGO.project.Chain?.logo}
+                  data={dataIGO.project}
                 />
                 <IGOPoolTimeline data={dataIGO.project} />
                 {/* <IGOClaimStatus /> */}
