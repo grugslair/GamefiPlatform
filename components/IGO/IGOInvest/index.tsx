@@ -168,9 +168,13 @@ const IGOInvest = ({
           commitAmount:
             amount * Math.pow(10, contractCommitInvest.currencyDecimals),
           walletAddress,
+          decimal: contractCommitInvest.currencyDecimals,
         })
       );
-      if (getSignatureResult?.payload?.signature) {
+      if (
+        getSignatureResult?.payload?.success &&
+        getSignatureResult?.payload?.signature
+      ) {
         const commitResult = await dispatch(
           investCommit({
             amount,
@@ -213,14 +217,13 @@ const IGOInvest = ({
           );
         }
       } else {
-        if (getSignatureResult?.payload?.error?.message) {
+        if (getSignatureResult?.payload?.duration) {
           pushMessage(
             {
               status: "error",
               title: "Failed to do investment",
-              // TODO: add timer
               description:
-                "You can only submit one request at a time. Please try again in 3 minutes",
+                `You can only submit one request at a time. Please try again in ${getSignatureResult?.payload?.duration} minutes`,
             },
             dispatch
           );

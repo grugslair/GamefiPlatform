@@ -140,6 +140,7 @@ export interface IGetInvestSignaturePayload {
   projectId: string | string[]
   commitAmount: number
   walletAddress: string
+  decimal: number
 }
 
 export interface IUpdateInvestHashPayload {
