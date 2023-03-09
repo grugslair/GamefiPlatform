@@ -12,7 +12,7 @@ const IGOStakeFirst = ({isBuyPhase = false}) => {
         {isBuyPhase ? 'Invest' : 'Registration'} Locked
       </div>
       <div className="mt-2 font-sora text-base font-light text-gray300">
-        Staked min. 3.000 ROCKS to unlock. Staked token will be lock until 7
+        Staked min. 3,000 ROCKS to unlock. Staked token will be lock until 7
         days after IGO ended
       </div>
       <ModalStakeAmountButton

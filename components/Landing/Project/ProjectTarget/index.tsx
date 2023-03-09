@@ -7,6 +7,8 @@ import { theme } from "tailwind.config";
 import styles from "./ProjectTarget.module.css";
 
 const ProjectTarget = ({ projectTarget }: any) => {
+  const utcOffsetInHours = moment().utcOffset() / 60;
+  const utcOffsetString = 'UTC' + (utcOffsetInHours >= 0 ? `+${utcOffsetInHours}` : utcOffsetInHours);
   return (
     <>
       <div className="mt-10 font-sora text-xs font-light text-white">
@@ -47,7 +49,7 @@ const ProjectTarget = ({ projectTarget }: any) => {
             Rate
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
-            1 {projectTarget.currency.symbol} = {1 / projectTarget.rate}
+            1 {projectTarget.currency.symbol} = {formatNumber(1 / projectTarget.rate)}
             &nbsp;
             {projectTarget.tokenSymbol}
           </div>
@@ -57,12 +59,13 @@ const ProjectTarget = ({ projectTarget }: any) => {
             Min. Staked ROCKS
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
-            {projectTarget.minRocks} $ROCKS
+            {formatNumber(projectTarget.minRocks)} $ROCKS
           </div>
         </div>
         <div className="flex">
           <div className="w-44 font-sora text-base font-light text-gray300">
-            Start Date (GMT+7)
+            {/* Start Date (GMT+7) */}
+            Start Date ({utcOffsetString})
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
             {moment(projectTarget.startDate).format("DD MMM'YY - hh:mm")}

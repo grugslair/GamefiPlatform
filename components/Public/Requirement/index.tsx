@@ -68,7 +68,7 @@ const Requirement = ({
         {showRocks && (
           <div className="text-sm font-['sora'] flex items-center">
             <Checkbox checked={haveStakeRocks} />
-            Stake {formatNumber(balances)}/3.000 $ROCKS
+            Stake {formatNumber(balances)}/3,000 $ROCKS
           </div>
         )}
       </Modal>

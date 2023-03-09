@@ -95,6 +95,11 @@ const IGOInvest = ({
   const isInvestHidden =
     (isRegistrationPhaseOver && !isRegistered) || !!isBuyPhaseOver;
 
+  const maxInvestAllowed = Math.min(
+    Number(contractCommitInvest.balance),
+    maxAllocation
+  );
+
   function submitRegistrationProject() {
     const projectId = router.query.id!;
     const walletAddress = wallet.walletAddress || "";
@@ -109,8 +114,9 @@ const IGOInvest = ({
         pushMessage(
           {
             status: "success",
-            title: "",
-            description: "Successfully register project",
+            title: "Register Success",
+            description:
+              "You will be able to invest when the buying phase arrives",
           },
           dispatch
         );
@@ -130,8 +136,10 @@ const IGOInvest = ({
         pushMessage(
           {
             status: "success",
-            title: "",
-            description: `Successfully approve ${data.Currency.symbol}`,
+            title: "Approve Success",
+            description: `You've successfully approved ${formatNumber(
+              amount
+            )} ${data.Currency.symbol}`,
           },
           dispatch
         );
@@ -141,7 +149,7 @@ const IGOInvest = ({
         pushMessage(
           {
             status: "error",
-            title: "",
+            title: "Failed to Approve",
             description: approveResult.payload.reason,
           },
           dispatch
@@ -151,12 +159,14 @@ const IGOInvest = ({
       pushMessage(
         {
           status: "error",
-          title: "",
-          description: "Unknown error occured",
+          title: "Failed to Approve",
+          description: "Unknown error occured. Please try again later",
         },
         dispatch
       );
     } finally {
+      dispatch(getCommitInvestAllowance());
+      dispatch(getCommitInvestBalance());
       setApproveLoading(false);
     }
   }
@@ -189,19 +199,17 @@ const IGOInvest = ({
           })
         );
         if (commitResult.payload?.receipt?.transactionHash) {
-          dispatch(getCommitInvestAllowance());
-          dispatch(getCommitInvestBalance());
           pushMessage(
             {
               status: "success",
-              title: `${data.Currency.symbol} succesfully invested`,
+              title: `Invest Success`,
               description: `You've invested ${formatNumber(amount)} ${
                 data.Currency.symbol
               }`,
             },
             dispatch
           );
-          const uploadInvestHashResult = await dispatch(
+          dispatch(
             uploadInvestHash({
               hash: commitResult.payload?.receipt?.transactionHash,
               projectId: router.query.id!,
@@ -216,7 +224,7 @@ const IGOInvest = ({
           pushMessage(
             {
               status: "error",
-              title: "",
+              title: "Failed to Invest",
               description: commitResult.payload.reason,
             },
             dispatch
@@ -227,8 +235,17 @@ const IGOInvest = ({
           pushMessage(
             {
               status: "error",
-              title: "Failed to do investment",
+              title: "Failed to Invest",
               description: `You can only submit one request at a time. Please try again in ${getSignatureResult?.payload?.duration} minutes`,
+            },
+            dispatch
+          );
+        } else {
+          pushMessage(
+            {
+              status: "error",
+              title: "Failed to Invest",
+              description: "Unknown error occured. Please try again later",
             },
             dispatch
           );
@@ -238,12 +255,14 @@ const IGOInvest = ({
       pushMessage(
         {
           status: "error",
-          title: "",
-          description: "Unknown error occured",
+          title: "Failed to Invest",
+          description: "Unknown error occured. Please try again later",
         },
         dispatch
       );
     } finally {
+      dispatch(getCommitInvestAllowance());
+      dispatch(getCommitInvestBalance());
       setCommitLoading(false);
       refetchData();
     }
@@ -294,11 +313,7 @@ const IGOInvest = ({
             />
             <a
               className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
-              onClick={() =>
-                setAmount(
-                  Math.min(Number(contractCommitInvest.balance), maxAllocation)
-                )
-              }
+              onClick={() => setAmount(maxInvestAllowed)}
             >
               Max
             </a>

@@ -76,7 +76,7 @@ const ModalClaimRocksButton = ({
         pushMessage(
           {
             status: "success",
-            title: "$ROCKS succesfully claimed",
+            title: "$ROCKS Succesfully Claimed",
             description: `You've claimed ${formatNumber(
               stakeAmount ? parseInt(stakeAmount, 10) * 3000 : 0
             )} $ROCKS`,
@@ -87,7 +87,7 @@ const ModalClaimRocksButton = ({
         pushMessage(
           {
             status: "error",
-            title: "Failed to claim $ROCKS",
+            title: "Failed to Claim $ROCKS",
             description: "Please wait a little bit then try again",
           },
           dispatch
