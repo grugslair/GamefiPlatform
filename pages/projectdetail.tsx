@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "store";
@@ -49,10 +52,14 @@ const ProjectDetail = () => {
 
   return (
     <>
-      {dataIGO?.project && (
+      {dataIGO?.project ? (
         <div>
           <div className="absolute top-0 h-[708px] w-full overflow-hidden">
-            <img src={dataIGO.project.banner || ""} alt="banner" className="w-full" />
+            <img
+              src={dataIGO.project.banner || ""}
+              alt="banner"
+              className="w-full"
+            />
             <div
               className="absolute bottom-0 h-full w-full"
               style={{
@@ -64,9 +71,7 @@ const ProjectDetail = () => {
           <div className="relative mx-auto mt-[280px] box-content max-w-screen-maxContent px-6">
             <div className="flex gap-4">
               <div className="flex-[690]">
-                <IGOProfile
-                  data={dataIGO.project}
-                />
+                <IGOProfile data={dataIGO.project} />
                 <IGOPoolTimeline data={dataIGO.project} />
                 {/* <IGOClaimStatus /> */}
               </div>
@@ -74,11 +79,13 @@ const ProjectDetail = () => {
                 <IGOTargetRaise
                   handleOpenRequirement={() => setOpenRequirement(true)}
                   data={dataIGO.project}
+                  totalInvestedAmount={dataIGO.totalInvestedAmount}
                 />
                 <IGOInvest
                   isRegistered={dataIGO.isRegistered}
                   maxAllocation={dataIGO.maxAllocation}
                   investedAmount={dataIGO.investedAmount}
+                  totalInvestedAmount={dataIGO.totalInvestedAmount}
                   data={dataIGO.project}
                   refetchData={fetchData}
                 />
@@ -88,6 +95,14 @@ const ProjectDetail = () => {
           <Requirement
             openRequirement={openRequirement}
             handleClose={() => setOpenRequirement(false)}
+          />
+        </div>
+      ) : (
+        <div className="mt-40 flex h-64 w-full items-center justify-center">
+          <FontAwesomeIcon
+            icon={faSpinner}
+            className="text-6xl text-primary600"
+            spin
           />
         </div>
       )}

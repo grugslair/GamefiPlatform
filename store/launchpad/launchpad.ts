@@ -49,6 +49,7 @@ export interface ICommitInvest {
 export interface IProjectDetail {
   isRegistered: boolean
   investedAmount: number
+  totalInvestedAmount: number
   maxAllocation: number
   project: IProjectDetailData
 } 
@@ -67,10 +68,10 @@ export interface IProjectDetailData {
   status: string
   banner: string | null //projectBanner -> companyProfile
   logo: string | null //projectBanner -> companyLogo
-  targetAmount: number // target raise -> 190rb
-  publicSaleTokenAmount: number // -> 150rb -> berarti ini ambil dari contract
-  publicSaleTokenSold: number // 2500 -> ambil dari contract
-  publicSalePrice: number // rate -> 1usdt = 1000 dota
+  targetAmount: string | number // target raise -> 190rb
+  publicSaleTokenAmount: string | number // -> 150rb -> berarti ini ambil dari contract
+  publicSaleTokenSold: string | number // 2500 -> ambil dari contract
+  publicSalePrice: string | number // rate -> 1usdt = 1000 dota
   publicSaleCurrencyId: number
   minStaking: number //projectTarget -> minRocks
   registrationPeriodStart: string 
@@ -88,6 +89,9 @@ export interface IProjectDetailData {
   VestingRule: IProjectVestingRule
   Currency: IPorjectCurrency
   Chain: ICommitInvest
+  investedAmount: number,
+  totalInvestedAmount: number,
+  Registrations: any[]
 }
 
 export interface IProject {

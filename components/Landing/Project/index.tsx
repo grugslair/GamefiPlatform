@@ -43,15 +43,14 @@ const Project = (props: IProps) => {
   };
 
   const projectTarget: IProjectTarget = {
-    targetRaise: props.dataproject.targetAmount,
-    rate: props.dataproject.publicSalePrice,
+    targetAmount: props.dataproject.targetAmount,
+    publicSalePrice: props.dataproject.publicSalePrice,
     startDate: props.dataproject.registrationPeriodStart,
     minRocks: props.dataproject.minStaking,
     vesting: props.dataproject.VestingRule.label,
     tokenSymbol: props.dataproject.tokenSymbol,
     currency: props.dataproject.Currency,
-    publicSaleTokenSold: props.dataproject.publicSaleTokenSold,
-    publicSaleTokenAmount: props.dataproject.publicSaleTokenAmount,
+    totalInvestedAmount: props.dataproject.totalInvestedAmount
   };
 
   const getButtonWording = () => {
@@ -67,9 +66,11 @@ const Project = (props: IProps) => {
     const isClaimPhase = moment().isAfter(
       moment(props.dataproject.claimPeriodStart)
     );
-    if (isRegistrationPhase && false) wording = "Participate"; // Unregistered
-    if (isBuyPhase && false) wording = "Buy Token"; // Registered
-    if (isClaimPhase && false) wording = "Claim Your Token"; // Commited
+    const isRegistered = props.dataproject?.Registrations?.length
+    const isCommited = props.dataproject?.investedAmount > 0
+    if (isRegistrationPhase && !isRegistered) wording = "Participate"; // Unregistered
+    if (isBuyPhase && isRegistered) wording = "Buy Token"; // Registered
+    if (isClaimPhase && isCommited) wording = "Claim Your Token"; // Commited
     return wording;
   };
 

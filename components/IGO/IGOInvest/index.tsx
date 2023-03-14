@@ -47,6 +47,7 @@ interface IIGOInvest {
   isRegistered: boolean;
   maxAllocation: number;
   investedAmount: number;
+  totalInvestedAmount: number;
   refetchData: () => void;
 }
 
@@ -55,6 +56,7 @@ const IGOInvest = ({
   isRegistered,
   maxAllocation,
   investedAmount,
+  totalInvestedAmount,
   refetchData,
 }: IIGOInvest) => {
   const router = useRouter();
@@ -95,10 +97,17 @@ const IGOInvest = ({
   const isInvestHidden =
     (isRegistrationPhaseOver && !isRegistered) || !!isBuyPhaseOver;
 
-  const maxInvestAllowed = Math.min(
-    Number(contractCommitInvest.balance),
-    maxAllocation
-  );
+  const maxInvestAllowed =
+    Math.floor(
+      Math.max(
+        0,
+        Math.min(
+          maxAllocation - investedAmount,
+          Number(contractCommitInvest.balance),
+          Number(data.targetAmount) - totalInvestedAmount
+        )
+      ) * 10000
+    ) / 10000;
 
   function submitRegistrationProject() {
     const projectId = router.query.id!;
@@ -306,10 +315,7 @@ const IGOInvest = ({
               onChange={setAmount}
               placeholder="Type Here"
               controls={false}
-              // max={Math.min(
-              //   Number(contractCommitInvest.balance),
-              //   maxAllocation
-              // )}
+              max={maxInvestAllowed}
             />
             <a
               className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
@@ -333,7 +339,7 @@ const IGOInvest = ({
           </div>
           <div className="mt-1 font-avara text-2xl font-extrabold text-white">
             {formatNumber(
-              Math.round((amount / data.publicSalePrice) * 100) / 100 || 0
+              Math.round((amount / Number(data.publicSalePrice)) * 100) / 100 || 0
             )}
           </div>
           <Button

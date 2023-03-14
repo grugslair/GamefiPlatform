@@ -15,10 +15,15 @@ import styles from "./IGOTargetRaise.module.css";
 
 interface IIGOTargetRaise {
   data: IProjectDetailData;
+  totalInvestedAmount: number;
   handleOpenRequirement: () => void;
 }
 
-const IGOTargetRaise = ({ data, handleOpenRequirement }: IIGOTargetRaise) => {
+const IGOTargetRaise = ({
+  data,
+  totalInvestedAmount,
+  handleOpenRequirement,
+}: IIGOTargetRaise) => {
   const { haveWallet, haveNft, haveStakeRocks } = useWallet();
 
   const countRequirement = useMemo(() => {
@@ -26,6 +31,9 @@ const IGOTargetRaise = ({ data, handleOpenRequirement }: IIGOTargetRaise) => {
 
     return requirement.filter((value) => value === true).length;
   }, [haveWallet, haveNft, haveStakeRocks]);
+
+  const progressPercent =
+    Math.round((totalInvestedAmount / Number(data.targetAmount)) * 100 * 100) / 100;
 
   return (
     <>
@@ -39,20 +47,26 @@ const IGOTargetRaise = ({ data, handleOpenRequirement }: IIGOTargetRaise) => {
         <Progress
           strokeColor={theme.extend.colors.success600}
           trailColor={`${theme.extend.colors.gray400}33`} // 20% opacity
-          percent={
-            (data.publicSaleTokenSold / data.publicSaleTokenAmount) * 100
-          }
+          percent={progressPercent}
           className={styles.ProgressBar}
           showInfo={false}
         />
         <div className="-mt-0.5 flex">
           <div className="flex-1 font-sora text-xs font-light text-gray400">
-            Progress:{" "}
-            {(data.publicSaleTokenSold / data.publicSaleTokenAmount) * 100} %
+            {`Progress: ${progressPercent}%`}
           </div>
           <div className="font-sora text-xs font-light text-gray400">
-            {formatNumber(data.publicSaleTokenSold)}/
-            {formatNumber(data.publicSaleTokenAmount)}
+            {formatNumber(
+              Math.round(
+                totalInvestedAmount * Number(data.publicSalePrice) * 100
+              ) / 100
+            )}
+            /
+            {formatNumber(
+              Math.round(
+                (Number(data.targetAmount) / Number(data.publicSalePrice)) * 100
+              ) / 100
+            )}
             &nbsp;
             {data.tokenSymbol}
           </div>
