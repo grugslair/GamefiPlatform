@@ -14,7 +14,7 @@ import useWallet from "hooks/useWallet";
 
 export default RouteGuard;
 
-const isDevBypassRoute = false;
+const isDevBypassRoute = true;
 
 function RouteGuard({ children }: any) {
   const prevBalanceRef = useRef();

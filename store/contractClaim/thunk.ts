@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { ethers } from "ethers"
 import { IContractStake } from "store/contractStake/contractStake";
-import { useContract, useProvider } from "wagmi";
+import { useAccount, useContract, useProvider } from "wagmi";
 import { claimRocksContractAddress, claimRocksContractABI } from "../../helper/contract";
 
 export const initiateContractClaim = createAsyncThunk(
@@ -63,6 +63,10 @@ export const isNFTClaimed = createAsyncThunk(
 export const claimNFT = createAsyncThunk(
   'contract/claimNFT',
   async (amount: string, { getState, rejectWithValue }): Promise<any> => {
+    const { address } = useAccount()
+
+    const provider = useProvider()
+
     const { contractStake, wallet, contractClaim }:any = getState()
 
     const { gasPrice } = contractStake as IContractStake
@@ -87,7 +91,7 @@ export const claimNFT = createAsyncThunk(
       const transactionParameters = {
         gasPrice: gasPrice._hex, // customizable by user during MetaMask confirmation.
         to: claimRocksContractAddress, // Required except during contract publications.
-        from: wallet.walletAddress, // must match user's active address.
+        from: address, // must match user's active address.
         value: '0x00', // Only required to send ether to the recipient from the initiating external account.
         data: dataIclaim, // Optional, but used for defining smart contract creation and interaction.
         chainId: '0x5', // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
@@ -95,10 +99,12 @@ export const claimNFT = createAsyncThunk(
 
       // console.log(transactionParameters)
 
+      // const tx = await provider.sendTransaction()
 
-      const tx = await wallet.etherProvider.getSigner().sendTransaction(transactionParameters)
 
-      const receipt = await wallet.etherProvider.waitForTransaction(tx.hash, 1, 150000)
+      // const tx = await provider.sendTransaction(transactionParameters)
+
+      // const receipt = await provider.waitForTransaction(tx.hash, 1, 150000)
 
       return {
         amount,

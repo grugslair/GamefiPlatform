@@ -20,6 +20,9 @@ import { pushMessage } from "core/notification";
 
 // Components
 import Button, { IButton } from "components/Button";
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+
+import { claimRocksContractAddress, claimRocksContractABI } from "@/helper/contract";
 
 interface IModalClaimRocksButtonProps {
   actionTitle: string;
@@ -38,11 +41,28 @@ const ModalClaimRocksButton = ({
   const wallet: walletState = useSelector((state: RootState) => state.wallet);
   const [loadingClaim, setLoadingClaim] = useState<boolean>(false);
 
+  const [dataToken, setDataToken] = useState<String[]>([]);
+
   const dispatch = useAppDispatch();
 
   function changeStakeAmount(value: string) {
     setStakeAmount(value);
   }
+
+  const { config } = usePrepareContractWrite({
+    address: claimRocksContractAddress,
+    abi: claimRocksContractABI,
+    functionName: 'claim',
+    args: [dataToken],
+    enabled: !!stakeAmount
+  })
+
+  const { data, error, isError, write } = useContractWrite(config)
+ 
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  })
+ 
 
   const disclaimer = useMemo(() => {
     if (
@@ -69,35 +89,51 @@ const ModalClaimRocksButton = ({
   }, [isModalOpen]);
 
   async function claimNft() {
-    setLoadingClaim(true);
-    await dispatch(getGasPrice());
-    dispatch(claimNFT(stakeAmount)).then((resp) => {
-      if (resp.payload?.receipt?.transactionHash) {
-        pushMessage(
-          {
-            status: "success",
-            title: "$ROCKS succesfully claimed",
-            description: `You've claimed ${formatNumber(
-              stakeAmount ? parseInt(stakeAmount, 10) * 3000 : 0
-            )} $ROCKS`,
-          },
-          dispatch
-        );
-      } else {
-        pushMessage(
-          {
-            status: "error",
-            title: "Failed to claim $ROCKS",
-            description: "Please wait a little bit then try again",
-          },
-          dispatch
-        );
-      }
-      setLoadingClaim(false);
-      setStakeAmount("");
-      setModalOpen(false);
-    });
+    let dataTokenTemp = []
+    
+    for(let index = 0; index < parseInt(stakeAmount, 10); index++) {
+      dataTokenTemp.push(contractClaim.unClaimNft[index].tokenId)
+    }
+
+    setDataToken(dataTokenTemp)
+
+    write?.()
+    
+
+    // setLoadingClaim(true);
+    // await dispatch(getGasPrice());
+    // dispatch(claimNFT(stakeAmount)).then((resp) => {
+    //   if (resp.payload?.receipt?.transactionHash) {
+    //     pushMessage(
+    //       {
+    //         status: "success",
+    //         title: "$ROCKS succesfully claimed",
+    //         description: `You've claimed ${formatNumber(
+    //           stakeAmount ? parseInt(stakeAmount, 10) * 3000 : 0
+    //         )} $ROCKS`,
+    //       },
+    //       dispatch
+    //     );
+    //   } else {
+    //     pushMessage(
+    //       {
+    //         status: "error",
+    //         title: "Failed to claim $ROCKS",
+    //         description: "Please wait a little bit then try again",
+    //       },
+    //       dispatch
+    //     );
+    //   }
+    //   setLoadingClaim(false);
+    //   setStakeAmount("");
+    //   setModalOpen(false);
+    // });
   }
+
+  useEffect(() => {
+    console.log(isLoading)
+    console.log(isSuccess)
+  }, [isLoading, isSuccess])
 
   return (
     <>
@@ -143,7 +179,7 @@ const ModalClaimRocksButton = ({
                 className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-xl font-extrabold text-white"
                 value={stakeAmount}
                 size="large"
-                onChange={() => changeStakeAmount}
+                onChange={changeStakeAmount}
                 placeholder="Type Here"
                 controls={false}
               />
