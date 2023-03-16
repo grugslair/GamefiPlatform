@@ -82,7 +82,7 @@ const NotVerifiedGrug = () => {
         <>
           <div className="relative mr-2 -mt-1 h-5 w-5">
             <Image
-              src="/openseaWhiteOrange.svg"
+              src="/icons/openseaWhiteOrange.svg"
               alt="openseas"
               objectFit="contain"
               layout="fill"
@@ -112,14 +112,20 @@ const NotVerifiedGrug = () => {
         <div className="h-[282px] rounded-sm border border-solid border-grugBorder bg-grugCardBackground" />
         <div className="h-[282px] rounded-sm border border-solid border-grugBorder bg-grugCardBackground" />
       </div>
-      <div className="verifyGradient relative -mt-[182px] h-full w-full">
+      <div
+        className="relative -mt-[182px] h-full w-full"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(11, 11, 11, 0) 0%, #0b0b0b 14.05%)",
+        }}
+      >
         <div className="mx-auto max-w-[682px] pt-[365px]">
           <div className="font-avara text-xl font-extrabold">
             Reveal the projects
           </div>
           <p className="mt-2 font-sora text-xl font-light text-grayCool300">
-            Simply own a Grug(s) NFT then connect your <br /> wallet to
-            reveal the project list
+            Simply own a Grug(s) NFT then connect your <br /> wallet to reveal
+            the project list
           </p>
 
           <div className="mt-10 grid grid-cols-2">

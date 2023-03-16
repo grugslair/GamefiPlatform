@@ -1,12 +1,13 @@
 import { Tabs } from "antd";
 import { useEffect } from "react";
 import type { NextPage } from "next";
+import moment from "moment";
 
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "store/index";
 import { getProjectList } from "store/launchpad/thunk";
-import type { IProjectList } from "store/launchpad/launchpad";
+import type { IProjectDetailData } from "store/launchpad/launchpad";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,7 +24,7 @@ import styles from "styles/Projects.module.css";
 import { useAccount } from "wagmi";
 
 interface IGridWrapper {
-  projects: IProjectList[];
+  projects: IProjectDetailData[];
   loading: boolean;
 }
 
@@ -86,7 +87,12 @@ const Landing: NextPage = () => {
       key: "ongoing",
       children: (
         <GridWrapper
-          projects={list.filter((e) => e.status === "on_going")}
+          projects={list.filter((e) =>
+            moment().isBetween(
+              moment(e.registrationPeriodStart),
+              moment(e.claimPeriodStart)
+            )
+          )}
           loading={isLoading}
         />
       ),
@@ -96,7 +102,9 @@ const Landing: NextPage = () => {
       key: "upcoming",
       children: (
         <GridWrapper
-          projects={list.filter((e) => e.status === "upcoming")}
+          projects={list.filter((e) =>
+            moment().isBefore(moment(e.registrationPeriodStart))
+          )}
           loading={isLoading}
         />
       ),
@@ -106,7 +114,7 @@ const Landing: NextPage = () => {
       key: "participated",
       children: (
         <GridWrapper
-          projects={list.filter((e) => e.status === "participate")}
+          projects={list.filter((e) => e.investedAmount > 0)}
           loading={isLoading}
         />
       ),

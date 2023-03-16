@@ -1,44 +1,57 @@
 import { Progress } from "antd";
-import { memo, useMemo } from "react";
-import isEqual from "lodash/isEqual";
+import moment from "moment";
 
-import { grugDateFormat, numberWithCommas } from "helper/utilities";
+import { formatNumber } from "helper/utilities";
 import { theme } from "tailwind.config";
 
 import styles from "./ProjectTarget.module.css";
 
 const ProjectTarget = ({ projectTarget }: any) => {
-  const startDate = useMemo(() => {
-    return grugDateFormat(projectTarget.startDate);
-  }, [projectTarget.startDate]);
-
+  const utcOffsetInHours = moment().utcOffset() / 60;
+  const utcOffsetString =
+    "UTC" + (utcOffsetInHours >= 0 ? `+${utcOffsetInHours}` : utcOffsetInHours);
+  const progressPercent =
+    Math.round(
+      (projectTarget.totalInvestedAmount / projectTarget.targetAmount) *
+        100 *
+        100
+    ) / 100;
   return (
     <>
       <div className="mt-10 font-sora text-xs font-light text-white">
         Target Raise
       </div>
       <div className="font-extraBold mt-1 font-avara text-2xl font-extrabold text-white">
-        ${numberWithCommas(projectTarget.targetRaise)}
+        ${formatNumber(projectTarget.targetAmount)}
       </div>
       <Progress
         strokeColor={theme.extend.colors.success600}
         trailColor={`${theme.extend.colors.gray400}33`} // 20% opacity
-        percent={
-          (projectTarget.publicSaleTokenSold / projectTarget.targetRaise) * 100
-        }
+        percent={progressPercent}
         className={styles.ProgressBar}
         showInfo={false}
       />
       <div className="-mt-0.5 flex">
         <div className="flex-1 font-sora text-xs font-light text-gray400">
-          Progress:{" "}
-          {(projectTarget.publicSaleTokenSold / projectTarget.targetRaise) *
-            100}{" "}
-          %
+          {`Progress: ${progressPercent}%`}
         </div>
         <div className="font-sora text-xs font-light text-gray400">
-          {numberWithCommas(projectTarget.publicSaleTokenSold)}/
-          {numberWithCommas(projectTarget.targetRaise)} $
+          {formatNumber(
+            Math.round(
+              projectTarget.totalInvestedAmount *
+                Number(projectTarget.publicSalePrice) *
+                100
+            ) / 100
+          )}
+          /
+          {formatNumber(
+            Math.round(
+              (projectTarget.targetAmount /
+                Number(projectTarget.publicSalePrice)) *
+                100
+            ) / 100
+          )}
+          &nbsp;
           {projectTarget.tokenSymbol}
         </div>
       </div>
@@ -48,7 +61,9 @@ const ProjectTarget = ({ projectTarget }: any) => {
             Rate
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
-            1 ${projectTarget.currency.symbol} = {1 / projectTarget.rate} $
+            1 {projectTarget.currency.symbol} ={" "}
+            {formatNumber(1 / projectTarget.publicSalePrice)}
+            &nbsp;
             {projectTarget.tokenSymbol}
           </div>
         </div>
@@ -57,15 +72,16 @@ const ProjectTarget = ({ projectTarget }: any) => {
             Min. Staked ROCKS
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
-            {projectTarget.minRocks} $ROCKS
+            {formatNumber(projectTarget.minRocks)} $ROCKS
           </div>
         </div>
         <div className="flex">
           <div className="w-44 font-sora text-base font-light text-gray300">
-            Start Date (GMT+7)
+            {/* Start Date (GMT+7) */}
+            Start Date ({utcOffsetString})
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
-            {startDate}
+            {moment(projectTarget.startDate).format("DD MMM'YY - hh:mm")}
           </div>
         </div>
         <div className="flex">
@@ -81,6 +97,4 @@ const ProjectTarget = ({ projectTarget }: any) => {
   );
 };
 
-export default memo(ProjectTarget, (prevProps, nextProps) =>
-  isEqual(prevProps, nextProps)
-);
+export default ProjectTarget;

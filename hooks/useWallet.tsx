@@ -8,7 +8,6 @@ import { contractGetBalance } from "store/contractRocks/thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { contractGrugAction, resetWalletAction } from "store/wallet/actions";
-import { getUSDCBalance } from "store/contractUSDC/thunk";
 import {
   grugContractABI,
   grugContractAddress,
@@ -16,8 +15,6 @@ import {
   rocksContractABI,
   stakeContractAddress,
   stakeContractABI,
-  usdcContractAddress,
-  usdcContractABI,
   claimRocksContractAddress,
   claimRocksContractABI
 } from "@/helper/contract"
@@ -25,12 +22,13 @@ import { useAccount, useContract, useNetwork, useProvider } from "wagmi";
 import { initiateContractRocks } from "store/contractRocks/actions";
 import { initiateContractClaim } from "store/contractClaim/actions";
 import { initiateContractStake } from "store/contractStake/actions";
-import { initiateContractUSDC } from "store/contractUSDC/actions";
 
 const useWallet = () => {
   const dispatch = useAppDispatch();
   const { walletAddress, balance } = useSelector((state: RootState) => state.wallet);
-  const { lockRocks } = useSelector((state: RootState) => state.contractStake);
+  const { balances: rocksBalance } = useSelector(
+    (state: RootState) => state.contractStake
+  );
   const provider = useProvider();
 
   const { address, isConnected } = useAccount();
@@ -61,12 +59,6 @@ const useWallet = () => {
     signerOrProvider: provider
   })
 
-  const contractUSDC = useContract({
-    address: usdcContractAddress,
-    abi: usdcContractABI,
-    signerOrProvider: provider
-  })
-
   const haveWallet = useMemo(() => {
     return !!walletAddress;
   }, [walletAddress]);
@@ -80,19 +72,21 @@ const useWallet = () => {
   }, [balance]);
 
   const haveStakeRocks = useMemo(() => {
-    if (lockRocks) {
-      return lockRocks >= 3000;
-    } else {
-      return false;
-    }
-  }, [lockRocks]);
+    return rocksBalance >= 3000;
+  }, [rocksBalance]);
+
+  const commitRequirementMeet = useMemo(() => {
+    return (
+      haveWallet && haveNft && rocksBalance >= 3000
+    );
+  }, [haveWallet, haveNft, rocksBalance]);
 
   const isAuthorize = useMemo(() => {
-    if(balance === 0 || balance === null) {
-      return false
+    if (balance === 0 || balance === null) {
+      return false;
     }
-    return true
-  }, [balance])
+    return true;
+  }, [balance]);
 
   const connectWallet = useCallback(
     async function () {
@@ -109,12 +103,10 @@ const useWallet = () => {
 
         await dispatch(initiateContractStake(contractStake));
         await dispatch(initiateContractRocks(contractRocks));
-        await dispatch(initiateContractUSDC(contractUSDC));
         await dispatch(contractGetBalance());
 
         await dispatch(getStakeBalance());
         await dispatch(getAvailableWithdrawAmount());
-        await dispatch(getUSDCBalance());
       }
     },
     [dispatch, isConnected]
@@ -158,15 +150,16 @@ const useWallet = () => {
     //   };
     // }
   }, [provider, disconnect]);
-  
+
   return {
     connectWallet,
     disconnect,
     haveWallet,
     haveNft,
     haveStakeRocks,
+    commitRequirementMeet,
     isAuthorize,
-  }
-}
+  };
+};
 
-export default useWallet
+export default useWallet;

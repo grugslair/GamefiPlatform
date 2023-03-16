@@ -1,0 +1,4 @@
+.ProgressBar :global(.ant-progress-inner),
+.ProgressBar :global(.ant-progress-bg) {
+  border-radius: 2px;
+}

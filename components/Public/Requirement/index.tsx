@@ -1,8 +1,7 @@
-import { join } from "tailwind-merge";
 import { Modal } from "antd";
 
 // Fontawesome
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Redux
@@ -11,31 +10,16 @@ import { useSelector } from "react-redux";
 
 // Hooks
 import useWallet from "hooks/useWallet";
-import { useMemo } from "react";
+import { formatNumber } from "helper/utilities";
+
+// Global component
+import Checkbox from "components/Button/CheckboxButton";
 
 export interface IRequirement {
   openRequirement: boolean;
   handleClose: () => void;
   showRocks?: boolean;
 }
-export interface ICheckbox {
-  checked: boolean;
-}
-
-const Checkbox = ({ checked }: ICheckbox) => {
-  return (
-    <div
-      className={join(
-        "mr-2 w-4 h-4 text-xs rounded-[4px] flex items-center justify-center",
-        checked
-          ? "bg-success600"
-          : "border border-solid border-gray-300 bg-gray100"
-      )}
-    >
-      {checked && <FontAwesomeIcon icon={faCheck} color="white" />}
-    </div>
-  );
-};
 
 const Requirement = ({
   openRequirement,
@@ -43,24 +27,18 @@ const Requirement = ({
   showRocks = true,
 }: IRequirement) => {
   const { haveWallet, haveNft, haveStakeRocks } = useWallet();
-  const { lockRocks } = useSelector((state: RootState) => state.contractStake);
-
-  const countRequirement = useMemo(() => {
-    const requirement = [haveWallet, haveNft, haveStakeRocks]
-
-    return requirement.filter((value) => value === true).length
-  }, [haveWallet, haveNft, haveStakeRocks])
+  const { balances } = useSelector((state: RootState) => state.contractStake);
 
   return (
     <div>
       <Modal
-        open={openRequirement}
-        destroyOnClose
-        footer={null}
         centered
+        destroyOnClose
         width={400}
+        open={openRequirement}
         closable={false}
         closeIcon={null}
+        footer={null}
         bodyStyle={{
           backgroundColor: "#151011",
           border: "1px solid #B546394D",
@@ -90,7 +68,7 @@ const Requirement = ({
         {showRocks && (
           <div className="text-sm font-['sora'] flex items-center">
             <Checkbox checked={haveStakeRocks} />
-            Stake {lockRocks}/3000 $ROCKS
+            Stake {formatNumber(balances)}/3,000 $ROCKS
           </div>
         )}
       </Modal>

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { IContractStake } from './contractStake'
-import { contractStaking, getAllowance, getAvailableWithdrawAmount, getGasPrice, getStakeBalance, initiateStakingContract } from './thunk'
+import { getAllowance, getAvailableWithdrawAmount, getGasPrice, getStakeBalance, initiateStakingContract } from './thunk'
 
 const initialState = {
   stakeContract: null,

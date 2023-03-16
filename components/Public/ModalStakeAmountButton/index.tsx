@@ -1,35 +1,35 @@
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Checkbox,
-  Input,
-  InputNumber,
-  Modal,
-  Radio,
-  RadioChangeEvent,
-} from "antd";
-import type { CheckboxChangeEvent } from "antd/lib/checkbox";
-import { pushMessage } from "core/notification";
+import React, { useEffect, useMemo, useState } from "react";
+import { InputNumber, Modal } from "antd";
 import Link from "next/link";
-import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
+
 import { useSelector } from "react-redux";
-import { ethToWei } from "../../../helper/utilities";
-import { useAppDispatch } from "../../../hooks/useStoreHooks";
-import { RootState } from "../../../store";
-import { IContractRocks } from "../../../store/contractRocks/contractRocks";
+import { RootState } from "store";
+import { IContractRocks } from "store/contractRocks/contractRocks";
 import {
   approveContractRocks,
   contractGetBalance,
-} from "../../../store/contractRocks/thunk";
-import { IContractStake } from "../../../store/contractStake/contractStake";
+} from "store/contractRocks/thunk";
+import { IContractStake } from "store/contractStake/contractStake";
 import {
   contractStaking,
   getAllowance,
   getGasPrice,
-} from "../../../store/contractStake/thunk";
-import { IwalletConnect } from "../../../store/wallet/walletType";
+} from "store/contractStake/thunk";
 
+// Fontawesome
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { theme } from "tailwind.config";
+
+import { pushMessage } from "core/notification";
+import { ethToWei, formatNumber } from "helper/utilities";
+import { useAppDispatch } from "hooks/useStoreHooks";
+
+// Global components
 import Button, { IButton } from "components/Button";
+import Checkbox from "components/Button/CheckboxButton";
+import RadioButton from "components/Button/RadioButton";
 
 interface IModalStakeAmountButtonProps {
   actionTitle: string;
@@ -44,42 +44,18 @@ const ModalStakeAmountButton = ({
   const [method, setMethod] = useState(1);
   const [stakeAmount, setStakeAmount] = useState("");
   const [disclaimer, setDisclaimer] = useState(false);
+  const [loading, setLoading] = useState(false);
   const contractRocks: IContractRocks = useSelector(
     (state: RootState) => state.contractRocks
   );
   const contractStake: IContractStake = useSelector(
     (state: RootState) => state.contractStake
   );
-  const wallet: IwalletConnect = useSelector(
-    (state: RootState) => state.wallet
-  );
 
   const dispatch = useAppDispatch();
 
-  function changeStakeAmount(value: string) {
-    setStakeAmount(value);
-    if (parseInt(value, 10) > contractRocks.balanceOfRocks) {
-      setDisclaimer(false);
-    }
-  }
-
   function handleCancel() {
     setModalOpen(false);
-  }
-
-  function chooseMethod(event: RadioChangeEvent) {
-    setMethod(event.target.value);
-  }
-
-  function checkDisclaimer(event: CheckboxChangeEvent) {
-    if (
-      event.target.checked &&
-      parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks
-    ) {
-      setDisclaimer(true);
-    } else {
-      setDisclaimer(false);
-    }
   }
 
   const isAllowed = useMemo(() => {
@@ -88,76 +64,88 @@ const ModalStakeAmountButton = ({
       return parseInt(weiAmount, 10) <= contractStake.allowance;
     }
     return false;
-  }, [stakeAmount]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stakeAmount, loading]);
 
   async function staking() {
-    if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
-      await dispatch(getGasPrice());
+    try {
+      setLoading(true);
+      if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
+        await dispatch(getGasPrice());
 
-      const weiAmount = ethToWei(stakeAmount?.toString() || "0");
+        const weiAmount = ethToWei(stakeAmount?.toString() || "0");
 
-      if (contractStake.allowance) {
-        const result = await dispatch(contractStaking(weiAmount));
+        if (contractStake.allowance) {
+          const result = await dispatch(contractStaking(weiAmount));
 
-        if (result?.payload?.hash) {
-          pushMessage(
-            {
-              status: "success",
-              title: "Successfully stake token",
-              description: "You’ve stake ROCKS",
-            },
-            dispatch
-          );
+          if (result?.payload?.hash) {
+            pushMessage(
+              {
+                status: "success",
+                title: "Successfully stake token",
+                description: "You've stake ROCKS",
+              },
+              dispatch
+            );
+          }
+
+          //@ts-ignore
+          if (result?.error?.message === "Rejected") {
+            pushMessage(
+              {
+                status: "error",
+                title: "",
+                description: result.payload.reason,
+              },
+              dispatch
+            );
+          }
+
+          setModalOpen(false);
         }
-
-        //@ts-ignore
-        if (result?.error?.message === "Rejected") {
-          pushMessage(
-            {
-              status: "error",
-              title: "",
-              description: result.payload.reason,
-            },
-            dispatch
-          );
-        }
-
-        setModalOpen(false);
       }
+    } finally {
+      setLoading(false);
     }
   }
 
   async function approve() {
-    if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
-      await dispatch(getGasPrice());
+    try {
+      setLoading(true);
+      if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
+        await dispatch(getGasPrice());
 
-      const weiAmount = ethToWei(stakeAmount?.toString() || "0");
-      if (contractStake.allowance) {
-        const approveResult = await dispatch(approveContractRocks(weiAmount));
+        const weiAmount = ethToWei(stakeAmount?.toString() || "0");
+        if (contractStake.allowance) {
+          const approveResult = await dispatch(approveContractRocks(weiAmount));
 
-        if (approveResult?.payload?.hash) {
-          pushMessage(
-            {
-              status: "success",
-              title: "",
-              description: "Successfully approve token",
-            },
-            dispatch
-          );
+          if (approveResult?.payload?.hash) {
+            pushMessage(
+              {
+                status: "success",
+                title: "",
+                description: "Successfully approve token",
+              },
+              dispatch
+            );
+          }
+
+          //@ts-ignore
+          if (approveResult?.error?.message === "Rejected") {
+            pushMessage(
+              {
+                status: "error",
+                title: "",
+                description: approveResult.payload.reason,
+              },
+              dispatch
+            );
+          }
         }
-
-        //@ts-ignore
-        if (approveResult?.error?.message === "Rejected") {
-          pushMessage(
-            {
-              status: "error",
-              title: "",
-              description: approveResult.payload.reason,
-            },
-            dispatch
-          );
-        }
+        await callAllowance();
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -168,6 +156,9 @@ const ModalStakeAmountButton = ({
 
   useEffect(() => {
     callAllowance();
+    setStakeAmount("");
+    setDisclaimer(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
 
   return (
@@ -176,100 +167,103 @@ const ModalStakeAmountButton = ({
         {actionTitle}
       </Button>
       <Modal
-        width={400}
+        centered
         destroyOnClose
+        width={400}
         open={isModalOpen}
         onCancel={handleCancel}
-        closeIcon={<FontAwesomeIcon icon={faXmark} color="white" />}
+        closable={false}
+        closeIcon={null}
         footer={null}
-        className="p-0"
         bodyStyle={{
-          padding: "0px",
+          backgroundColor: "#151011",
+          border: "1px solid #B546394D",
+          color: "white",
         }}
       >
-        <div className="border border-[#B546394D] bg-[#151011] p-6 text-white">
-          <div className="mb-4 font-['avara'] text-lg">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="font-['avara'] text-lg font-extrabold text-white">
             Input amount to stake
+          </h3>
+          <FontAwesomeIcon
+            icon={faTimes}
+            color="white"
+            className="h-6 w-6 cursor-pointer text-xl"
+            onClick={handleCancel}
+          />
+        </div>
+        <div className="text-sora text-sm text-gray400">
+          Select balance from
+        </div>
+        <div className="mt-2 flex">
+          <div
+            className="flex cursor-pointer font-sora text-sm text-white"
+            onClick={() => setMethod(1)}
+          >
+            <RadioButton
+              selected={method === 1}
+              color={theme.extend.colors.primary600}
+            />
+            <div className="-mt-[2px] flex-1">Wallet</div>
           </div>
-          <div>
-            <div className="mb-2 text-[#98A2B3]">Select balance from</div>
-            <Radio.Group
-              className="mb-6"
-              onChange={chooseMethod}
-              value={method}
-            >
-              <Radio value={1} className="text-white">
-                Wallet
-              </Radio>
-            </Radio.Group>
+        </div>
+        <div className="text-sora mt-4 text-sm text-gray400">
+          Curr. Balance:{" "}
+          <span className="text-warning500">
+            {formatNumber(Number(contractRocks.balanceOfRocks))} $ROCKS
+          </span>
+        </div>
+        <div className="mt-2 flex items-center gap-6 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 px-[14px] py-[10px]">
+          <InputNumber
+            type="number"
+            className="staking-input-number w-full border-none bg-transparent p-0 font-sora text-base font-normal text-white"
+            value={stakeAmount}
+            size="large"
+            onChange={setStakeAmount as any}
+            placeholder="Type Here"
+            controls={false}
+            min="0"
+            max={contractRocks.balanceOfRocks?.toString()}
+          />
+          <a
+            className="font-avara text-base font-extrabold text-primary500 underline hover:text-primary500"
+            onClick={() =>
+              setStakeAmount(contractRocks.balanceOfRocks.toString())
+            }
+          >
+            Max
+          </a>
+        </div>
+        <div
+          className="my-6 flex cursor-pointer font-sora text-sm text-gray400"
+          onClick={() => setDisclaimer(!disclaimer)}
+        >
+          <Checkbox
+            checked={disclaimer}
+            color={theme.extend.colors.primary600}
+          />
+          <div className="-mt-[2px] flex-1">
+            By checking this box, you&apos;ll agree to lock the token until 30
+            days after IGO ended
           </div>
-          <div className="mb-2 text-[#98A2B3]">
-            Curr. Balance:{" "}
-            <span className="text-[#D88D1A]">
-              {contractRocks.balanceOfRocks} ROCKS
-            </span>
-          </div>
-          <div className="mb-6">
-            <Input.Group compact>
-              <InputNumber
-                style={{ width: "calc(100% - 100px)" }}
-                className="border border-[#CA5D504D] bg-[#68121E1A] text-white"
-                value={stakeAmount}
-                size="large"
-                onChange={() => changeStakeAmount}
-                controls={false}
-              />
-              <Button
-                size="large"
-                className="
-                  border border-[#CA5D504D] bg-[#68121E1A] font-['avara'] text-[#CA5D50] 
-                  hover:border-[#CA5D504D] hover:bg-[#68121E1A] hover:text-[#CA5D50]
-                  focus:border-[#CA5D504D] focus:bg-[#68121E1A] focus:text-[#CA5D50]
-                  active:border-[#CA5D504D] active:bg-[#68121E1A] active:text-[#CA5D50]
-                "
-                onClick={() =>
-                  setStakeAmount(contractRocks.balanceOfRocks.toString())
-                }
-              >
-                Max
-              </Button>
-            </Input.Group>
-          </div>
-          <div className="mb-6">
-            <Checkbox
-              className="text-[#98A2B3]"
-              checked={disclaimer}
-              onChange={checkDisclaimer}
-            >
-              By checking this box, you’ll agree to lock the token until 30 days
-              after IGO ended
-            </Checkbox>
-          </div>
+        </div>
 
-          {isAllowed ? (
-            <Button
-              className="mb-6 w-full bg-[#B54639] py-2 font-['avara'] text-base"
-              disabled={!disclaimer}
-              onClick={() => staking()}
-            >
-              Stake
-            </Button>
-          ) : (
-            <Button
-              className="mb-6 w-full bg-[#B54639] py-2 font-['avara'] text-base"
-              disabled={!disclaimer}
-              onClick={() => approve()}
-            >
-              Approve
-            </Button>
-          )}
+        <Button
+          className="mb-6 w-full bg-[#B54639] py-2 font-['avara'] text-base"
+          disabled={!disclaimer}
+          onClick={isAllowed ? staking : approve}
+          loading={loading}
+        >
+          {isAllowed ? "Stake" : "Approve"}
+        </Button>
 
-          <div>
-            Dont have ROCKS? &nbsp;
-            <Link passHref href={"/rocks"}>
-              <a className="font-['avara'] text-[#CA5D50]">Claim</a>
-            </Link>
-          </div>
+        <div className="font-sora text-sm font-light text-white">
+          Dont have ROCKS? &nbsp;
+          <Link passHref href={"/rocks"}>
+            <a className="font-avara font-extrabold text-primary500 underline hover:text-primary500">
+              Claim
+            </a>
+          </Link>
         </div>
       </Modal>
     </>

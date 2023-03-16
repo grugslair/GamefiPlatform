@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react";
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "store";
-import { claimNFT } from "store/contractClaim/thunk";
 import { contractGetBalance } from "store/contractRocks/thunk";
 import { IContractClaim } from "store/contractClaim/contractClaim";
 import { getAllowance, getGasPrice } from "store/contractStake/thunk";
@@ -56,6 +55,7 @@ const ModalClaimRocksButton = ({
 
     setDataToken(dataTokenTemp)
   }
+  
 
   const { config } = usePrepareContractWrite({
     address: claimRocksContractAddress,
@@ -169,10 +169,10 @@ const ModalClaimRocksButton = ({
             <div className="mt-1 flex items-center gap-6">
               <InputNumber
                 type="number"
-                className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-xl font-extrabold text-white"
+                className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-2xl font-extrabold text-white"
                 value={stakeAmount}
                 size="large"
-                onChange={changeStakeAmount}
+                onChange={value => changeStakeAmount(value)}
                 placeholder="Type Here"
                 controls={false}
               />

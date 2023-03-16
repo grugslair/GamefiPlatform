@@ -5,6 +5,7 @@ export interface INavLink {
   label: React.ReactElement | string;
   url?: string;
   target?: string;
+  isMobile?: boolean;
   key?: any;
   onClick?: any;
 }

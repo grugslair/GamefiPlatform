@@ -31,10 +31,11 @@ export interface IPorjectCurrency {
   decimals: number,
   rate: number,
   createdAt: string,
-  updatedAt: string
+  updatedAt: string,
+  Chains: ICommitInvest[],
 }
 
-export interface IProjectChain {
+export interface ICommitInvest {
   id: number,
   networkId: string,
   rpcUrl: string,
@@ -47,10 +48,13 @@ export interface IProjectChain {
 
 export interface IProjectDetail {
   isRegistered: boolean
-  project: IProjectList
+  investedAmount: number
+  totalInvestedAmount: number
+  maxAllocation: number
+  project: IProjectDetailData
 } 
 
-export interface IProjectList {
+export interface IProjectDetailData {
   id: number
   chainId: number // ini di polygon
   vestingRuleId: number // ada tambahan object label
@@ -64,14 +68,17 @@ export interface IProjectList {
   status: string
   banner: string | null //projectBanner -> companyProfile
   logo: string | null //projectBanner -> companyLogo
-  targetAmount: number // target raise -> 190rb
-  publicSaleTokenAmount: number // -> 150rb -> berarti ini ambil dari contract
-  publicSaleTokenSold: number // 2500 -> ambil dari contract
-  publicSalePrice: number // rate -> 1usdt = 1000 dota
+  targetAmount: string | number // target raise -> 190rb
+  publicSaleTokenAmount: string | number // -> 150rb -> berarti ini ambil dari contract
+  publicSaleTokenSold: string | number // 2500 -> ambil dari contract
+  publicSalePrice: string | number // rate -> 1usdt = 1000 dota
   publicSaleCurrencyId: number
   minStaking: number //projectTarget -> minRocks
-  periodStart: string 
-  periodEnd: string //projectTarget -> endDate
+  registrationPeriodStart: string 
+  registrationPeriodEnd: string
+  buyPeriodStart: string 
+  buyPeriodEnd: string 
+  claimPeriodStart: string
   discordUrl: string | null
   twitterUrl: string | null
   mediumUrl: string | null
@@ -81,12 +88,15 @@ export interface IProjectList {
   updatedAt: string 
   VestingRule: IProjectVestingRule
   Currency: IPorjectCurrency
-  Chain: IProjectChain
+  Chain: ICommitInvest
+  investedAmount: number,
+  totalInvestedAmount: number,
+  Registrations: any[]
 }
 
 export interface IProject {
   loading: boolean
-  list: IProjectList[]
+  list: IProjectDetailData[]
 }
 
 export interface IReportList {
@@ -122,11 +132,24 @@ export interface IGetReportList {
   haveNft?: boolean
 }
 
-export interface IProjectListPayload {
+export interface IProjectDetailDataPayload {
   walletAddress: string
 }
 
-export interface IProjectListByIdPayload {
+export interface IProjectDetailDataByIdPayload {
   id: string
   walletAddress: string
+}
+export interface IGetInvestSignaturePayload {
+  projectId: string | string[]
+  commitAmount: number
+  walletAddress: string
+  decimal: number
+}
+
+export interface IUpdateInvestHashPayload {
+  projectId: string | string[]
+  amount: number
+  walletAddress: string
+  hash: any
 }

@@ -1,14 +1,14 @@
 import { getReturnValues } from "helper/utilities";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const useCountDown = () => {
-  const [countDown, setCountDown] = useState<number[]>();
+  const countDownRef = useRef<any>();
+  const [countDown, setCountDown] = useState<any>(-1);
 
-  const [endDate, setEndDate] = useState(0);
+  const [endDate, setEndDate] = useState(-1);
 
   function handleSetEndDate(endDate: number) {
     setEndDate(endDate);
-    setCountDown(getCountDownValues(endDate));
   }
 
   function getCountDownValues(date: number) {
@@ -16,15 +16,18 @@ const useCountDown = () => {
   }
 
   useEffect(() => {
-    if (new Date().getTime() < endDate) {
-      setTimeout(() => {
-        setCountDown(getCountDownValues(endDate));
+    if (endDate !== -1) {
+      countDownRef.current = setInterval(() => {
+        if (new Date().getTime() + 500 < endDate) {
+          setCountDown(getCountDownValues(endDate));
+        } else {
+          setCountDown(0);
+          clearInterval(countDownRef.current);
+        }
       }, 1000);
-    } else {
-      setCountDown(undefined);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countDown]);
+  }, [endDate]);
 
   return {
     countDown,
