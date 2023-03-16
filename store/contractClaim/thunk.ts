@@ -102,9 +102,8 @@ export const claimNFT = createAsyncThunk(
       // const tx = await provider.sendTransaction()
 
 
-      // const tx = await provider.sendTransaction(transactionParameters)
-
-      // const receipt = await provider.waitForTransaction(tx.hash, 1, 150000)
+      const tx = await provider.sendTransaction(transactionParameters)
+      const receipt = await provider.waitForTransaction(tx.hash, 1, 150000)
 
       return {
         amount,
