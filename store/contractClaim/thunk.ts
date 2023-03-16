@@ -63,13 +63,12 @@ export const isNFTClaimed = createAsyncThunk(
 export const claimNFT = createAsyncThunk(
   'contract/claimNFT',
   async (amount: string, { getState, rejectWithValue }): Promise<any> => {
-    const { address } = useAccount()
-
-    const provider = useProvider()
 
     const { contractStake, wallet, contractClaim }:any = getState()
 
     const { gasPrice } = contractStake as IContractStake
+
+    const { provider, address } = wallet
 
     let dataIclaim
     
