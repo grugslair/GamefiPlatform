@@ -98,7 +98,12 @@ const Staking: NextPage = () => {
           size="small"
           onClick={onClickAddRocksToken}
         >
-          <Image src={"/metamask.svg"} alt="metamask" width={18} height={18} />
+          <Image
+            src={"/icons/metamask.svg"}
+            alt="metamask"
+            width={18}
+            height={18}
+          />
           Add $ROCKS
         </Button>
       </div>
@@ -121,7 +126,7 @@ const Staking: NextPage = () => {
         </div>
         <div className="flex-[2] border border-solid border-grugBorder bg-grugCardBackground p-6">
           <div className="font-avara text-xl font-extrabold text-primary500">
-            Stake & Unstake (Soon)
+            Stake & Unstake
           </div>
           <div className="flex justify-between">
             <div>
@@ -136,18 +141,16 @@ const Staking: NextPage = () => {
               actionTitle="Stake"
               buttonProps={{
                 size: "small",
-                className:
-                  "mt-auto w-[120px] justify-center self-end opacity-[0.15]",
-                disabled: true,
+                className: "mt-auto w-[120px] justify-center self-end",
               }}
             />
           </div>
           <div className="my-6 border-b border-dashed border-b-grayCool25 opacity-10" />
-          <div className="font-sora text-sm text-gray300 opacity-10">
+          <div className="font-sora text-sm text-gray300">
             Unlocked Stake Balance:{" "}
             {formatNumber(contractStake.unlockRocks || 0)} $ROCKS
           </div>
-          <div className="pointer-events-none mt-3 border border-solid border-primary500 border-opacity-10 bg-grugAltCardBackground10 p-4 pr-6 opacity-50">
+          <div className="mt-3 border border-solid border-primary500 border-opacity-10 bg-grugAltCardBackground10 p-4 pr-6">
             <div className="flex items-center gap-6">
               <div className="flex-1">
                 <div className="font-sora text-xs font-light text-gray300">
@@ -190,7 +193,7 @@ const Staking: NextPage = () => {
           </div>
         </div>
         <div className="flex flex-1 flex-col border border-solid border-grugBorder bg-grugCardBackground p-6">
-          <div className="flex flex-1 flex-col opacity-10">
+          <div className="flex flex-1 flex-col">
             <div className="font-avara text-xl font-extrabold text-primary500">
               Overview
             </div>

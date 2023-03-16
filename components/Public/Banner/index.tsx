@@ -12,7 +12,7 @@ const Banner = () => {
     <div
       className={twJoin(
         "flex h-[708px] flex-col justify-center px-16 text-center",
-        "bg-[url('/grugbackground.png')] bg-cover bg-center "
+        "bg-[url('/images/grugbackground.png')] bg-cover bg-center "
       )}
     >
       <div className="mx-auto max-w-[912px] font-avara text-6xl font-black">

@@ -3,7 +3,7 @@ import { ethers } from "ethers"
 import { faDiscord, faMedium, faTelegram, faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { faGlobe } from "@fortawesome/free-solid-svg-icons"
 
-import { IProjectList } from "store/launchpad/launchpad"
+import { IProjectDetailData } from "store/launchpad/launchpad"
 
 import { IChainData } from "../types/chainList"
 import supportedChains from "./chainList"
@@ -56,10 +56,6 @@ export function weiToEth(wei: string) {
   return ethers.utils.formatEther(wei)
 }
 
-export function numberWithCommas(x: any) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
 export const formatNumber = (amount: any, decimals = 4) => {
   const numberedAmount = Number(amount);
   if (!amount || !numberedAmount) {
@@ -71,21 +67,6 @@ export const formatNumber = (amount: any, decimals = 4) => {
     decimalSplit[1]?.slice(0, decimals),
   ].filter(Boolean).join('.');
 };
-
-export function grugDateFormat(unFomatDate:string) {
-  const date = new Date(unFomatDate)
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  const formatTime = (time: number) => {
-    if (time < 10) {
-      return "0" + time
-    }
-    return time
-  }
-
-  const formatedDate = `${date.getDate()} ${months[date.getMonth()]}'${date.getFullYear()} - ${formatTime(date.getHours())} : ${formatTime(date.getMinutes())}`
-  return formatedDate
-}
 
 export const getReturnValues = (countDown:number) => {
   // calculate time left
@@ -108,7 +89,7 @@ export const encodeUrl = (pdfUrl: string) => {
   )
 }
 
-export const getSocialMedias = (data: IProjectList) => {
+export const getSocialMedias = (data: IProjectDetailData) => {
   return [
     {
       url: data?.twitterUrl || "",
@@ -132,3 +113,8 @@ export const getSocialMedias = (data: IProjectList) => {
     },
   ].filter(e => !!e.url)
 }
+
+
+export const isTouchDevice = () => {
+  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+};
