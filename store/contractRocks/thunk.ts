@@ -74,8 +74,6 @@ export const approveContractRocks = createAsyncThunk(
 
       const receipt = await wallet.etherProvider.waitForTransaction(tx.hash, 1, 150000)
 
-      console.log(receipt)
-
       return tx
 
     } catch(err) {

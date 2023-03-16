@@ -39,14 +39,22 @@ const ModalClaimRocksButton = ({
     (state: RootState) => state.contractClaim
   );
   const wallet: walletState = useSelector((state: RootState) => state.wallet);
-  const [loadingClaim, setLoadingClaim] = useState<boolean>(false);
 
   const [dataToken, setDataToken] = useState<String[]>([]);
 
   const dispatch = useAppDispatch();
 
-  function changeStakeAmount(value: string) {
+  function changeStakeAmount(value: any) {
     setStakeAmount(value);
+    let dataTokenTemp = []
+
+    if(contractClaim.unClaimNft.length > 0) {
+      for(let index = 0; index < parseInt(value, 10); index++) {
+        dataTokenTemp.push(contractClaim.unClaimNft[index].tokenId)
+      }
+    }
+
+    setDataToken(dataTokenTemp)
   }
 
   const { config } = usePrepareContractWrite({
@@ -57,9 +65,9 @@ const ModalClaimRocksButton = ({
     enabled: !!stakeAmount
   })
 
-  const { data, error, isError, write } = useContractWrite(config)
+  const { data, write } = useContractWrite(config)
  
-  const { isLoading, isSuccess } = useWaitForTransaction({
+  const { isLoading, isSuccess, isError: transactionError } = useWaitForTransaction({
     hash: data?.hash,
   })
  
@@ -89,51 +97,36 @@ const ModalClaimRocksButton = ({
   }, [isModalOpen]);
 
   async function claimNft() {
-    let dataTokenTemp = []
-    
-    for(let index = 0; index < parseInt(stakeAmount, 10); index++) {
-      dataTokenTemp.push(contractClaim.unClaimNft[index].tokenId)
-    }
-
-    setDataToken(dataTokenTemp)
-
     write?.()
-    
-
-    // setLoadingClaim(true);
-    // await dispatch(getGasPrice());
-    // dispatch(claimNFT(stakeAmount)).then((resp) => {
-    //   if (resp.payload?.receipt?.transactionHash) {
-    //     pushMessage(
-    //       {
-    //         status: "success",
-    //         title: "$ROCKS succesfully claimed",
-    //         description: `You've claimed ${formatNumber(
-    //           stakeAmount ? parseInt(stakeAmount, 10) * 3000 : 0
-    //         )} $ROCKS`,
-    //       },
-    //       dispatch
-    //     );
-    //   } else {
-    //     pushMessage(
-    //       {
-    //         status: "error",
-    //         title: "Failed to claim $ROCKS",
-    //         description: "Please wait a little bit then try again",
-    //       },
-    //       dispatch
-    //     );
-    //   }
-    //   setLoadingClaim(false);
-    //   setStakeAmount("");
-    //   setModalOpen(false);
-    // });
   }
 
   useEffect(() => {
-    console.log(isLoading)
-    console.log(isSuccess)
-  }, [isLoading, isSuccess])
+    if(isSuccess) {
+      pushMessage(
+        {
+          status: "success",
+          title: "$ROCKS succesfully claimed",
+          description: `You've claimed ${formatNumber(
+            stakeAmount ? parseInt(stakeAmount, 10) * 3000 : 0
+          )} $ROCKS`,
+        },
+        dispatch
+      );
+    }
+
+    if(transactionError) {
+      pushMessage(
+        {
+          status: "error",
+          title: "Failed to claim $ROCKS",
+          description: "Please wait a little bit then try again",
+        },
+        dispatch
+      );
+    }
+    setStakeAmount("");
+    setModalOpen(false);
+  }, [isSuccess, transactionError])
 
   return (
     <>
@@ -213,7 +206,7 @@ const ModalClaimRocksButton = ({
           <Button
             className="mt-6 w-full justify-center"
             disabled={disclaimer}
-            loading={loadingClaim}
+            loading={isLoading}
             onClick={() => claimNft()}
           >
             Claim

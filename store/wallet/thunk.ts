@@ -24,7 +24,6 @@ export const getGrugBalance = createAsyncThunk(
   "wallet/grugBalance",
   async (arg, { getState }) => {
     const { wallet }: any = getState();
-    console.log(wallet)
     const balance: number = await wallet.contract.balanceOf(
       wallet.walletAddress
     );
