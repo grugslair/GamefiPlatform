@@ -45,9 +45,14 @@ const ModalClaimRocksButton = ({
 
   const dispatch = useAppDispatch();
 
-  function changeStakeAmount(value: string) {
-    setStakeAmount(value);
+  function changeStakeAmount(value: string | null) {
+    if (value !== null) {
+      setStakeAmount(value);
+    } else {
+      setStakeAmount("");
+    }
   }
+  
 
   const { config } = usePrepareContractWrite({
     address: claimRocksContractAddress,
@@ -179,7 +184,7 @@ const ModalClaimRocksButton = ({
                 className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-xl font-extrabold text-white"
                 value={stakeAmount}
                 size="large"
-                onChange={changeStakeAmount}
+                onChange={value => changeStakeAmount(value)}
                 placeholder="Type Here"
                 controls={false}
               />
