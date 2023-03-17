@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { IContractClaim } from './contractClaim'
-import { claimNFT, initiateContractClaim, isNFTClaimed } from './thunk'
+import { isNFTClaimed } from './thunk'
 
 const initialState = {
   contract: null,
@@ -20,15 +20,6 @@ const contractClaim = createSlice({
     builder.addCase(isNFTClaimed.fulfilled, (state: IContractClaim, action: any) => {
       state.claimedNft = action.payload.claimedNft
       state.unClaimNft = action.payload.unClaimNft
-    })
-
-    builder.addCase(claimNFT.fulfilled, (state: IContractClaim, action: any) => {
-      if(action.payload.receipt.transactionHash) {
-        for(let token = 0; token < action.payload.amount; token++) {
-          state.claimedNft.push(state.unClaimNft[token])
-          state.unClaimNft.shift()
-        }
-      }
     })
   }
 })
