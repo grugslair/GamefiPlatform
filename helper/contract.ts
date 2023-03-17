@@ -9,7 +9,7 @@ const grugContractAddressENV: IContractEnv = {
 } 
 
 const rocksContractAddressENV: IContractEnv = {
-  development: "0xB36Dd853f10EdEc6A029A06AC3641cCe78537c0D",
+  development: "0xFC8557F37134bA748aA1e3Af1d702528CB835Aed",
   production: '0xe6222fe5294d3546a0c32b028c5af9a2a60481da'
 } 
 
