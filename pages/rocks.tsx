@@ -41,6 +41,8 @@ const Staking: NextPage = () => {
 
   const [unStakeAmount, setUnStakeAmount] = useState("");
 
+  const [loadingUnstake, setLoadingUnstake] = useState<boolean>(false);
+
   const unstakeDisabled = !(contractRocks?.balanceOfRocks > 0);
 
   function changeUnStakeAmount(value: string) {
@@ -56,6 +58,7 @@ const Staking: NextPage = () => {
 
   async function unStake() {
     await dispatch(getGasPrice());
+    setLoadingUnstake(true)
     const weiAmount = ethToWei(unStakeAmount?.toString() || "0");
     const result = await dispatch(contractUnstaking(weiAmount));
 
@@ -81,6 +84,8 @@ const Staking: NextPage = () => {
         dispatch
       );
     }
+
+    setLoadingUnstake(false)
   }
 
   useEffect(() => {
@@ -184,6 +189,7 @@ const Staking: NextPage = () => {
                 <Button
                   size="small"
                   onClick={unStake}
+                  loading={loadingUnstake}
                   disabled={unstakeDisabled}
                 >
                   Unstake
