@@ -62,6 +62,8 @@ const Staking: NextPage = () => {
     const weiAmount = ethToWei(unStakeAmount?.toString() || "0");
     const result = await dispatch(contractUnstaking(weiAmount));
 
+    console.log(result)
+
     if (result?.payload?.hash) {
       pushMessage(
         {
