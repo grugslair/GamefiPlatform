@@ -12,7 +12,7 @@ import { addRocksTokenToWallet, getRocksFromNFT } from "store/wallet/thunk";
 import { isNFTClaimed } from "store/contractClaim/thunk";
 import { IContractRocks } from "store/contractRocks/contractRocks";
 import { IContractStake } from "store/contractStake/contractStake";
-import { contractUnstaking, getGasPrice } from "store/contractStake/thunk";
+import { contractUnstaking, getAvailableWithdrawAmount, getGasPrice } from "store/contractStake/thunk";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,6 +41,8 @@ const Staking: NextPage = () => {
 
   const [unStakeAmount, setUnStakeAmount] = useState("");
 
+  const [loadingUnstake, setLoadingUnstake] = useState<boolean>(false);
+
   const unstakeDisabled = !(contractRocks?.balanceOfRocks > 0);
 
   function changeUnStakeAmount(value: string) {
@@ -56,10 +58,11 @@ const Staking: NextPage = () => {
 
   async function unStake() {
     await dispatch(getGasPrice());
+    setLoadingUnstake(true)
     const weiAmount = ethToWei(unStakeAmount?.toString() || "0");
     const result = await dispatch(contractUnstaking(weiAmount));
 
-    if (result?.payload?.hash) {
+    if (result?.payload?.ts.hash) {
       pushMessage(
         {
           status: "success",
@@ -81,6 +84,9 @@ const Staking: NextPage = () => {
         dispatch
       );
     }
+
+    await dispatch(getAvailableWithdrawAmount());
+    setLoadingUnstake(false)
   }
 
   useEffect(() => {
@@ -184,6 +190,7 @@ const Staking: NextPage = () => {
                 <Button
                   size="small"
                   onClick={unStake}
+                  loading={loadingUnstake}
                   disabled={unstakeDisabled}
                 >
                   Unstake
