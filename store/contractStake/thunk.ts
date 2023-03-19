@@ -110,8 +110,12 @@ export const contractStaking = createAsyncThunk(
     }
 
       const ts = await wallet.etherProvider.getSigner().sendTransaction(transactionParametersStake)
-      ts.wait()
-      return ts
+      const receipt = await wallet.etherProvider.waitForTransaction(ts.hash, 1, 150000)
+
+      return {
+        ts,
+        receipt
+      }
     } catch(err) {
       return rejectWithValue(err)
     }
@@ -145,7 +149,12 @@ export const contractUnstaking = createAsyncThunk(
 
       const ts = await wallet.etherProvider.getSigner().sendTransaction(transactionParametersStake)
 
-      return ts
+      const receipt = await wallet.etherProvider.waitForTransaction(ts.hash, 1, 150000)
+
+      return {
+        ts,
+        receipt
+      }
     } catch(err) {
       return rejectWithValue(err)
     }
