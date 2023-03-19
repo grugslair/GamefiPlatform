@@ -12,7 +12,7 @@ import { addRocksTokenToWallet, getRocksFromNFT } from "store/wallet/thunk";
 import { isNFTClaimed } from "store/contractClaim/thunk";
 import { IContractRocks } from "store/contractRocks/contractRocks";
 import { IContractStake } from "store/contractStake/contractStake";
-import { contractUnstaking, getGasPrice } from "store/contractStake/thunk";
+import { contractUnstaking, getAvailableWithdrawAmount, getGasPrice } from "store/contractStake/thunk";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -64,7 +64,7 @@ const Staking: NextPage = () => {
 
     console.log(result)
 
-    if (result?.payload?.hash) {
+    if (result?.payload?.ts.hash) {
       pushMessage(
         {
           status: "success",
@@ -87,6 +87,7 @@ const Staking: NextPage = () => {
       );
     }
 
+    await dispatch(getAvailableWithdrawAmount());
     setLoadingUnstake(false)
   }
 
