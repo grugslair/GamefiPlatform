@@ -13,7 +13,9 @@ import { IContractStake } from "store/contractStake/contractStake";
 import {
   contractStaking,
   getAllowance,
+  getAvailableWithdrawAmount,
   getGasPrice,
+  getStakeBalance,
 } from "store/contractStake/thunk";
 
 // Fontawesome
@@ -152,6 +154,8 @@ const ModalStakeAmountButton = ({
   async function callAllowance() {
     await dispatch(getAllowance());
     await dispatch(contractGetBalance());
+    await dispatch(getStakeBalance());
+    await dispatch(getAvailableWithdrawAmount());
   }
 
   useEffect(() => {
