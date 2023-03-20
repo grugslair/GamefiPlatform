@@ -32,6 +32,8 @@ import { useAppDispatch } from "hooks/useStoreHooks";
 import Button, { IButton } from "components/Button";
 import Checkbox from "components/Button/CheckboxButton";
 import RadioButton from "components/Button/RadioButton";
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { stakeContractAddress, rocksContractABI, rocksContractAddress } from "@/helper/contract";
 
 interface IModalStakeAmountButtonProps {
   actionTitle: string;
@@ -56,6 +58,20 @@ const ModalStakeAmountButton = ({
 
   const dispatch = useAppDispatch();
 
+  const { config: approveConfig } = usePrepareContractWrite({
+    address: rocksContractAddress,
+    abi: rocksContractABI,
+    functionName: 'approve',
+    args: [stakeContractAddress, '0'],
+    enabled: !!stakeAmount
+  })
+
+  const { data, write: writeApprove } = useContractWrite(approveConfig)
+ 
+  const { isLoading: loadingApprove, isSuccess, isError: approveError, error } = useWaitForTransaction({
+    hash: data?.hash,
+  })
+
   function handleCancel() {
     setModalOpen(false);
   }
@@ -63,7 +79,8 @@ const ModalStakeAmountButton = ({
   const isAllowed = useMemo(() => {
     const weiAmount = ethToWei(stakeAmount?.toString() || "0");
     if (contractStake.allowance) {
-      return parseInt(weiAmount, 10) <= contractStake.allowance;
+      return false
+      // return parseInt(weiAmount, 10) <= contractStake.allowance;
     }
     return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,41 +132,42 @@ const ModalStakeAmountButton = ({
     try {
       setLoading(true);
       if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
-        await dispatch(getGasPrice());
 
-        const weiAmount = ethToWei(stakeAmount?.toString() || "0");
-        if (contractStake.allowance) {
-          const approveResult = await dispatch(approveContractRocks(weiAmount));
+        writeApprove?.();
 
-          if (approveResult?.payload?.hash) {
-            pushMessage(
-              {
-                status: "success",
-                title: "",
-                description: "Successfully approve token",
-              },
-              dispatch
-            );
-          }
-
-          //@ts-ignore
-          if (approveResult?.error?.message === "Rejected") {
-            pushMessage(
-              {
-                status: "error",
-                title: "",
-                description: approveResult.payload.reason,
-              },
-              dispatch
-            );
-          }
-        }
+          
         await callAllowance();
       }
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (loadingApprove) {
+      pushMessage(
+        {
+          status: "success",
+          title: "",
+          description: "Successfully approve token",
+        },
+        dispatch
+      );
+    }
+
+    console.log(approveError);
+
+    if(approveError) {
+      pushMessage(
+        {
+          status: "error",
+          title: "",
+          description: "approveError.payload.reason",
+        },
+        dispatch
+      );
+    }
+  }, [loadingApprove])
 
   async function callAllowance() {
     await dispatch(getAllowance());
