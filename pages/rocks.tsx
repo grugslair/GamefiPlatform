@@ -67,7 +67,7 @@ const Staking: NextPage = () => {
         {
           status: "success",
           title: "",
-          description: "Successfully unstake token",
+          description: `Successfully unstake ${unStakeAmount} token`,
         },
         dispatch
       );

@@ -85,7 +85,7 @@ const ModalStakeAmountButton = ({
               {
                 status: "success",
                 title: "Successfully stake token",
-                description: "You've stake ROCKS",
+                description: `You've stake ${stakeAmount} ROCKS`,
               },
               dispatch
             );
@@ -121,12 +121,12 @@ const ModalStakeAmountButton = ({
         if (contractStake.allowance) {
           const approveResult = await dispatch(approveContractRocks(weiAmount));
 
-          if (approveResult?.payload?.hash) {
+          if (approveResult?.payload?.ts.hash) {
             pushMessage(
               {
                 status: "success",
                 title: "",
-                description: "Successfully approve token",
+              description: "Successfully approve token",
               },
               dispatch
             );
@@ -223,7 +223,7 @@ const ModalStakeAmountButton = ({
             className="staking-input-number w-full border-none bg-transparent p-0 font-sora text-base font-normal text-white"
             value={stakeAmount}
             size="large"
-            onChange={setStakeAmount}
+            onChange={setStakeAmount as any}
             placeholder="Type Here"
             controls={false}
             min="0"
