@@ -33,7 +33,7 @@ import Button, { IButton } from "components/Button";
 import Checkbox from "components/Button/CheckboxButton";
 import RadioButton from "components/Button/RadioButton";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
-import { stakeContractAddress, rocksContractABI, rocksContractAddress } from "@/helper/contract";
+import { stakeContractAddress, rocksContractABI, rocksContractAddress, stakeContractABI } from "@/helper/contract";
 
 interface IModalStakeAmountButtonProps {
   actionTitle: string;
@@ -62,14 +62,28 @@ const ModalStakeAmountButton = ({
     address: rocksContractAddress,
     abi: rocksContractABI,
     functionName: 'approve',
-    args: [stakeContractAddress, '0'],
+    args: [stakeContractAddress, ethToWei('0')],
     enabled: !!stakeAmount
   })
 
-  const { data, write: writeApprove } = useContractWrite(approveConfig)
+  const { data: dataApprove, write: writeApprove } = useContractWrite(approveConfig)
  
-  const { isLoading: loadingApprove, isSuccess, isError: approveError, error } = useWaitForTransaction({
-    hash: data?.hash,
+  const { isLoading: loadingApprove, isSuccess: successApprove, isError: approveError } = useWaitForTransaction({
+    hash: dataApprove?.hash,
+  })
+
+  const { config: stakeConfig } = usePrepareContractWrite({
+    address: stakeContractAddress,
+    abi: stakeContractABI,
+    functionName: 'lockToken',
+    args: [stakeContractAddress, [ethToWei('857')]],
+    enabled: !!stakeAmount
+  })
+
+  const { data: dataStaking, write: writeStaking } = useContractWrite(stakeConfig)
+ 
+  const { isLoading: loadingStaking, isSuccess: successStaking, isError: stakingError } = useWaitForTransaction({
+    hash: dataStaking?.hash,
   })
 
   function handleCancel() {
@@ -95,30 +109,7 @@ const ModalStakeAmountButton = ({
         const weiAmount = ethToWei(stakeAmount?.toString() || "0");
 
         if (contractStake.allowance) {
-          const result = await dispatch(contractStaking(weiAmount));
-
-          if (result?.payload?.hash) {
-            pushMessage(
-              {
-                status: "success",
-                title: "Successfully stake token",
-                description: "You've stake ROCKS",
-              },
-              dispatch
-            );
-          }
-
-          //@ts-ignore
-          if (result?.error?.message === "Rejected") {
-            pushMessage(
-              {
-                status: "error",
-                title: "",
-                description: result.payload.reason,
-              },
-              dispatch
-            );
-          }
+          writeStaking?.();
 
           setModalOpen(false);
         }
@@ -155,8 +146,6 @@ const ModalStakeAmountButton = ({
       );
     }
 
-    console.log(approveError);
-
     if(approveError) {
       pushMessage(
         {
@@ -167,7 +156,29 @@ const ModalStakeAmountButton = ({
         dispatch
       );
     }
-  }, [loadingApprove])
+
+    if (loadingStaking) {
+      pushMessage(
+        {
+          status: "success",
+          title: "",
+          description: "Successfully approve token",
+        },
+        dispatch
+      );
+    }
+
+    if (stakingError) {
+      pushMessage(
+        {
+          status: "error",
+          title: "",
+          description: "approveError.payload.reason",
+        },
+        dispatch
+      );
+    }
+  }, [loadingApprove, loadingStaking])
 
   async function callAllowance() {
     await dispatch(getAllowance());
