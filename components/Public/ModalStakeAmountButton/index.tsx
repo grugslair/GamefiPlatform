@@ -62,7 +62,7 @@ const ModalStakeAmountButton = ({
     address: rocksContractAddress,
     abi: rocksContractABI,
     functionName: 'approve',
-    args: [stakeContractAddress, ethToWei('0')],
+    args: [stakeContractAddress, ethToWei(stakeAmount?.toString() || "0")],
     enabled: !!stakeAmount
   })
 
@@ -76,7 +76,7 @@ const ModalStakeAmountButton = ({
     address: stakeContractAddress,
     abi: stakeContractABI,
     functionName: 'lockToken',
-    args: [stakeContractAddress, [ethToWei('857')]],
+    args: [ethToWei(stakeAmount?.toString() || "0")],
     enabled: !!stakeAmount
   })
 
@@ -93,8 +93,7 @@ const ModalStakeAmountButton = ({
   const isAllowed = useMemo(() => {
     const weiAmount = ethToWei(stakeAmount?.toString() || "0");
     if (contractStake.allowance) {
-      return false
-      // return parseInt(weiAmount, 10) <= contractStake.allowance;
+      return parseInt(weiAmount, 10) <= contractStake.allowance;
     }
     return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,14 +103,12 @@ const ModalStakeAmountButton = ({
     try {
       setLoading(true);
       if (parseInt(stakeAmount, 10) <= contractRocks.balanceOfRocks) {
-        await dispatch(getGasPrice());
 
-        const weiAmount = ethToWei(stakeAmount?.toString() || "0");
 
         if (contractStake.allowance) {
+
           writeStaking?.();
 
-          setModalOpen(false);
         }
       }
     } finally {
@@ -135,7 +132,7 @@ const ModalStakeAmountButton = ({
   }
 
   useEffect(() => {
-    if (loadingApprove) {
+    if (successApprove) {
       pushMessage(
         {
           status: "success",
@@ -144,6 +141,7 @@ const ModalStakeAmountButton = ({
         },
         dispatch
       );
+      setModalOpen(false)
     }
 
     if(approveError) {
@@ -155,17 +153,20 @@ const ModalStakeAmountButton = ({
         },
         dispatch
       );
+      setModalOpen(false)
+
     }
 
-    if (loadingStaking) {
+    if (successStaking) {
       pushMessage(
         {
           status: "success",
           title: "",
-          description: "Successfully approve token",
+          description: "Successfully staking token",
         },
         dispatch
       );
+      setModalOpen(false)
     }
 
     if (stakingError) {
@@ -177,8 +178,10 @@ const ModalStakeAmountButton = ({
         },
         dispatch
       );
+      setModalOpen(false)
     }
-  }, [loadingApprove, loadingStaking])
+
+  }, [successApprove, successStaking])
 
   async function callAllowance() {
     await dispatch(getAllowance());
@@ -285,7 +288,7 @@ const ModalStakeAmountButton = ({
           className="mb-6 w-full bg-[#B54639] py-2 font-['avara'] text-base"
           disabled={!disclaimer}
           onClick={isAllowed ? staking : approve}
-          loading={loading}
+          loading={loadingApprove || loadingStaking}
         >
           {isAllowed ? "Stake" : "Approve"}
         </Button>
