@@ -19,7 +19,7 @@ function RouteGuard({ children }: any) {
   const router = useRouter();
 
   const path = router.asPath.split("?")[0];
-  const publicPaths = ["/verify", "/reports", "/rocks"];
+  const publicPaths = ["/verify", "/reports", "/rocks", "/lairs-tale"];
   const isCurrentPathPublic = publicPaths.includes(path);
 
   const { connectWallet, isAuthorize } = useWallet();

@@ -13,7 +13,7 @@ const ProjectDescription = (prop: IProjectDescriptionProp) => {
         {prop.companyName}
       </div>
       <div className="mt-1 font-avara text-xl font-bold text-white">
-        ${prop.companyToken}
+        ${prop.companyToken} · {prop.networkName}
       </div>
       <div className="mt-4 font-sora text-base text-grayCool300 line-clamp-2">
         {prop.companyDescription}

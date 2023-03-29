@@ -1,14 +1,11 @@
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
+import moment from "moment";
 
 //Redux
-import type { IProjectList } from "store/launchpad/launchpad";
-
-// Hooks
-import useCountDown from "hooks/useCountDown";
+import type { IProjectDetailData } from "store/launchpad/launchpad";
 
 // Components
-import Button from "components/Button";
 import ProjectBanner from "./ProjectBanner";
 import ProjectDescription from "./ProjectDescription.tsx";
 import ProjectTarget from "./ProjectTarget";
@@ -20,24 +17,21 @@ import {
 } from "./type";
 import { getSocialMedias } from "helper/utilities";
 
+import Button from "@/components/Button";
+
 interface IProps {
-  dataproject: IProjectList;
+  dataproject: IProjectDetailData;
 }
 
 const Project = (props: IProps) => {
   const router = useRouter();
-
-  const { handleSetEndDate, countDown } = useCountDown();
-
-  useLayoutEffect(() => {
-    const date = new Date(props.dataproject.periodEnd);
-    handleSetEndDate(date.getTime());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props]);
+  const [, setRerenderer] = useState(0);
 
   const projectBanner: IProjectBannerProp = {
-    companyLogo: props.dataproject.logo,
+    networkLogo: props.dataproject.Chain.logo,
     companyProfile: props.dataproject.banner,
+    data: props.dataproject,
+    onPhaseChange: () => setRerenderer((prev) => prev + 1),
   };
 
   const projectDescription: IProjectDescriptionProp = {
@@ -45,53 +39,64 @@ const Project = (props: IProps) => {
     companyName: props.dataproject.name,
     companyToken: props.dataproject.tokenSymbol,
     companySosMedList: getSocialMedias(props.dataproject),
+    networkName: props.dataproject.Chain.name,
   };
 
   const projectTarget: IProjectTarget = {
-    targetRaise: props.dataproject.targetAmount,
-    rate: props.dataproject.publicSalePrice,
-    startDate: props.dataproject.periodStart,
+    targetAmount: props.dataproject.targetAmount,
+    publicSalePrice: props.dataproject.publicSalePrice,
+    startDate: props.dataproject.registrationPeriodStart,
     minRocks: props.dataproject.minStaking,
     vesting: props.dataproject.VestingRule.label,
     tokenSymbol: props.dataproject.tokenSymbol,
     currency: props.dataproject.Currency,
-    publicSaleTokenSold: props.dataproject.publicSaleTokenSold,
+    totalInvestedAmount: props.dataproject.totalInvestedAmount
+  };
+
+  const getButtonWording = () => {
+    let wording = "See Project Detail";
+    const isRegistrationPhase = moment().isBetween(
+      moment(props.dataproject.registrationPeriodStart),
+      moment(props.dataproject.registrationPeriodEnd)
+    );
+    const isBuyPhase = moment().isBetween(
+      moment(props.dataproject.buyPeriodStart),
+      moment(props.dataproject.buyPeriodEnd)
+    );
+    const isClaimPhase = moment().isAfter(
+      moment(props.dataproject.claimPeriodStart)
+    );
+    const isRegistered = props.dataproject?.Registrations?.length
+    const isCommited = props.dataproject?.investedAmount > 0
+    if (isRegistrationPhase && !isRegistered) wording = "Participate"; // Unregistered
+    if (isBuyPhase && isRegistered) wording = "Buy Token"; // Registered
+    if (isClaimPhase && isCommited) wording = "Claim Your Token"; // Commited
+    return wording;
   };
 
   return (
     <>
       <div className="relative rounded-sm border border-solid border-grugBorder bg-grugCardBackground">
-        <ProjectBanner
-          companyProfile={projectBanner.companyProfile}
-          companyLogo={projectBanner.companyLogo}
-          countDown={countDown}
-          endDate={props.dataproject.periodEnd}
-        />
+        <ProjectBanner {...projectBanner} />
         <div className="px-10 pt-6 pb-24">
-          <ProjectDescription
-            companyName={projectDescription.companyName}
-            companyToken={projectDescription.companyToken}
-            companyDescription={projectDescription.companyDescription}
-            companySosMedList={projectDescription.companySosMedList}
-          />
+          <ProjectDescription {...projectDescription} />
           <ProjectTarget projectTarget={projectTarget} />
         </div>
-        <div className="absolute -bottom-4 w-full px-10">
-          <Button
-            className="w-full justify-center"
-            onClick={() =>
-              router.push({
-                pathname: "/projectdetail",
-                query: {
-                  id: props.dataproject.id,
-                },
-              })
-            }
-          >
-            {countDown ? "Participate" : "See Project Detail"}
-          </Button>
-        </div>
-        {/* )} */}
+          <div className="absolute -bottom-4 w-full px-10">
+            <Button
+              className="w-full justify-center"
+              onClick={() =>
+                router.push({
+                  pathname: "/projectdetail",
+                  query: {
+                    id: props.dataproject.id,
+                  },
+                })
+              }
+            >
+              {getButtonWording()}
+            </Button>
+          </div>
       </div>
     </>
   );

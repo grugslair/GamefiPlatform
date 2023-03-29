@@ -21,7 +21,7 @@ import {
   faTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 
-import { join, twMerge } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "tailwind.config";
 
@@ -50,21 +50,21 @@ const SOCIAL_MEDIAS = [
     label: "Twitter",
     url: "https://twitter.com/GrugsLair",
     icon: faTwitter,
-    logo: "/twitter.svg",
+    logo: "/icons/twitter.svg",
     target: "_blank",
   },
   {
     label: "Medium",
     url: "https://medium.com/@grugslair",
     icon: faMedium,
-    logo: "/medium.svg",
+    logo: "/icons/medium.svg",
     target: "_blank",
   },
   {
     label: "Discord",
     url: "https://discord.gg/gDyJBYUNDq",
     icon: faDiscord,
-    logo: "/discord.svg",
+    logo: "/icons/discord.svg",
     target: "_blank",
   },
 ];
@@ -84,7 +84,7 @@ const LINKS = [
   },
 ];
 
-const MobileMenu = ({ renderWalletButtons }: any) => {
+const MobileMenu = ({ renderWalletButton }: any) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -97,17 +97,17 @@ const MobileMenu = ({ renderWalletButtons }: any) => {
         className="relative z-[1] flex h-10 w-10 items-center justify-center"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Image src={"/mobile-menu.svg"} alt="grugs-lair" layout="fill" />
+        <Image src={"/icons/mobile-menu.svg"} alt="grugs-lair" layout="fill" />
         <FontAwesomeIcon
           icon={faBars}
-          className={join(
+          className={twJoin(
             "absolute w-5 text-white transition-opacity duration-300",
             isOpen && "opacity-0"
           )}
         />
         <FontAwesomeIcon
           icon={faClose}
-          className={join(
+          className={twJoin(
             "absolute w-3 text-white transition-opacity duration-300",
             !isOpen && "opacity-0"
           )}
@@ -128,8 +128,20 @@ const MobileMenu = ({ renderWalletButtons }: any) => {
       >
         <div className="flex flex-col gap-6">
           {LINKS.map((data, i) => (
-            <NavLink key={i} {...data} onClick={() => setIsOpen(false)} />
+            <NavLink
+              key={i}
+              {...data}
+              isMobile
+              onClick={() => setIsOpen(false)}
+            />
           ))}
+          <NavLink
+            label="Buy Grug's @ Opensea"
+            url="https://opensea.io/collection/grugslair"
+            target="_blank"
+            isMobile
+            onClick={() => setIsOpen(false)}
+          />
         </div>
         <div className="mt-8 flex gap-3">
           {SOCIAL_MEDIAS.map(({ url, icon, target }, i) => {
@@ -146,20 +158,26 @@ const MobileMenu = ({ renderWalletButtons }: any) => {
             );
           })}
         </div>
-        {renderWalletButtons()}
+        {renderWalletButton()}
       </div>
     </>
   );
 };
 
-const NavLink = ({ label, url, target, onClick }: INavLink) => {
+const NavLink = ({
+  label,
+  url,
+  target,
+  onClick,
+  isMobile = false,
+}: INavLink) => {
   return (
     <Link href={url || ""}>
       <a
         target={target}
-        className={join(
-          "font-avara text-xl font-black text-white",
-          "tablet:text-base tablet:font-bold tablet:text-shadow-grugSm"
+        className={twMerge(
+          "font-avara text-base font-bold text-shadow-grugSm",
+          isMobile && "text-xl font-black text-white text-shadow-none"
         )}
         onClick={onClick}
       >
@@ -196,7 +214,7 @@ const DesktopSocialMedias = () => {
         </p>
         <FontAwesomeIcon
           icon={faChevronDown}
-          className={join(
+          className={twJoin(
             "-mt-1 w-[16px] text-white transition-transform",
             open && "rotate-180"
           )}
@@ -206,7 +224,7 @@ const DesktopSocialMedias = () => {
         />
       </div>
       <div
-        className={join(
+        className={twJoin(
           "absolute right-0 top-10 z-[1] w-64 flex-col rounded-sm border border-solid border-grugBorder bg-grugCardBackground p-4",
           "origin-top-right transition-all group-hover:opacity-100",
           open ? "scale-100 opacity-100" : "scale-0 opacity-0"
@@ -220,7 +238,7 @@ const DesktopSocialMedias = () => {
             {...data}
             label={
               <div
-                className={join(
+                className={twJoin(
                   "flex items-center",
                   i !== 0 && "mt-4 border-t border-solid border-grugBorder pt-4"
                 )}
@@ -283,68 +301,29 @@ const Header = () => {
 
   const router = useRouter();
 
-  const renderWalletButtons = () => (
-    <div
-      className={twMerge(
-        "flex justify-end items-center gap-4",
-        isMobile && "justify-start mt-8"
-      )}
-    >
-      <div>
-        <Button
-          className={join(
-            "h-10 text-sm bg-white text-primary700 font-black",
-            "tablet:h-10 tablet:text-sm",
-            isMobile && "shadow-lg"
-          )}
-          onClick={() =>
-            window.open("https://opensea.io/collection/grugslair", "_blank")
-          }
-        >
-          <div className="relative w-5 h-5 mr-2 -mt-1">
-            <Image
-              src="/openseas.svg"
-              alt="openseas"
-              objectFit="contain"
-              layout="fill"
-            />
-          </div>
-          OpenSea
-        </Button>
-      </div>
-      <div>
-        {
-          <Button
-            className={join(
-              "h-10 text-sm font-black",
-              "tablet:h-10 tablet:text-sm",
-              isMobile && "shadow-lg"
-            )}
-            onClick={wallet.walletAddress ? disconnect : connectWallet}
-          >
-            {wallet.walletAddress ? (
-              ellipseAddress(wallet.walletAddress, 5)
-            ) : (
-              <>
-                Connect MetaMask
-                {/* <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className="ml-2 -mt-1 w-[16px] text-white"
-                    /> */}
-              </>
-            )}
-          </Button>
-        }
-      </div>
+  const renderWalletButton = () => (
+    <div>
+      <Button
+        className={twJoin(
+          "h-10 text-sm",
+          "tablet:h-10 tablet:text-sm",
+          isMobile && "mt-10 bg-white text-primary700 shadow-lg"
+        )}
+        onClick={wallet.walletAddress ? disconnect : connectWallet}
+      >
+        {wallet.walletAddress
+          ? ellipseAddress(wallet.walletAddress, 5)
+          : "Connect MetaMask"}
+      </Button>
     </div>
   );
 
   return isMobile !== -1 ? (
     <div
       id="NavBar"
-      className={join(
+      className={twJoin(
         "fixed top-0 z-10 w-full py-4 transition duration-500",
-        isMobile ? "pl-4 pr-5 py-4" : "px-8 py-[30px]"
+        isMobile ? "py-4 pl-4 pr-5" : "py-[30px]"
       )}
       style={{
         background: scrolled
@@ -354,9 +333,9 @@ const Header = () => {
       }}
     >
       <div
-        className={join(
+        className={twJoin(
           "mx-auto flex max-w-screen-largeDesktop items-center gap-12",
-          isMobile && "justify-between"
+          isMobile ? "justify-between" : "px-8"
         )}
       >
         <div
@@ -369,14 +348,14 @@ const Header = () => {
           }}
         >
           <Image
-            src={"/grugsLair.png"}
+            src={"/images/grugsLair.png"}
             alt="grugs-lair"
             width={61}
             height={48}
           />
         </div>
         {isMobile ? (
-          <MobileMenu renderWalletButtons={renderWalletButtons} />
+          <MobileMenu renderWalletButton={renderWalletButton} />
         ) : (
           <div className="flex flex-1 gap-12">
             {LINKS.map((data, i) => (
@@ -385,7 +364,35 @@ const Header = () => {
             <DesktopSocialMedias />
           </div>
         )}
-        {!isMobile && renderWalletButtons()}
+        {!isMobile && (
+          <div className="flex items-center justify-end gap-4">
+            <div>
+              <Button
+                className={twJoin(
+                  "h-10 bg-white text-sm text-primary700",
+                  "tablet:h-10 tablet:text-sm"
+                )}
+                onClick={() =>
+                  window.open(
+                    "https://opensea.io/collection/grugslair",
+                    "_blank"
+                  )
+                }
+              >
+                <div className="relative mr-2 -mt-1 h-5 w-5">
+                  <Image
+                    src="/icons/openseas.svg"
+                    alt="openseas"
+                    objectFit="contain"
+                    layout="fill"
+                  />
+                </div>
+                OpenSea
+              </Button>
+            </div>
+            {renderWalletButton()}
+          </div>
+        )}
       </div>
     </div>
   ) : null;

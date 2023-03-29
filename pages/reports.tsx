@@ -65,7 +65,8 @@ const Reports = () => {
       <div className="rock-background">
         <div
           style={{
-            background: "linear-gradient(0deg, rgb(11, 11, 11), transparent 300px)",
+            background:
+              "linear-gradient(0deg, rgb(11, 11, 11), transparent 300px)",
           }}
         >
           <div
@@ -155,7 +156,7 @@ const Reports = () => {
                                     )}
                                   >
                                     <Image
-                                      src="/lock.svg"
+                                      src="/icons/lock.svg"
                                       alt="lock"
                                       layout="fill"
                                     />

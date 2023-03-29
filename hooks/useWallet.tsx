@@ -1,16 +1,25 @@
 import { useCallback, useEffect, useMemo } from "react";
-import { getGrugBalance, switchNetwork, walletConnect } from "store/wallet/thunk";
+import {
+  getGrugBalance,
+  switchNetwork,
+  walletConnect,
+} from "store/wallet/thunk";
 import { useAppDispatch } from "./useStoreHooks";
 import Web3Modal from "web3modal";
 import { validNetworkId } from "helper/environment";
-import { getAvailableWithdrawAmount, getStakeBalance, initiateStakingContract } from "store/contractStake/thunk";
-import { contractGetBalance, initiateRocksContract } from "store/contractRocks/thunk";
+import {
+  getAvailableWithdrawAmount,
+  getStakeBalance,
+  initiateStakingContract,
+} from "store/contractStake/thunk";
+import {
+  contractGetBalance,
+  initiateRocksContract,
+} from "store/contractRocks/thunk";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { resetWalletAction, setLoadingAction } from "store/wallet/actions";
-import { getUSDCBalance, initiateUSDCContract } from "store/contractUSDC/thunk";
 import { initiateContractClaim } from "store/contractClaim/thunk";
-import { AccessControlTranslationFilterSensitiveLog } from "@aws-sdk/client-s3";
 
 const providerOptions = {};
 
@@ -25,8 +34,12 @@ if (typeof window !== "undefined") {
 
 const useWallet = () => {
   const dispatch = useAppDispatch();
-  const { provider, chainId, walletAddress, balance } = useSelector((state: RootState) => state.wallet);
-  const { lockRocks } = useSelector((state: RootState) => state.contractStake);
+  const { provider, walletAddress, balance } = useSelector(
+    (state: RootState) => state.wallet
+  );
+  const { balances: rocksBalance } = useSelector(
+    (state: RootState) => state.contractStake
+  );
 
   const haveWallet = useMemo(() => {
     return !!walletAddress;
@@ -41,25 +54,27 @@ const useWallet = () => {
   }, [balance]);
 
   const haveStakeRocks = useMemo(() => {
-    if (lockRocks) {
-      return lockRocks >= 3000;
-    } else {
-      return false;
-    }
-  }, [lockRocks]);
+    return rocksBalance >= 3000;
+  }, [rocksBalance]);
+
+  const commitRequirementMeet = useMemo(() => {
+    return (
+      haveWallet && haveNft && rocksBalance >= 3000
+    );
+  }, [haveWallet, haveNft, rocksBalance]);
 
   const isAuthorize = useMemo(() => {
-    if(balance === 0 || balance === null) {
-      return false
+    if (balance === 0 || balance === null) {
+      return false;
     }
-    return true
-  }, [balance])
+    return true;
+  }, [balance]);
 
   const connectWallet = useCallback(
     async function () {
-      dispatch(setLoadingAction(true))
-      await dispatch(walletConnect(web3Modal)).then(async(resp: any) => {
-        if (resp.payload?.chainId != parseInt(validNetworkId || '1', 10)) {
+      dispatch(setLoadingAction(true));
+      await dispatch(walletConnect(web3Modal)).then(async (resp: any) => {
+        if (resp.payload?.chainId != parseInt(validNetworkId || "1", 10)) {
           await dispatch(switchNetwork());
         }
       });
@@ -68,14 +83,12 @@ const useWallet = () => {
 
       await dispatch(initiateStakingContract());
       await dispatch(initiateRocksContract());
-      await dispatch(initiateUSDCContract());
       await dispatch(initiateContractClaim());
       await dispatch(contractGetBalance());
 
       await dispatch(getStakeBalance());
       await dispatch(getAvailableWithdrawAmount());
-      await dispatch(getUSDCBalance());
-      dispatch(setLoadingAction(false))
+      dispatch(setLoadingAction(false));
     },
     [walletAddress]
   );
@@ -83,10 +96,7 @@ const useWallet = () => {
   const disconnect = useCallback(
     async function () {
       await web3Modal.clearCachedProvider();
-      if (
-        provider?.disconnect &&
-        typeof provider.disconnect === "function"
-      ) {
+      if (provider?.disconnect && typeof provider.disconnect === "function") {
         const test = await provider.disconnect();
       }
       dispatch(resetWalletAction());
@@ -125,15 +135,16 @@ const useWallet = () => {
       };
     }
   }, [provider, disconnect]);
-  
+
   return {
     connectWallet,
     disconnect,
     haveWallet,
     haveNft,
     haveStakeRocks,
+    commitRequirementMeet,
     isAuthorize,
-  }
-}
+  };
+};
 
-export default useWallet
+export default useWallet;

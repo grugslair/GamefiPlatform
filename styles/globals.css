@@ -53,18 +53,6 @@ a:hover {
   font-weight: 300;
 }
 
-.verifyGradient {
-  background: linear-gradient(180deg, rgba(11, 11, 11, 0) 0%, #0b0b0b 14.05%);
-}
-
-.projectDetailsGradient {
-  background: linear-gradient(
-    360deg,
-    #0b0b0b 57.24%,
-    rgba(11, 11, 11, 0.2) 98.26%
-  );
-}
-
 .reports-search > input {
   margin-left: 8px;
   font-size: inherit;
@@ -82,16 +70,6 @@ a:hover {
 
 .staking-input-number input::placeholder {
   color: rgba(255, 255, 255, 0.2);
-}
-
-.streaming-gradient {
-  background: rgb(0, 0, 0);
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.8) 0%,
-    rgba(0, 0, 0, 0.4) 80%,
-    rgba(0, 0, 0, 0) 100%
-  );
 }
 
 .rock-background {
