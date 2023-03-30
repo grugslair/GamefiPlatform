@@ -77,7 +77,6 @@ const ModalStakeAmountButton = ({
     enabled: !!stakeAmount
   })
 
-  const {} = useStakeHook();
 
   const { data: dataStaking, write: writeStaking } = useContractWrite(stakeConfig)
  
