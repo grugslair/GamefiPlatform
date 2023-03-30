@@ -6,15 +6,12 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { IContractRocks } from "store/contractRocks/contractRocks";
 import {
-  approveContractRocks,
   contractGetBalance,
 } from "store/contractRocks/thunk";
 import { IContractStake } from "store/contractStake/contractStake";
 import {
-  contractStaking,
   getAllowance,
   getAvailableWithdrawAmount,
-  getGasPrice,
   getStakeBalance,
 } from "store/contractStake/thunk";
 
@@ -79,6 +76,8 @@ const ModalStakeAmountButton = ({
     args: [ethToWei(stakeAmount?.toString() || "0")],
     enabled: !!stakeAmount
   })
+
+  const {} = useStakeHook();
 
   const { data: dataStaking, write: writeStaking } = useContractWrite(stakeConfig)
  
