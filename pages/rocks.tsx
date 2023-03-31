@@ -12,7 +12,7 @@ import { addRocksTokenToWallet, getRocksFromNFT } from "store/wallet/thunk";
 import { isNFTClaimed } from "store/contractClaim/thunk";
 import { IContractRocks } from "store/contractRocks/contractRocks";
 import { IContractStake } from "store/contractStake/contractStake";
-import { contractUnstaking, getAvailableWithdrawAmount, getGasPrice } from "store/contractStake/thunk";
+import { getAvailableWithdrawAmount } from "store/contractStake/thunk";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -27,6 +27,8 @@ import { pushMessage } from "core/notification";
 import Button from "components/Button";
 import ModalClaimRocksButton from "components/Public/ModalClaimRocksButton";
 import ModalStakeAmountButton from "components/Public/ModalStakeAmountButton";
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { stakeContractABI, stakeContractAddress } from "@/helper/contract";
 
 const Staking: NextPage = () => {
   const wallet: walletState = useSelector((state: RootState) => state.wallet);
@@ -41,9 +43,21 @@ const Staking: NextPage = () => {
 
   const [unStakeAmount, setUnStakeAmount] = useState("");
 
-  const [loadingUnstake, setLoadingUnstake] = useState<boolean>(false);
-
   const unstakeDisabled = !(contractRocks?.balanceOfRocks > 0);
+
+  const { config: unStakeConfig } = usePrepareContractWrite({
+    address: stakeContractAddress,
+    abi: stakeContractABI,
+    functionName: 'withdrawUnlockedToken',
+    args: [ethToWei(unStakeAmount?.toString() || "0")],
+    enabled: !!unStakeAmount
+  })
+
+  const { data: dataUnStaking, write: writeUnStaking } = useContractWrite(unStakeConfig)
+ 
+  const { isLoading: loadingUnStaking, isSuccess: successUnStaking, isError: unStakingError } = useWaitForTransaction({
+    hash: dataUnStaking?.hash,
+  })
 
   function changeUnStakeAmount(value: string) {
     setUnStakeAmount(value);
@@ -57,12 +71,15 @@ const Staking: NextPage = () => {
   }
 
   async function unStake() {
-    await dispatch(getGasPrice());
-    setLoadingUnstake(true)
     const weiAmount = ethToWei(unStakeAmount?.toString() || "0");
-    const result = await dispatch(contractUnstaking(weiAmount));
 
-    if (result?.payload?.ts?.hash) {
+    writeUnStaking?.();
+
+    await dispatch(getAvailableWithdrawAmount());
+  }
+
+  useEffect(() => {
+    if(successUnStaking) {
       pushMessage(
         {
           status: "success",
@@ -73,21 +90,17 @@ const Staking: NextPage = () => {
       );
     }
 
-    //@ts-ignore
-    if (result?.error?.message === "Rejected") {
+    if(unStakingError) {
       pushMessage(
         {
           status: "error",
           title: "",
-          description: result.payload.reason,
+          description: "Failed to unstake token",
         },
         dispatch
       );
     }
-
-    await dispatch(getAvailableWithdrawAmount());
-    setLoadingUnstake(false)
-  }
+  }, [successUnStaking, unStakingError])
 
   useEffect(() => {
     dispatch(getRocksFromNFT()).then(() => {
@@ -190,7 +203,7 @@ const Staking: NextPage = () => {
                 <Button
                   size="small"
                   onClick={unStake}
-                  loading={loadingUnstake}
+                  loading={loadingUnStaking}
                   disabled={unstakeDisabled}
                 >
                   Unstake
