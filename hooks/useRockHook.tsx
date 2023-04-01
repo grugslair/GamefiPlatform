@@ -6,10 +6,6 @@ const useStakeHook = () => {
   const [stakeAmount, setStakeAmount] = useState<string>("")
   const [unStakeAmount, setUnStakeAmount] = useState<string>("")
 
-  useEffect(() => {
-    console.log(stakeAmount);
-  }, [stakeAmount])
-
   const { config: stakeConfig } = usePrepareContractWrite({
     address: stakeContractAddress,
     abi: stakeContractABI,

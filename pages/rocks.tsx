@@ -57,8 +57,6 @@ const Staking: NextPage = () => {
   }
 
   async function unStake() {
-    const weiAmount = ethToWei(unStakeAmount?.toString() || "0");
-    console.log(writeUnStaking);
     writeUnStaking?.();
   }
 

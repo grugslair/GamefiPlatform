@@ -6,10 +6,6 @@ import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from
 export const useStakeHook = () => {
   const [stakeAmount, setStakeAmount] = useState<string>("")
 
-  useEffect(() => {
-    console.log(stakeAmount);
-  }, [stakeAmount])
-
   const { config: stakeConfig } = usePrepareContractWrite({
     address: stakeContractAddress,
     abi: stakeContractABI,
