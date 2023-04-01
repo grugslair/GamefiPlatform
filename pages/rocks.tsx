@@ -12,7 +12,8 @@ import { addRocksTokenToWallet, getRocksFromNFT } from "store/wallet/thunk";
 import { isNFTClaimed } from "store/contractClaim/thunk";
 import { IContractRocks } from "store/contractRocks/contractRocks";
 import { IContractStake } from "store/contractStake/contractStake";
-import { getAvailableWithdrawAmount } from "store/contractStake/thunk";
+import { getAvailableWithdrawAmount, getStakeBalance } from "store/contractStake/thunk";
+import { contractGetBalance } from "store/contractRocks/thunk";
 
 // Fontawesome
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,13 +23,12 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch } from "hooks/useStoreHooks";
 import { formatNumber, ethToWei } from "helper/utilities";
 import { pushMessage } from "core/notification";
+import { useUnStakeHook } from "hooks/useStakeHook";
 
 // Components
 import Button from "components/Button";
 import ModalClaimRocksButton from "components/Public/ModalClaimRocksButton";
 import ModalStakeAmountButton from "components/Public/ModalStakeAmountButton";
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
-import { stakeContractABI, stakeContractAddress } from "@/helper/contract";
 
 const Staking: NextPage = () => {
   const wallet: walletState = useSelector((state: RootState) => state.wallet);
@@ -41,25 +41,11 @@ const Staking: NextPage = () => {
 
   const dispatch = useAppDispatch();
 
-  const [unStakeAmount, setUnStakeAmount] = useState("");
+  const { unStakeAmount, setUnStakeAmount, writeUnStaking, loadingUnStaking, successUnStaking, unStakingError} = useUnStakeHook();
 
   const unstakeDisabled = !(contractRocks?.balanceOfRocks > 0);
 
-  const { config: unStakeConfig } = usePrepareContractWrite({
-    address: stakeContractAddress,
-    abi: stakeContractABI,
-    functionName: 'withdrawUnlockedToken',
-    args: [ethToWei(unStakeAmount?.toString() || "0")],
-    enabled: !!unStakeAmount
-  })
-
-  const { data: dataUnStaking, write: writeUnStaking } = useContractWrite(unStakeConfig)
- 
-  const { isLoading: loadingUnStaking, isSuccess: successUnStaking, isError: unStakingError } = useWaitForTransaction({
-    hash: dataUnStaking?.hash,
-  })
-
-  function changeUnStakeAmount(value: string) {
+  function changeUnStakeAmount(value: any) {
     setUnStakeAmount(value);
   }
 
@@ -72,10 +58,8 @@ const Staking: NextPage = () => {
 
   async function unStake() {
     const weiAmount = ethToWei(unStakeAmount?.toString() || "0");
-
+    console.log(writeUnStaking);
     writeUnStaking?.();
-
-    await dispatch(getAvailableWithdrawAmount());
   }
 
   useEffect(() => {
@@ -100,6 +84,10 @@ const Staking: NextPage = () => {
         dispatch
       );
     }
+    dispatch(getAvailableWithdrawAmount());
+    dispatch(contractGetBalance());
+    dispatch(getStakeBalance());
+
   }, [successUnStaking, unStakingError])
 
   useEffect(() => {
@@ -180,7 +168,7 @@ const Staking: NextPage = () => {
                   className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-2xl font-extrabold text-white"
                   value={unStakeAmount}
                   size="large"
-                  onChange={() => changeUnStakeAmount}
+                  onChange={changeUnStakeAmount}
                   placeholder="0"
                   controls={false}
                 />

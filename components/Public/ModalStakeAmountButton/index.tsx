@@ -31,6 +31,7 @@ import Checkbox from "components/Button/CheckboxButton";
 import RadioButton from "components/Button/RadioButton";
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { stakeContractAddress, rocksContractABI, rocksContractAddress, stakeContractABI } from "@/helper/contract";
+import { useStakeHook } from "hooks/useStakeHook";
 
 interface IModalStakeAmountButtonProps {
   actionTitle: string;
@@ -43,7 +44,7 @@ const ModalStakeAmountButton = ({
 }: IModalStakeAmountButtonProps) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [method, setMethod] = useState(1);
-  const [stakeAmount, setStakeAmount] = useState("");
+  // const [stakeAmount, setStakeAmount] = useState("");
   const [disclaimer, setDisclaimer] = useState(false);
   const [loading, setLoading] = useState(false);
   const contractRocks: IContractRocks = useSelector(
@@ -54,6 +55,8 @@ const ModalStakeAmountButton = ({
   );
 
   const dispatch = useAppDispatch();
+
+  const { writeStaking, setStakeAmount, stakeAmount, stakingError, loadingStaking, successStaking } = useStakeHook(); 
 
   const { config: approveConfig } = usePrepareContractWrite({
     address: rocksContractAddress,
@@ -67,21 +70,6 @@ const ModalStakeAmountButton = ({
  
   const { isLoading: loadingApprove, isSuccess: successApprove, isError: approveError } = useWaitForTransaction({
     hash: dataApprove?.hash,
-  })
-
-  const { config: stakeConfig } = usePrepareContractWrite({
-    address: stakeContractAddress,
-    abi: stakeContractABI,
-    functionName: 'lockToken',
-    args: [ethToWei(stakeAmount?.toString() || "0")],
-    enabled: !!stakeAmount
-  })
-
-
-  const { data: dataStaking, write: writeStaking } = useContractWrite(stakeConfig)
- 
-  const { isLoading: loadingStaking, isSuccess: successStaking, isError: stakingError } = useWaitForTransaction({
-    hash: dataStaking?.hash,
   })
 
   function handleCancel() {
@@ -104,7 +92,6 @@ const ModalStakeAmountButton = ({
 
 
         if (contractStake.allowance) {
-
           writeStaking?.();
 
         }
