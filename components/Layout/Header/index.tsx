@@ -47,26 +47,26 @@ if (typeof window !== "undefined") {
 
 const SOCIAL_MEDIAS = [
   {
-    label: "Twitter",
-    url: "https://twitter.com/GrugsLair",
-    icon: faTwitter,
-    logo: "/icons/twitter.svg",
-    target: "_blank",
-  },
-  {
-    label: "Medium",
-    url: "https://medium.com/@grugslair",
-    icon: faMedium,
-    logo: "/icons/medium.svg",
-    target: "_blank",
-  },
-  {
     label: "Discord",
     url: "https://discord.gg/gDyJBYUNDq",
     icon: faDiscord,
     logo: "/icons/discord.svg",
     target: "_blank",
   },
+  {
+    label: "Twitter",
+    url: "https://twitter.com/GrugsLair",
+    icon: faTwitter,
+    logo: "/icons/twitter.svg",
+    target: "_blank",
+  },
+  // {
+  //   label: "Medium",
+  //   url: "https://medium.com/@grugslair",
+  //   icon: faMedium,
+  //   logo: "/icons/medium.svg",
+  //   target: "_blank",
+  // },
 ];
 
 const LINKS = [
