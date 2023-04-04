@@ -58,7 +58,7 @@ export const getCommitInvestBalance = createAsyncThunk(
       const { currencyContract, currencyDecimals } =
         contractCommitInvest as IContractCommitInvest;
 
-      const balance = await currencyContract.balances(wallet.walletAddress);
+      const balance = await currencyContract.balanceOf(wallet.walletAddress);
 
       return {
         balance: balance.toString() / Math.pow(10, currencyDecimals),
