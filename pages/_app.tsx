@@ -14,9 +14,14 @@ import Layout from "components/Layout";
 
 import "styles/globals.css";
 
-import { EthereumClient, modalConnectors, walletConnectProvider } from "@web3modal/ethereum"
-import { Web3Modal} from "@web3modal/react"
-import { goerli, configureChains, createClient, WagmiConfig,} from "wagmi"
+import {
+  EthereumClient,
+  modalConnectors,
+  walletConnectProvider,
+} from "@web3modal/ethereum";
+import { Web3Modal } from "@web3modal/react";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { bscTestnet, mainnet, goerli } from "wagmi/chains";
 
 config.autoAddCss = false;
 
@@ -25,23 +30,26 @@ notification.config({
   duration: 3,
 });
 
+const projectId = "b84d5cea063ce59ac6845a21ac965631";
 
-const projectId = 'b84d5cea063ce59ac6845a21ac965631'
+const chains =
+  process.env.NEXT_PUBLIC_RELEASE_STAGE === "production"
+    ? [mainnet]
+    : [goerli, bscTestnet];
 
-const chains = [goerli]
-
-const { provider } = configureChains(chains, [walletConnectProvider({ projectId })])
+const { provider } = configureChains(chains, [
+  walletConnectProvider({ projectId }),
+]);
 
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: modalConnectors({ appName: 'web3Modal', chains }),
+  connectors: modalConnectors({ appName: "web3Modal", chains }),
   provider,
-})
+});
 
-export const ethereumClient = new EthereumClient(wagmiClient, chains)
+export const ethereumClient = new EthereumClient(wagmiClient, chains);
 
 function MyApp({ Component, pageProps }: AppProps) {
-
   return (
     <Provider store={store}>
       <WagmiConfig client={wagmiClient}>
@@ -54,7 +62,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </RouteGuard>
           </Layout>
         </Notification>
-        <Web3Modal projectId={projectId} ethereumClient={ethereumClient}/>
+        <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
       </WagmiConfig>
     </Provider>
   );

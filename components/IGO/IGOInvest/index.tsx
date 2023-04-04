@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { InputNumber } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import moment from "moment";
 
@@ -9,12 +9,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { ILaunchPadState, IProjectDetailData } from "store/launchpad/launchpad";
 import {
-  approveContractCommitInvest,
   getCommitInvestAllowance,
   getCommitInvestBalance,
-  investCommit,
 } from "store/contractCommitInvest/thunk";
-import { getGasPrice } from "store/contractStake/thunk";
 import {
   getInvestSignature,
   registerProject,
@@ -41,6 +38,10 @@ import IgoRegister from "./BlockerScreen/IGORegister";
 import IGOCalculating from "./BlockerScreen/IGOCalculating";
 import IGOMultiChain from "./IGOMultiChain";
 import IGOComingSoon from "./BlockerScreen/IGOComingSoon";
+import {
+  useApproveCommitInvestHook,
+  useCommitInvestHook,
+} from "hooks/useCommitInvestHook";
 
 interface IIGOInvest {
   data: IProjectDetailData;
@@ -72,8 +73,23 @@ const IGOInvest = ({
   ) as IContractCommitInvest;
 
   const [amount, setAmount] = useState(0);
-  const [approveLoading, setApproveLoading] = useState(false);
   const [commitLoading, setCommitLoading] = useState(false);
+
+  const {
+    writeApprove,
+    setApproveAmount,
+    approveError,
+    loadingApprove,
+    successApprove,
+  } = useApproveCommitInvestHook();
+  const {
+    writeCommit,
+    successCommit,
+    commitError,
+    commitArgs,
+    setCommitArgs,
+    commitTrxHash,
+  } = useCommitInvestHook();
 
   const isUpcoming = moment().isBefore(moment(data.registrationPeriodStart));
   const isRegistrationPhase = moment().isBetween(
@@ -135,50 +151,39 @@ const IGOInvest = ({
   }
 
   async function askAllowance() {
-    try {
-      setApproveLoading(true);
-      await dispatch(getGasPrice());
-      const approveResult = await dispatch(
-        approveContractCommitInvest(amount.toString())
+    writeApprove?.();
+  }
+
+  useEffect(() => {
+    if (successApprove) {
+      pushMessage(
+        {
+          status: "success",
+          title: "Approve Success",
+          description: `You've successfully approved ${formatNumber(amount)} ${
+            data.Currency.symbol
+          }`,
+        },
+        dispatch
       );
-      if (approveResult?.payload?.hash) {
-        pushMessage(
-          {
-            status: "success",
-            title: "Approve Success",
-            description: `You've successfully approved ${formatNumber(
-              amount
-            )} ${data.Currency.symbol}`,
-          },
-          dispatch
-        );
-      }
-      //@ts-ignore
-      if (approveResult?.error?.message === "Rejected") {
-        pushMessage(
-          {
-            status: "error",
-            title: "Failed to Approve",
-            description: approveResult.payload.reason,
-          },
-          dispatch
-        );
-      }
-    } catch (error) {
+      dispatch(getCommitInvestAllowance());
+      dispatch(getCommitInvestBalance());
+    }
+
+    if (approveError && approveError?.message === "User rejected request") {
       pushMessage(
         {
           status: "error",
           title: "Failed to Approve",
-          description: "Unknown error occured. Please try again later",
+          description: "The approve transaction is rejected",
         },
         dispatch
       );
-    } finally {
       dispatch(getCommitInvestAllowance());
       dispatch(getCommitInvestBalance());
-      setApproveLoading(false);
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [approveError, successApprove]);
 
   async function invest() {
     const projectId = router.query.id || "0";
@@ -186,7 +191,6 @@ const IGOInvest = ({
 
     try {
       setCommitLoading(true);
-      await dispatch(getGasPrice());
       const getSignatureResult = await dispatch(
         getInvestSignature({
           projectId,
@@ -200,46 +204,13 @@ const IGOInvest = ({
         getSignatureResult?.payload?.success &&
         getSignatureResult?.payload?.signature
       ) {
-        const commitResult = await dispatch(
-          investCommit({
-            amount,
-            signature: getSignatureResult?.payload?.signature,
-            salt: getSignatureResult?.payload?.salt,
-          })
-        );
-        if (commitResult.payload?.receipt?.transactionHash) {
-          pushMessage(
-            {
-              status: "success",
-              title: `Invest Success`,
-              description: `You've invested ${formatNumber(amount)} ${
-                data.Currency.symbol
-              }`,
-            },
-            dispatch
-          );
-          dispatch(
-            uploadInvestHash({
-              hash: commitResult.payload?.receipt?.transactionHash,
-              projectId: router.query.id!,
-              walletAddress: wallet.walletAddress || "",
-              amount,
-            })
-          );
-          setAmount(0);
-        }
-        //@ts-ignore
-        if (commitResult?.error?.message === "Rejected") {
-          pushMessage(
-            {
-              status: "error",
-              title: "Failed to Invest",
-              description: commitResult.payload.reason,
-            },
-            dispatch
-          );
-        }
+        setCommitArgs({
+          amount: amount.toString(),
+          signature: getSignatureResult?.payload?.signature,
+          salt: getSignatureResult?.payload?.salt,
+        });
       } else {
+        setCommitLoading(false);
         if (getSignatureResult?.payload?.duration) {
           pushMessage(
             {
@@ -259,6 +230,7 @@ const IGOInvest = ({
             dispatch
           );
         }
+        afterInvest();
       }
     } catch (error) {
       pushMessage(
@@ -269,13 +241,67 @@ const IGOInvest = ({
         },
         dispatch
       );
-    } finally {
-      dispatch(getCommitInvestAllowance());
-      dispatch(getCommitInvestBalance());
-      setCommitLoading(false);
-      refetchData();
+      afterInvest();
     }
   }
+
+  const afterInvest = () => {
+    dispatch(getCommitInvestAllowance());
+    dispatch(getCommitInvestBalance());
+    refetchData();
+    setCommitLoading(false);
+    setCommitArgs({
+      amount: "",
+      salt: 0,
+      signature: "",
+    });
+  };
+
+  useEffect(() => {
+    if (commitArgs.salt !== 0 && commitArgs.signature !== "") {
+      writeCommit?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commitArgs]);
+
+  useEffect(() => {
+    if (successCommit) {
+      pushMessage(
+        {
+          status: "success",
+          title: `Invest Success`,
+          description: `You've invested ${formatNumber(amount)} ${
+            data.Currency.symbol
+          }`,
+        },
+        dispatch
+      );
+      dispatch(
+        uploadInvestHash({
+          hash: commitTrxHash,
+          projectId: router.query.id!,
+          walletAddress: wallet.walletAddress || "",
+          amount,
+        })
+      );
+      setAmount(0);
+      setApproveAmount(0);
+      afterInvest();
+    }
+
+    if (commitError && commitError?.message === "User rejected request") {
+      pushMessage(
+        {
+          status: "error",
+          title: "Failed to Invest",
+          description: "The invest transaction is rejected",
+        },
+        dispatch
+      );
+      afterInvest();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commitError, successCommit]);
 
   return !isInvestHidden ? (
     <>
@@ -312,14 +338,20 @@ const IGOInvest = ({
               className="staking-input-number w-full border-none bg-transparent p-0 font-avara text-2xl font-extrabold text-white"
               value={amount}
               size="large"
-              onChange={setAmount as any}
+              onChange={(value) => {
+                setAmount(value as any);
+                setApproveAmount(value as any);
+              }}
               placeholder="Type Here"
               controls={false}
               max={maxInvestAllowed}
             />
             <a
               className="font-avara text-base font-extrabold text-primary600 underline hover:text-primary600"
-              onClick={() => setAmount(maxInvestAllowed)}
+              onClick={() => {
+                setAmount(maxInvestAllowed);
+                setApproveAmount(maxInvestAllowed);
+              }}
             >
               Max
             </a>
@@ -339,7 +371,8 @@ const IGOInvest = ({
           </div>
           <div className="mt-1 font-avara text-2xl font-extrabold text-white">
             {formatNumber(
-              Math.round((amount / Number(data.publicSalePrice)) * 100) / 100 || 0
+              Math.round((amount / Number(data.publicSalePrice)) * 100) / 100 ||
+                0
             )}
           </div>
           <Button
@@ -347,7 +380,7 @@ const IGOInvest = ({
               contractCommitInvest.allowance < amount ? askAllowance : invest
             }
             disabled={!amount}
-            loading={approveLoading}
+            loading={loadingApprove}
             className="mt-4 h-11 w-full"
           >
             {contractCommitInvest.allowance < amount ? "Approve " : "Invest "}
