@@ -29,9 +29,8 @@ import { useAppDispatch } from "hooks/useStoreHooks";
 import Button, { IButton } from "components/Button";
 import Checkbox from "components/Button/CheckboxButton";
 import RadioButton from "components/Button/RadioButton";
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
-import { stakeContractAddress, rocksContractABI, rocksContractAddress, stakeContractABI } from "@/helper/contract";
 import { useStakeHook } from "hooks/useStakeHook";
+import useRockHook from "hooks/useRockHook";
 
 interface IModalStakeAmountButtonProps {
   actionTitle: string;
@@ -44,7 +43,6 @@ const ModalStakeAmountButton = ({
 }: IModalStakeAmountButtonProps) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [method, setMethod] = useState(1);
-  // const [stakeAmount, setStakeAmount] = useState("");
   const [disclaimer, setDisclaimer] = useState(false);
   const [loading, setLoading] = useState(false);
   const contractRocks: IContractRocks = useSelector(
@@ -57,20 +55,7 @@ const ModalStakeAmountButton = ({
   const dispatch = useAppDispatch();
 
   const { writeStaking, setStakeAmount, stakeAmount, stakingError, loadingStaking, successStaking } = useStakeHook(); 
-
-  const { config: approveConfig } = usePrepareContractWrite({
-    address: rocksContractAddress,
-    abi: rocksContractABI,
-    functionName: 'approve',
-    args: [stakeContractAddress, ethToWei(stakeAmount?.toString() || "0")],
-    enabled: !!stakeAmount
-  })
-
-  const { data: dataApprove, write: writeApprove } = useContractWrite(approveConfig)
- 
-  const { isLoading: loadingApprove, isSuccess: successApprove, isError: approveError } = useWaitForTransaction({
-    hash: dataApprove?.hash,
-  })
+  const { writeApprove, setApproveAmount, approveError, loadingApprove, successApprove } = useRockHook();
 
   function handleCancel() {
     setModalOpen(false);
@@ -178,6 +163,7 @@ const ModalStakeAmountButton = ({
   useEffect(() => {
     callAllowance();
     setStakeAmount("");
+    setApproveAmount("");
     setDisclaimer(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
@@ -240,7 +226,10 @@ const ModalStakeAmountButton = ({
             className="staking-input-number w-full border-none bg-transparent p-0 font-sora text-base font-normal text-white"
             value={stakeAmount}
             size="large"
-            onChange={setStakeAmount as any}
+            onChange={(e) => {
+              setStakeAmount(e || '0')
+              setApproveAmount(e || '0')
+            }}
             placeholder="Type Here"
             controls={false}
             min="0"
@@ -248,9 +237,10 @@ const ModalStakeAmountButton = ({
           />
           <a
             className="font-avara text-base font-extrabold text-primary500 underline hover:text-primary500"
-            onClick={() =>
+            onClick={() => {
+              setApproveAmount(contractRocks.balanceOfRocks.toString())
               setStakeAmount(contractRocks.balanceOfRocks.toString())
-            }
+            }}
           >
             Max
           </a>

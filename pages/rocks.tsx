@@ -21,7 +21,7 @@ import { faLock } from "@fortawesome/free-solid-svg-icons";
 
 // Utils
 import { useAppDispatch } from "hooks/useStoreHooks";
-import { formatNumber, ethToWei } from "helper/utilities";
+import { formatNumber } from "helper/utilities";
 import { pushMessage } from "core/notification";
 import { useUnStakeHook } from "hooks/useStakeHook";
 

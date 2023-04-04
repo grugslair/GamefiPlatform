@@ -1,52 +1,34 @@
-import { stakeContractABI, stakeContractAddress } from "@/helper/contract"
-import { useEffect, useState } from "react"
+import { rocksContractABI, rocksContractAddress, stakeContractABI, stakeContractAddress } from "@/helper/contract"
+import { ethToWei } from "@/helper/utilities"
+import { useState } from "react"
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
 
-const useStakeHook = () => {
-  const [stakeAmount, setStakeAmount] = useState<string>("")
-  const [unStakeAmount, setUnStakeAmount] = useState<string>("")
+const useRockHook = () => {
+  const [approveAmount, setApproveAmount] = useState<string>("")
 
-  const { config: stakeConfig } = usePrepareContractWrite({
-    address: stakeContractAddress,
-    abi: stakeContractABI,
-    functionName: 'lockToken',
-    args: [stakeAmount],
-    enabled: !!stakeAmount
+  const { config: approveConfig } = usePrepareContractWrite({
+    address: rocksContractAddress,
+    abi: rocksContractABI,
+    functionName: 'approve',
+    args: [stakeContractAddress, ethToWei(approveAmount?.toString() || "0")],
+    enabled: !!approveAmount
   })
 
-  const { data: dataStaking, write: writeStaking } = useContractWrite(stakeConfig)
+  const { data: dataApprove, write: writeApprove } = useContractWrite(approveConfig)
  
-  const { isLoading: loadingStaking, isSuccess: successStaking, isError: stakingError } = useWaitForTransaction({
-    hash: dataStaking?.hash,
+  const { isLoading: loadingApprove, isSuccess: successApprove, isError: approveError } = useWaitForTransaction({
+    hash: dataApprove?.hash,
   })
 
 
   return {
-    writeStaking,
-    loadingStaking,
-    successStaking,
-    stakingError,
-    stakeAmount,
-    setStakeAmount,
-    unStakeAmount,
-    setUnStakeAmount
+    writeApprove,
+    loadingApprove,
+    successApprove,
+    approveError,
+    approveAmount,
+    setApproveAmount,
   }
 }
 
-// const useStakeHook = (stakeAmount: string) => {
-//   const { config: stakeConfig } = usePrepareContractWrite({
-//     address: stakeContractAddress,
-//     abi: stakeContractABI,
-//     functionName: 'lockToken',
-//     args: [stakeAmount],
-//     enabled: !!stakeAmount
-//   })
-
-//   return stakeConfig
-// }
-
-// const useUnstakeToken = (unStakeAmount: string) => {
-
-// }
-
-export default useStakeHook
+export default useRockHook
