@@ -22,6 +22,7 @@ import IGOPoolTimeline from "components/IGO/IGOPoolTimeline";
 import IGOProfile from "components/IGO/IGOProfile";
 import IGOTargetRaise from "components/IGO/IGOTargetRaise";
 import IGOInvest from "components/IGO/IGOInvest";
+import IGOClaimStatus from "@/components/IGO/IGOClaimStatus";
 
 const ProjectDetail = () => {
   const router = useRouter();
@@ -73,7 +74,7 @@ const ProjectDetail = () => {
               <div className="flex-[690]">
                 <IGOProfile data={dataIGO.project} />
                 <IGOPoolTimeline data={dataIGO.project} />
-                {/* <IGOClaimStatus /> */}
+                <IGOClaimStatus />
               </div>
               <div className="flex-[448]">
                 <IGOTargetRaise

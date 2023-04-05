@@ -210,7 +210,6 @@ const IGOInvest = ({
           salt: getSignatureResult?.payload?.salt,
         });
       } else {
-        setCommitLoading(false);
         if (getSignatureResult?.payload?.duration) {
           pushMessage(
             {
@@ -248,16 +247,19 @@ const IGOInvest = ({
   const afterInvest = () => {
     dispatch(getCommitInvestAllowance());
     dispatch(getCommitInvestBalance());
-    refetchData();
     setCommitLoading(false);
     setCommitArgs({
       amount: "",
       salt: 0,
       signature: "",
     });
+    setTimeout(() => {
+      refetchData();
+    }, 1000);
   };
 
   useEffect(() => {
+    console.log(commitArgs);
     if (commitArgs.salt !== 0 && commitArgs.signature !== "") {
       writeCommit?.();
     }
