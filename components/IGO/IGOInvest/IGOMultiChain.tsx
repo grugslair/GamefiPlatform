@@ -19,8 +19,10 @@ import {
 
 // Global utils
 import { useAppDispatch } from "hooks/useStoreHooks";
-import { useContract, useProvider } from "wagmi";
+import { useContract, useNetwork, useProvider, useSwitchNetwork } from "wagmi";
 import { commitInvestContractData } from "@/helper/contract";
+import next from "next";
+import { pushMessage } from "core/notification";
 
 interface IIGOMultiChain {
   data: IProjectDetailData;
@@ -29,16 +31,19 @@ interface IIGOMultiChain {
 const IGOMultiChain = ({ data }: IIGOMultiChain) => {
   const dispatch = useAppDispatch();
 
+  const isInitial = useRef(true);
   const closeTimeout = useRef<NodeJS.Timeout>();
 
+  const provider = useProvider();
+  const { chain } = useNetwork();
+  const { switchNetworkAsync } = useSwitchNetwork();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedChain, setSelectedChain] = useState(0);
+  const [selectedChain, setSelectedChain] = useState(-1);
   const [currencyContractData, setCurrencyContractData] = useState({
     address: "",
     ABI: [],
   });
-
-  const provider = useProvider();
   const contractCommitInvest = useContract({
     address: currencyContractData.address,
     abi: currencyContractData.ABI,
@@ -62,34 +67,80 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
     );
   };
 
+  const fetchData = () => {
+    dispatch(
+      initiateCommitInvestContract({
+        currencySymbol: data.Currency.symbol,
+        chainNetwork: availableChains[selectedChain].networkId,
+        contractCommitInvest,
+      })
+    ).then((e) => {
+      if (e.meta.requestStatus === "fulfilled") {
+        dispatch(getCommitInvestAllowance());
+        dispatch(getCommitInvestBalance());
+      }
+    });
+  };
+
+  const onClickChangeChain = (nextChainIndex: number) => {
+    switchNetworkAsync?.(Number(availableChains[nextChainIndex].networkId))
+      .then(() => {
+        setSelectedChain(nextChainIndex);
+        onLeave(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
-    setCurrencyContractData(
-      // @ts-ignore
-      commitInvestContractData[availableChains[selectedChain].networkId]
-        .currency[data.Currency.symbol]
-    );
+    if (selectedChain !== -1) {
+      setCurrencyContractData(
+        // @ts-ignore
+        commitInvestContractData[availableChains[selectedChain].networkId]
+          .currency[data.Currency.symbol]
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain]);
 
   useEffect(() => {
     if (contractCommitInvest) {
-      dispatch(
-        initiateCommitInvestContract({
-          currencySymbol: data.Currency.symbol,
-          chainNetwork: availableChains[selectedChain].networkId,
-          contractCommitInvest,
-        })
-      ).then((e) => {
-        if (e.meta.requestStatus === "fulfilled") {
-          dispatch(getCommitInvestAllowance());
-          dispatch(getCommitInvestBalance());
-        }
-      });
+      fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currencyContractData]);
+  }, [chain?.id]);
 
-  return (
+  useEffect(() => {
+    if (selectedChain === -1) {
+      let initialSelectedChain = data.Currency.Chains.findIndex(
+        (e) => e.networkId === chain?.id.toString()
+      );
+      if (initialSelectedChain === -1) {
+        initialSelectedChain = 0;
+      }
+      setSelectedChain(initialSelectedChain);
+      switchNetworkAsync?.(
+        Number(availableChains[initialSelectedChain].networkId)
+      ).catch(() => {
+        pushMessage(
+          {
+            status: "error",
+            title: "Incorrect Network",
+            description:
+              "Please change your network to the correct one in order to invest",
+          },
+          dispatch
+        );
+      });
+    } else if (isInitial.current && contractCommitInvest?.address) {
+      isInitial.current = false;
+      fetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contractCommitInvest?.address]);
+
+  return selectedChain !== -1 ? (
     <div className="relative">
       <button
         className="mt-6 flex h-14 w-full items-center border border-[#CA5D504D] bg-grugAltCardBackground10 px-4"
@@ -128,10 +179,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
               "flex h-12 cursor-pointer items-center",
               i !== 0 && "border-t border-solid border-grugBorder"
             )}
-            onClick={() => {
-              setSelectedChain(i);
-              onLeave(true);
-            }}
+            onClick={() => onClickChangeChain(i)}
           >
             <img src={chain.logo} alt="chain-img" className="mr-2 h-6 w-6" />
             <div className="mt-1 flex-1 text-left font-avara text-sm font-extrabold">
@@ -146,7 +194,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
         ))}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default IGOMultiChain;
