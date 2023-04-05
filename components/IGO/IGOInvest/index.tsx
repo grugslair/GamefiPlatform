@@ -86,7 +86,7 @@ const IGOInvest = ({
     writeCommit,
     successCommit,
     commitError,
-    commitArgs,
+    commitConfig,
     setCommitArgs,
     commitTrxHash,
   } = useCommitInvestHook();
@@ -259,12 +259,11 @@ const IGOInvest = ({
   };
 
   useEffect(() => {
-    console.log(commitArgs);
-    if (commitArgs.salt !== 0 && commitArgs.signature !== "") {
+    if (commitConfig?.request?.data) {
       writeCommit?.();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commitArgs]);
+  }, [commitConfig?.request?.data]);
 
   useEffect(() => {
     if (successCommit) {

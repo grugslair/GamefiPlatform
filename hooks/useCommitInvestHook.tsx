@@ -93,7 +93,7 @@ export const useCommitInvestHook = () => {
     loadingCommit,
     successCommit,
     commitError,
-    commitArgs,
+    commitConfig,
     setCommitArgs,
     commitTrxHash: dataCommit?.hash,
   };
