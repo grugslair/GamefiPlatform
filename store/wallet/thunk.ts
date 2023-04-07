@@ -8,8 +8,6 @@ import {
   rocksContractABI,
   stakeContractAddress,
   stakeContractABI,
-  usdcContractAddress,
-  usdcContractABI,
   crowdFundingContractAddress,
   crowdFundingContractABI,
   claimRocksContractAddress,
