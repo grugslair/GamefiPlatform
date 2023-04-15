@@ -1,0 +1,7 @@
+.headerDesktopMenuBackground {
+  transition: width 300ms cubic-bezier(.22,.8,.65,1.02);
+}
+
+.headerDesktopMenu:hover .headerDesktopMenuBackground {
+  width: 105%;
+}

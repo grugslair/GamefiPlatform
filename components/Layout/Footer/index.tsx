@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { twJoin } from "tailwind-merge";
-import footerStyles from "./Footer.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTwitter,
   faDiscord,
   faMedium,
 } from "@fortawesome/free-brands-svg-icons";
+
+import footerStyles from "./Footer.module.css";
 
 const FOOTER_MENUS: {
   title: string;
@@ -57,23 +58,23 @@ const FOOTER_MENUS: {
 
 export const SOCIAL_MEDIAS = [
   {
-    label: "Twitter",
-    url: "https://twitter.com/GrugsLair",
-    icon: faTwitter,
-    target: "_blank",
-  },
-  {
-    label: "Medium",
-    url: "https://medium.com/@grugslair",
-    icon: faMedium,
-    target: "_blank",
-  },
-  {
     label: "Discord",
     url: "https://discord.gg/NPsHvxvg",
     icon: faDiscord,
     target: "_blank",
   },
+  {
+    label: "Twitter",
+    url: "https://twitter.com/GrugsLair",
+    icon: faTwitter,
+    target: "_blank",
+  },
+  // {
+  //   label: "Medium",
+  //   url: "https://medium.com/@grugslair",
+  //   icon: faMedium,
+  //   target: "_blank",
+  // },
 ];
 
 const Footer = () => {
