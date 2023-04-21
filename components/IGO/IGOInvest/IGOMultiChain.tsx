@@ -8,6 +8,7 @@ import {
   getCommitInvestAllowance,
   getCommitInvestBalance,
   initiateCommitInvestContract,
+  resetCommitInvestBalance,
 } from "store/contractCommitInvest/thunk";
 
 // Fontawesome
@@ -20,8 +21,11 @@ import {
 // Global utils
 import { useAppDispatch } from "hooks/useStoreHooks";
 import { useContract, useNetwork, useProvider, useSwitchNetwork } from "wagmi";
-import { commitInvestContractData } from "@/helper/contract";
-import next from "next";
+import {
+  investCommitContractABI,
+  investCurrencyContractABI,
+  investCurrencyContractAddress,
+} from "@/helper/contract";
 import { pushMessage } from "core/notification";
 
 interface IIGOMultiChain {
@@ -40,13 +44,10 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedChain, setSelectedChain] = useState(-1);
-  const [currencyContractData, setCurrencyContractData] = useState({
-    address: "",
-    ABI: [],
-  });
-  const contractCommitInvest = useContract({
-    address: currencyContractData.address,
-    abi: currencyContractData.ABI,
+  const [currencyContractAddress, setCurrencyContractAddress] = useState("");
+  const contractCurrencyInvest = useContract({
+    address: currencyContractAddress,
+    abi: investCurrencyContractABI,
     signerOrProvider: provider,
   });
 
@@ -70,9 +71,16 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
   const fetchData = () => {
     dispatch(
       initiateCommitInvestContract({
-        currencySymbol: data.Currency.symbol,
-        chainNetwork: availableChains[selectedChain].networkId,
-        contractCommitInvest,
+        contractCurrencyInvest,
+        currencyContractAddress,
+        currencyContractABI: investCurrencyContractABI,
+        commitContractAddress:
+          availableChains[selectedChain].commitContractAddress,
+        commitContractABI:
+          // @ts-ignore
+          investCommitContractABI[
+            availableChains[selectedChain].version.toString()
+          ],
       })
     ).then((e) => {
       if (e.meta.requestStatus === "fulfilled") {
@@ -85,6 +93,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
   const onClickChangeChain = (nextChainIndex: number) => {
     switchNetworkAsync?.(Number(availableChains[nextChainIndex].networkId))
       .then(() => {
+        dispatch(resetCommitInvestBalance());
         setSelectedChain(nextChainIndex);
         onLeave(true);
       })
@@ -95,17 +104,18 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
 
   useEffect(() => {
     if (selectedChain !== -1) {
-      setCurrencyContractData(
+      setCurrencyContractAddress(
         // @ts-ignore
-        commitInvestContractData[availableChains[selectedChain].networkId]
-          .currency[data.Currency.symbol]
+        investCurrencyContractAddress[availableChains[selectedChain].networkId][
+          data.Currency.symbol
+        ]
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain]);
 
   useEffect(() => {
-    if (contractCommitInvest) {
+    if (contractCurrencyInvest) {
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,12 +143,12 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
           dispatch
         );
       });
-    } else if (isInitial.current && contractCommitInvest?.address) {
+    } else if (isInitial.current && contractCurrencyInvest?.address) {
       isInitial.current = false;
       fetchData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contractCommitInvest?.address]);
+  }, [contractCurrencyInvest?.address]);
 
   return selectedChain !== -1 ? (
     <div className="relative">

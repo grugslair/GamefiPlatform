@@ -39,7 +39,7 @@ import IGOCalculating from "./BlockerScreen/IGOCalculating";
 import IGOMultiChain from "./IGOMultiChain";
 import IGOComingSoon from "./BlockerScreen/IGOComingSoon";
 import {
-  useApproveCommitInvestHook,
+  useApproveCurrencyHook,
   useCommitInvestHook,
 } from "hooks/useCommitInvestHook";
 
@@ -81,7 +81,7 @@ const IGOInvest = ({
     approveError,
     loadingApprove,
     successApprove,
-  } = useApproveCommitInvestHook();
+  } = useApproveCurrencyHook();
   const {
     writeCommit,
     successCommit,
@@ -315,7 +315,11 @@ const IGOInvest = ({
             My {data.Currency.symbol} Balance:
           </div>
           <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
-            {formatNumber(contractCommitInvest.balance)} {data.Currency.symbol}
+            {contractCommitInvest.balance === -1
+              ? "Loading..."
+              : `${formatNumber(contractCommitInvest.balance)} ${
+                  data.Currency.symbol
+                }`}
           </div>
         </div>
         <div className="mt-2 flex items-center">

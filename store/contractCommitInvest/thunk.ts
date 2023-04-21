@@ -1,7 +1,4 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ethers } from "ethers";
-import { commitInvestContractData } from "../../helper/contract";
-import { IContractStake } from "store/contractStake/contractStake";
 import {
   IContractCommitInvest,
   IContractCommitInvestMapping,
@@ -14,28 +11,16 @@ export const initiateCommitInvestContract = createAsyncThunk(
     { getState, rejectWithValue }
   ): Promise<any> => {
     try {
-      const currencyContractAddress =
-        // @ts-ignore
-        commitInvestContractData[payload.chainNetwork].currency[
-          payload.currencySymbol
-        ].address;
-      const currencyContractABI =
-        // @ts-ignore
-        commitInvestContractData[payload.chainNetwork].currency[
-          payload.currencySymbol
-        ].ABI;
-      const commitContractAddress =
-        // @ts-ignore
-        commitInvestContractData[payload.chainNetwork].commitAddress;
-      const commitContractABI =
-        // @ts-ignore
-        commitInvestContractData[payload.chainNetwork].commitABI;
+      const currencyContractAddress = payload.currencyContractAddress;
+      const currencyContractABI = payload.currencyContractABI;
+      const commitContractAddress = payload.commitContractAddress;
+      const commitContractABI = payload.commitContractABI;
       const currencyDecimals = Number(
-        await payload.contractCommitInvest.decimals()
+        await payload.contractCurrencyInvest.decimals()
       );
 
       return {
-        currencyContract: payload.contractCommitInvest,
+        currencyContract: payload.contractCurrencyInvest,
         currencyContractAddress,
         currencyContractABI,
         commitContractAddress,
@@ -46,6 +31,13 @@ export const initiateCommitInvestContract = createAsyncThunk(
       console.log(error);
       return rejectWithValue(error);
     }
+  }
+);
+
+export const resetCommitInvestBalance = createAsyncThunk(
+  "contract/resetCommitInvestBalance",
+  async (): Promise<any> => {
+    return { balance: -1 };
   }
 );
 

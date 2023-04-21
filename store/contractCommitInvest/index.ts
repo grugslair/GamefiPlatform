@@ -4,12 +4,13 @@ import {
   getCommitInvestAllowance,
   getCommitInvestBalance,
   initiateCommitInvestContract,
+  resetCommitInvestBalance,
 } from "./thunk";
 
 const initialState = {
   currencyContract: null,
   allowance: 0,
-  balance: "",
+  balance: -1,
   currencyDecimals: 0,
   currencyContractAddress: null,
   currencyContractABI: null,
@@ -37,6 +38,12 @@ const contractCommitInvest = createSlice({
       getCommitInvestAllowance.fulfilled,
       (state: IContractCommitInvest, action: any) => {
         state.allowance = action.payload.allowance;
+      }
+    );
+    builder.addCase(
+      resetCommitInvestBalance.fulfilled,
+      (state: IContractCommitInvest, action: any) => {
+        state.balance = action.payload.balance;
       }
     );
     builder.addCase(

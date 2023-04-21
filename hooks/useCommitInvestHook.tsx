@@ -8,7 +8,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 
-export const useApproveCommitInvestHook = () => {
+export const useApproveCurrencyHook = () => {
   const contractCommitInvest: any = useSelector(
     (state: RootState) => state.contractCommitInvest
   );

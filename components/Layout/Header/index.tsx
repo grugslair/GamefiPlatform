@@ -292,6 +292,8 @@ const Header = () => {
     setIsMobile(mobile);
   }, [mobile]);
 
+  if (isMobile === -1) return null;
+
   return isMobile ? (
     <MobileHeader
       onClickLogo={onClickLogo}
