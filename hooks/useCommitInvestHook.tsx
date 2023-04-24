@@ -74,6 +74,7 @@ export const useCommitInvestHook = () => {
       commitArgs.salt,
       commitArgs.signature,
     ],
+    enabled: commitArgs.amount !== "" && commitArgs.salt !== 0 && commitArgs.signature !== "",
   });
 
   const {
