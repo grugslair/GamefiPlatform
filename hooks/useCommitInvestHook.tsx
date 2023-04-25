@@ -7,6 +7,7 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
+import fromExponential from "from-exponential";
 
 export const useApproveCurrencyHook = () => {
   const contractCommitInvest: any = useSelector(
@@ -20,16 +21,15 @@ export const useApproveCurrencyHook = () => {
   } = contractCommitInvest as IContractCommitInvest;
   const [approveAmount, setApproveAmount] = useState<number | string>(0);
 
+  const finalApproveAmount = fromExponential(
+    (approveAmount as any) * Math.pow(10, currencyDecimals)
+  );
+
   const { config: approveConfig } = usePrepareContractWrite({
     address: currencyContractAddress as string,
     abi: currencyContractABI,
     functionName: "approve",
-    args: [
-      commitContractAddress,
-      approveAmount >= "1000"
-        ? (approveAmount as any) * Math.pow(10, currencyDecimals)
-        : 1000 * Math.pow(10, currencyDecimals),
-    ],
+    args: [commitContractAddress, finalApproveAmount],
   });
 
   const {
@@ -65,16 +65,19 @@ export const useCommitInvestHook = () => {
     signature: "",
   });
 
+  const finalCommitAmount = fromExponential(
+    (commitArgs.amount as any) * Math.pow(10, currencyDecimals)
+  );
+
   const { config: commitConfig } = usePrepareContractWrite({
     address: commitContractAddress as string,
     abi: commitContractABI,
     functionName: "commit",
-    args: [
-      (commitArgs.amount as any) * Math.pow(10, currencyDecimals),
-      commitArgs.salt,
-      commitArgs.signature,
-    ],
-    enabled: commitArgs.amount !== "" && commitArgs.salt !== 0 && commitArgs.signature !== "",
+    args: [finalCommitAmount, commitArgs.salt, commitArgs.signature],
+    enabled:
+      commitArgs.amount !== "" &&
+      commitArgs.salt !== 0 &&
+      commitArgs.signature !== "",
   });
 
   const {
