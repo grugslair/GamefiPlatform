@@ -23,28 +23,21 @@ export interface IProjectVestingRule {
   updatedAt: string;
 }
 
-export interface IPorjectCurrency {
+export interface IProjectCurrencies {
   id: number;
   symbol: string;
   contractAddress: string;
+  commitContractAddress: string;
   name: string;
   decimals: number;
   rate: number;
   createdAt: string;
   updatedAt: string;
-  Chains: ICommitInvest[];
-}
-
-export interface ICommitInvest {
-  id: number;
   networkId: string;
   rpcUrl: string;
-  name: string;
-  logo: string;
-  color: string;
-  createdAt: string;
-  updatedAt: string;
-  commitContractAddress: string;
+  chainName: string;
+  chainLogo: string;
+  chainColor: string;
   version: string | number;
 }
 
@@ -74,7 +67,7 @@ export interface IProjectDetailData {
   publicSaleTokenAmount: string | number; // -> 150rb -> berarti ini ambil dari contract
   publicSaleTokenSold: string | number; // 2500 -> ambil dari contract
   publicSalePrice: string | number; // rate -> 1usdt = 1000 dota
-  publicSaleCurrencyId: number;
+  publicSaleCurrencySymbol: string;
   minStaking: number; //projectTarget -> minRocks
   registrationPeriodStart: string;
   registrationPeriodEnd: string;
@@ -89,8 +82,7 @@ export interface IProjectDetailData {
   createdAt: string;
   updatedAt: string;
   VestingRule: IProjectVestingRule;
-  Currency: IPorjectCurrency;
-  Chain: ICommitInvest;
+  Currencies: IProjectCurrencies[];
   investedAmount: number;
   totalInvestedAmount: number;
   Registrations: any[];

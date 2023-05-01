@@ -22,7 +22,7 @@ const ProjectTarget = ({ projectTarget }: any) => {
         Target Raise
       </div>
       <div className="font-extraBold mt-1 font-avara text-2xl font-extrabold text-white">
-        ${formatNumber(projectTarget.targetAmount)}
+        {formatNumber(projectTarget.targetAmount)} {projectTarget.publicSaleCurrencySymbol}
       </div>
       <Progress
         strokeColor={theme.extend.colors.success600}
@@ -61,7 +61,7 @@ const ProjectTarget = ({ projectTarget }: any) => {
             Rate
           </div>
           <div className="flex-1 text-right font-avara text-base font-bold text-white">
-            1 {projectTarget.currency.symbol} ={" "}
+            1 {projectTarget.publicSaleCurrencySymbol} ={" "}
             {formatNumber(1 / projectTarget.publicSalePrice)}
             &nbsp;
             {projectTarget.tokenSymbol}

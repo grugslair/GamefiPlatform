@@ -42,7 +42,7 @@ const IGOTargetRaise = ({
           Target Raise
         </div>
         <div className="mt-1 font-avara text-2xl font-extrabold text-white">
-          {formatNumber(data.targetAmount)} {data.Currency.symbol}
+          {formatNumber(data.targetAmount)} {data.publicSaleCurrencySymbol}
         </div>
         <Progress
           strokeColor={theme.extend.colors.success600}

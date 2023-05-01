@@ -88,11 +88,11 @@ const IGOTokenDetails = ({ data }: IIGOTokenDetails) => {
     },
     {
       text: "Token Price",
-      value: `${formatNumber(data.publicSalePrice)} $${data.Currency.symbol}`,
+      value: `${formatNumber(data.publicSalePrice)} $${data.publicSaleCurrencySymbol}`,
     },
     {
       text: "Token Network",
-      value: data.Chain?.name,
+      value: '????????????',
     },
     {
       text: "Initial Supply",

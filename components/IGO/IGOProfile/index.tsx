@@ -49,11 +49,13 @@ const IGOProfile = ({ data }: IIGOProfileProp) => {
               <div>
                 ${data.tokenSymbol} · {data.Chain?.name}
               </div>
-              <img
-                src={data.Chain?.logo}
-                alt="network-logo"
-                className="ml-1.5 h-6 w-6"
-              />
+              {!!data.Chain?.logo && (
+                <img
+                  src={data.Chain?.logo}
+                  alt="network-logo"
+                  className="ml-1.5 h-6 w-6"
+                />
+              )}
             </div>
             <div className="mt-4 font-sora text-base text-grayCool300">
               {descMoreThan200 && !readMoreExpanded

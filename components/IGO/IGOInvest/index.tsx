@@ -161,7 +161,7 @@ const IGOInvest = ({
           status: "success",
           title: "Approve Success",
           description: `You've successfully approved ${formatNumber(amount)} ${
-            data.Currency.symbol
+            data.publicSaleCurrencySymbol
           }`,
         },
         dispatch
@@ -272,7 +272,7 @@ const IGOInvest = ({
           status: "success",
           title: `Invest Success`,
           description: `You've invested ${formatNumber(amount)} ${
-            data.Currency.symbol
+            data.publicSaleCurrencySymbol
           }`,
         },
         dispatch
@@ -312,13 +312,13 @@ const IGOInvest = ({
         </div>
         <div className="mt-4 flex items-center">
           <div className="mb-0.5 font-sora text-base font-light text-gray300">
-            My {data.Currency.symbol} Balance:
+            My {data.publicSaleCurrencySymbol} Balance:
           </div>
           <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
             {contractCommitInvest.balance === -1
               ? "Loading..."
               : `${formatNumber(contractCommitInvest.balance)} ${
-                  data.Currency.symbol
+                  data.publicSaleCurrencySymbol
                 }`}
           </div>
         </div>
@@ -327,7 +327,7 @@ const IGOInvest = ({
             Max. Allocation:
           </div>
           <div className="mt-0.5 flex-1 text-right font-avara text-base font-bold text-white">
-            {formatNumber(maxAllocation)} {data.Currency.symbol}
+            {formatNumber(maxAllocation)} {data.publicSaleCurrencySymbol}
           </div>
         </div>
 
@@ -335,7 +335,7 @@ const IGOInvest = ({
 
         <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4">
           <div className="text-sora text-xs font-light text-gray300">
-            Invest ({data.Currency.symbol})
+            Invest ({data.publicSaleCurrencySymbol})
           </div>
           <div className="mt-1 flex items-center gap-6">
             <InputNumber
@@ -389,14 +389,14 @@ const IGOInvest = ({
             className="mt-4 h-11 w-full"
           >
             {contractCommitInvest.allowance < amount ? "Approve " : "Invest "}
-            {data.Currency.symbol}
+            {data.publicSaleCurrencySymbol}
           </Button>
         </div>
         {!!investedAmount && (
           <div className="mt-4 border border-solid border-[#CA5D504D] bg-grugAltCardBackground10 p-4 text-center font-sora text-base font-light text-gray300">
             🎉 You&apos;ve invested{" "}
             <span className="font-bold">
-              {formatNumber(investedAmount)} ${data.Currency.symbol}
+              {formatNumber(investedAmount)} ${data.publicSaleCurrencySymbol}
             </span>
           </div>
         )}

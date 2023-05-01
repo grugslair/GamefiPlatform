@@ -24,7 +24,6 @@ import { useContract, useNetwork, useProvider, useSwitchNetwork } from "wagmi";
 import {
   investCommitContractABI,
   investCurrencyContractABI,
-  investCurrencyContractAddress,
 } from "@/helper/contract";
 import { pushMessage } from "core/notification";
 
@@ -51,7 +50,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
     signerOrProvider: provider,
   });
 
-  const availableChains = data.Currency.Chains;
+  const availableChains = data.Currencies;
 
   const onEnter = () => {
     clearTimeout(closeTimeout.current);
@@ -79,7 +78,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
         commitContractABI:
           // @ts-ignore
           investCommitContractABI[
-            availableChains[selectedChain].version.toString()
+            availableChains[selectedChain]?.version?.toString() || '1'
           ],
       })
     ).then((e) => {
@@ -104,12 +103,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
 
   useEffect(() => {
     if (selectedChain !== -1) {
-      setCurrencyContractAddress(
-        // @ts-ignore
-        investCurrencyContractAddress[availableChains[selectedChain].networkId][
-          data.Currency.symbol
-        ]
-      );
+      setCurrencyContractAddress(availableChains[selectedChain].contractAddress);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain]);
@@ -123,7 +117,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
 
   useEffect(() => {
     if (selectedChain === -1) {
-      let initialSelectedChain = data.Currency.Chains.findIndex(
+      let initialSelectedChain = availableChains.findIndex(
         (e) => e.networkId === chain?.id.toString()
       );
       if (initialSelectedChain === -1) {
@@ -159,12 +153,12 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
         onTouchEnd={() => onLeave()}
       >
         <img
-          src={availableChains[selectedChain].logo}
+          src={availableChains[selectedChain].chainLogo}
           alt="chain-img"
           className="mr-2 h-6 w-6"
         />
         <div className="mt-1 flex-1 text-left font-avara text-sm font-extrabold">
-          Via {availableChains[selectedChain].name}
+          Via {availableChains[selectedChain].chainName}
         </div>
         <FontAwesomeIcon
           className="h-4 w-4 p-[1px]"
@@ -191,7 +185,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
             )}
             onClick={() => onClickChangeChain(i)}
           >
-            <img src={chain.logo} alt="chain-img" className="mr-2 h-6 w-6" />
+            <img src={chain.chainLogo} alt="chain-img" className="mr-2 h-6 w-6" />
             <div className="mt-1 flex-1 text-left font-avara text-sm font-extrabold">
               Via {chain.name}
             </div>

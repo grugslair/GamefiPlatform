@@ -28,7 +28,8 @@ const Project = (props: IProps) => {
   const [, setRerenderer] = useState(0);
 
   const projectBanner: IProjectBannerProp = {
-    networkLogo: props.dataproject.Chain.logo,
+    // networkLogo: props.dataproject.Chain.logo,
+    networkLogo: "",
     companyProfile: props.dataproject.banner,
     data: props.dataproject,
     onPhaseChange: () => setRerenderer((prev) => prev + 1),
@@ -39,7 +40,7 @@ const Project = (props: IProps) => {
     companyName: props.dataproject.name,
     companyToken: props.dataproject.tokenSymbol,
     companySosMedList: getSocialMedias(props.dataproject),
-    networkName: props.dataproject.Chain.name,
+    networkName: "?????",
   };
 
   const projectTarget: IProjectTarget = {
@@ -49,8 +50,8 @@ const Project = (props: IProps) => {
     minRocks: props.dataproject.minStaking,
     vesting: props.dataproject.VestingRule.label,
     tokenSymbol: props.dataproject.tokenSymbol,
-    currency: props.dataproject.Currency,
-    totalInvestedAmount: props.dataproject.totalInvestedAmount
+    publicSaleCurrencySymbol: props.dataproject.publicSaleCurrencySymbol,
+    totalInvestedAmount: props.dataproject.totalInvestedAmount,
   };
 
   const getButtonWording = () => {
@@ -66,8 +67,8 @@ const Project = (props: IProps) => {
     const isClaimPhase = moment().isAfter(
       moment(props.dataproject.claimPeriodStart)
     );
-    const isRegistered = props.dataproject?.Registrations?.length
-    const isCommited = props.dataproject?.investedAmount > 0
+    const isRegistered = props.dataproject?.Registrations?.length;
+    const isCommited = props.dataproject?.investedAmount > 0;
     if (isRegistrationPhase && !isRegistered) wording = "Participate"; // Unregistered
     if (isBuyPhase && isRegistered) wording = "Buy Token"; // Registered
     if (isClaimPhase && isCommited) wording = "Claim Your Token"; // Commited
@@ -82,21 +83,21 @@ const Project = (props: IProps) => {
           <ProjectDescription {...projectDescription} />
           <ProjectTarget projectTarget={projectTarget} />
         </div>
-          <div className="absolute -bottom-4 w-full px-10">
-            <Button
-              className="w-full justify-center"
-              onClick={() =>
-                router.push({
-                  pathname: "/projectdetail",
-                  query: {
-                    id: props.dataproject.id,
-                  },
-                })
-              }
-            >
-              {getButtonWording()}
-            </Button>
-          </div>
+        <div className="absolute -bottom-4 w-full px-10">
+          <Button
+            className="w-full justify-center"
+            onClick={() =>
+              router.push({
+                pathname: "/projectdetail",
+                query: {
+                  id: props.dataproject.id,
+                },
+              })
+            }
+          >
+            {getButtonWording()}
+          </Button>
+        </div>
       </div>
     </>
   );
