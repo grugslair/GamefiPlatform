@@ -28,8 +28,7 @@ const Project = (props: IProps) => {
   const [, setRerenderer] = useState(0);
 
   const projectBanner: IProjectBannerProp = {
-    // networkLogo: props.dataproject.Chain.logo,
-    networkLogo: "",
+    networkLogo: props.dataproject.Chain?.logo,
     companyProfile: props.dataproject.banner,
     data: props.dataproject,
     onPhaseChange: () => setRerenderer((prev) => prev + 1),
@@ -40,7 +39,7 @@ const Project = (props: IProps) => {
     companyName: props.dataproject.name,
     companyToken: props.dataproject.tokenSymbol,
     companySosMedList: getSocialMedias(props.dataproject),
-    networkName: "?????",
+    networkName: props.dataproject.Chain?.name,
   };
 
   const projectTarget: IProjectTarget = {

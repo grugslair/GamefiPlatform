@@ -86,6 +86,7 @@ export interface IProjectDetailData {
   investedAmount: number;
   totalInvestedAmount: number;
   Registrations: any[];
+  Chain: any;
 }
 
 export interface IProject {

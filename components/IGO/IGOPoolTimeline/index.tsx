@@ -92,7 +92,7 @@ const IGOTokenDetails = ({ data }: IIGOTokenDetails) => {
     },
     {
       text: "Token Network",
-      value: '????????????',
+      value: data.Chain?.name,
     },
     {
       text: "Initial Supply",
