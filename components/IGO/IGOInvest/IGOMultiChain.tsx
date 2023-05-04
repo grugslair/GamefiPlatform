@@ -187,7 +187,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
           >
             <img src={chain.chainLogo} alt="chain-img" className="mr-2 h-6 w-6" />
             <div className="mt-1 flex-1 text-left font-avara text-sm font-extrabold">
-              Via {chain.name}
+              Via {chain.chainName}
             </div>
             <FontAwesomeIcon
               className="h-4 w-4 p-[1px]"
