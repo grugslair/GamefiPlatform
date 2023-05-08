@@ -20,6 +20,7 @@ export const initiateCommitInvestContract = createAsyncThunk(
       );
 
       return {
+        networkId: payload.networkId,
         currencyContract: payload.contractCurrencyInvest,
         currencyContractAddress,
         currencyContractABI,

@@ -70,6 +70,7 @@ const IGOMultiChain = ({ data }: IIGOMultiChain) => {
   const fetchData = () => {
     dispatch(
       initiateCommitInvestContract({
+        networkId: availableChains[selectedChain].networkId,
         contractCurrencyInvest,
         currencyContractAddress,
         currencyContractABI: investCurrencyContractABI,

@@ -1,4 +1,5 @@
 export interface IContractCommitInvest {
+  networkId: string | null;
   currencyContract: any;
   allowance: number;
   balance: number;
@@ -10,6 +11,7 @@ export interface IContractCommitInvest {
 }
 
 export interface IContractCommitInvestMapping {
+  networkId: string;
   contractCurrencyInvest: any;
   currencyContractAddress: string;
   currencyContractABI: any;

@@ -186,17 +186,15 @@ const IGOInvest = ({
   }, [approveError, successApprove]);
 
   async function invest() {
-    const projectId = router.query.id || "0";
-    const walletAddress = wallet.walletAddress || "";
-
     try {
       setCommitLoading(true);
       const getSignatureResult = await dispatch(
         getInvestSignature({
-          projectId,
+          projectId: router.query.id || "0",
+          networkId: contractCommitInvest.networkId || "",
           commitAmount:
             amount * Math.pow(10, contractCommitInvest.currencyDecimals),
-          walletAddress,
+          walletAddress: wallet.walletAddress || "",
           decimal: contractCommitInvest.currencyDecimals,
         })
       );

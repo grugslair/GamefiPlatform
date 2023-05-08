@@ -8,6 +8,7 @@ import {
 } from "./thunk";
 
 const initialState = {
+  networkId: null,
   currencyContract: null,
   allowance: 0,
   balance: -1,
@@ -26,6 +27,7 @@ const contractCommitInvest = createSlice({
     builder.addCase(
       initiateCommitInvestContract.fulfilled,
       (state: IContractCommitInvest, action: any) => {
+        state.networkId = action.payload.networkId;
         state.currencyContract = action.payload.currencyContract;
         state.currencyContractAddress = action.payload.currencyContractAddress;
         state.currencyContractABI = action.payload.currencyContractABI;

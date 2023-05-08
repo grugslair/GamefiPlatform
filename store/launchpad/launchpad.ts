@@ -137,6 +137,7 @@ export interface IProjectDetailDataByIdPayload {
 }
 export interface IGetInvestSignaturePayload {
   projectId: string | string[];
+  networkId: string | string[];
   commitAmount: number;
   walletAddress: string;
   decimal: number;
