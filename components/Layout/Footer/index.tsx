@@ -156,7 +156,7 @@ const Footer = () => {
                 "tablet:mt-6 tablet:text-right"
               )}
             >
-              ©Grug&apos;s Lair 2022
+              ©Grug&apos;s Lair 2023
             </div>
           </div>
         </div>
