@@ -41,9 +41,13 @@ const FOOTER_MENUS: {
       //   label: "Projects",
       //   url: "/",
       // },
+      // {
+      //   label: "Claim & Stake",
+      //   url: "/rocks",
+      // },
       {
-        label: "Claim & Stake",
-        url: "/rocks",
+        label: "Reports",
+        url: "/reports",
       },
     ],
   },
